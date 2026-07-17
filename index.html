@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Boleta Rush">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#141E33">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<title>Boleta Rush</title>
+<style>
+  :root{
+    --bg:#0B1220; --card:#131C2E; --card2:#0F1726; --line:#22304A;
+    --txt:#E6EDF7; --mut:#8A97AC; --buy:#22C55E; --sell:#EF4444;
+    --amber:#F5A623; --acc:#4F8EF7; --gold:#EAC54F;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0;}
+  body{background:var(--bg); color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh; display:flex; justify-content:center;
+    padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom);}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace;}
+  #app{width:100%; max-width:420px;}
+  .pad{padding:14px;}
+  .screen{display:none;} .screen.on{display:block; animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+  @keyframes slideUp{from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:none;}}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.5;}}
+  @keyframes bob{0%,100%{transform:translateY(0);} 50%{transform:translateY(-3px);}}
+  @keyframes shake{0%,100%{transform:none;} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);}}
+  @keyframes marquee{from{transform:translateX(430px);} to{transform:translateX(-760px);}}
+  @keyframes blinkscr{0%,100%{opacity:1;} 50%{opacity:.35;}}
+  @keyframes floatup{from{opacity:1; transform:translate(-50%,0);} to{opacity:0; transform:translate(-50%,-48px);}}
+  h1{font-size:30px; letter-spacing:1px; margin:8px 0 2px;}
+  h2{font-size:18px; margin:0 0 8px;}
+  .sub{color:var(--mut); font-size:14px; margin:0 0 18px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px;}
+  .btn{display:block; width:100%; border:none; border-radius:12px; padding:14px;
+    font-size:16px; font-weight:700; cursor:pointer; color:#fff;}
+  .btn:active{transform:scale(.97);}
+  .btn-buy{background:var(--buy); box-shadow:0 3px 0 #158741;}
+  .btn-sell{background:var(--sell); box-shadow:0 3px 0 #a92f2f;}
+  .btn-main{background:var(--acc); box-shadow:0 3px 0 #2f62b8;}
+  .btn-ghost{background:transparent; border:1px solid var(--line); color:var(--mut); font-weight:500; box-shadow:none;}
+  .row{display:flex; gap:10px;}
+  .row .btn{flex:1;}
+  input[type=text]{width:100%; background:var(--card2); border:1px solid var(--line);
+    border-radius:10px; color:var(--txt); font-size:16px; padding:12px; outline:none; margin-bottom:12px;}
+  input[type=text]:focus{border-color:var(--acc);}
+  .toggles{display:flex; gap:8px; margin-bottom:12px;}
+  .tgl{flex:1; background:var(--card2); border:1px solid var(--line); border-radius:10px;
+    color:var(--mut); font-size:13px; padding:10px; cursor:pointer; text-align:center;}
+  .tgl.on{border-color:var(--acc); color:var(--txt);}
+  .topbar{display:flex; justify-content:space-between; align-items:center; padding:10px 14px 2px; font-size:13px; color:var(--mut);}
+  .topbar b{color:var(--txt);}
+  .subbar{display:flex; justify-content:space-between; align-items:center; padding:0 14px 6px;}
+  .cargo{font-size:11px; color:var(--gold); letter-spacing:.5px;}
+  .combo{font-size:12px; font-weight:800; color:var(--amber);}
+  .combo.fever{color:var(--gold); animation:pulse .9s infinite;}
+  .bonus{color:var(--buy); font-weight:700; font-size:14px;}
+  .bonus.neg{color:var(--sell);}
+  #cena{display:block; width:100%; background:#141E33;}
+  .clicavel{cursor:pointer;}
+  .selecionado .bolha-rect{stroke:#4F8EF7; stroke-width:3;}
+  .charwrap{animation:bob 2.2s ease-in-out infinite;}
+  #painel{padding:10px 14px 24px; background:var(--bg); border-top:2px solid var(--line);
+    border-radius:16px 16px 0 0; margin-top:-12px; position:relative;}
+  .painel-titulo{font-size:11px; letter-spacing:.8px; color:var(--mut); font-weight:700; margin-bottom:8px;
+    display:flex; justify-content:space-between;}
+  #dica-vazio{color:var(--mut); font-size:14px; text-align:center; padding:26px 10px; animation:pulse 2s infinite;}
+  .ticket{border-radius:12px; padding:10px 12px; margin-bottom:8px; border:1px solid var(--line); animation:slideUp .25s ease;}
+  .ticket .tag{font-size:10px; letter-spacing:.8px; font-weight:700; margin-bottom:5px;}
+  .ticket-ordem{background:#12233F; border-color:#26436F;}
+  .ticket-ordem .tag{color:#7FB0F5;}
+  .ticket-boleta{background:var(--card2);}
+  .ticket-boleta .tag{color:var(--mut);}
+  .fields{display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; font-size:14px;}
+  .f label{display:block; font-size:9px; color:var(--mut); letter-spacing:.5px;}
+  .f span{font-weight:700;}
+  .f.buyside span{color:var(--buy);} .f.sellside span{color:var(--sell);}
+  .f.hint span{background:rgba(245,166,35,.22); color:var(--amber); padding:0 5px; border-radius:5px;}
+  .tag2{font-size:11px; letter-spacing:.6px; color:var(--mut); font-weight:700; margin:2px 0 8px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;}
+  .chip{flex:1 1 28%; background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:13px 6px; font-weight:700; color:var(--txt); font-size:14px; text-align:center; cursor:pointer;}
+  .chip:active{transform:scale(.95); border-color:var(--acc);}
+  .chip.larga{flex:1 1 40%;}
+  .chip.cancel{background:transparent; color:var(--mut); font-weight:500;}
+  .float{position:absolute; top:-4px; left:50%; font-weight:800; font-size:17px;
+    animation:floatup .95s ease forwards; pointer-events:none; z-index:5; white-space:nowrap;}
+  .float.good{color:var(--buy);} .float.bad{color:var(--sell);}
+  #mo{margin-top:8px; padding:11px;}
+  #toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%);
+    background:#1D2A44; border:1px solid var(--line); color:var(--txt); font-size:14px;
+    padding:10px 16px; border-radius:10px; opacity:0; pointer-events:none; transition:opacity .25s;
+    max-width:90%; z-index:9; text-align:center;}
+  #toast.show{opacity:1;}
+  #toast.good{border-color:var(--buy);} #toast.bad{border-color:var(--sell);}
+  .big{font-size:32px; font-weight:800; margin:4px 0;}
+  .stats{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin:14px 0;}
+  .stat{background:var(--card2); border-radius:10px; padding:10px 6px; text-align:center;}
+  .stat b{display:block; font-size:19px;}
+  .stat small{color:var(--mut); font-size:11px;}
+  .center{text-align:center;}
+  .logo{font-size:44px;}
+  ul.rules{color:var(--mut); font-size:13px; line-height:1.7; padding-left:18px; margin:0 0 16px; text-align:left;}
+  ul.rules b{color:var(--txt);}
+  .spacer{height:12px;}
+  .promo{background:rgba(234,197,79,.1); border:1px solid #6b5a1e; color:var(--gold);
+    border-radius:10px; padding:10px; font-size:14px; font-weight:600; margin:12px 0; animation:slideUp .4s ease;}
+  .audit{border-radius:10px; padding:9px 12px; font-size:13px; margin:8px 0;}
+  .audit.good{background:rgba(34,197,94,.1); border:1px solid #1d5c36; color:var(--buy);}
+  .audit.bad{background:rgba(239,68,68,.1); border:1px solid #6f2626; color:var(--sell);}
+  table.rank{width:100%; border-collapse:collapse; font-size:13px; margin:10px 0 4px;}
+  table.rank td{padding:7px 6px; border-bottom:1px solid var(--line); text-align:left;}
+  table.rank td:first-child{color:var(--mut); width:26px;}
+  table.rank td:last-child{text-align:right; font-weight:600;}
+  table.rank tr.me td{color:var(--gold); font-weight:700;}
+  table.rank tr:last-child td{border-bottom:none;}
+  .shop{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 4px;}
+  .shopitem{background:var(--card2); border:1px solid var(--line); border-radius:10px; padding:10px; text-align:left; font-size:11px; color:var(--mut);}
+  .shopitem b{display:block; font-size:13px; color:var(--txt); margin-bottom:2px;}
+  .shopitem .preco{color:var(--gold); font-weight:700; display:block; margin-top:4px;}
+  .btnmini{margin-top:6px; width:100%; border:none; border-radius:8px; padding:8px;
+    font-weight:700; font-size:12px; background:var(--acc); color:#fff; cursor:pointer;}
+  .btnmini:disabled{background:var(--card); color:var(--mut); cursor:default;}
+  .record{font-size:12px; color:var(--mut); margin-top:12px;}
+  .record b{color:var(--gold);}
+  .shake{animation:shake .3s ease;}
+  .tvmarquee{animation:marquee 13s linear infinite;}
+  .scrblink{animation:blinkscr 3.5s ease-in-out infinite;}
+
+  #poster{position:relative; overflow:hidden;}
+  #poster-svg{display:block; width:100%;}
+  .poster-corp{position:absolute; top:12px; left:0; right:0; text-align:center;
+    font-size:10px; letter-spacing:2px; color:var(--gold); z-index:2;}
+  #poster-mascote{animation:bob 2.6s ease-in-out infinite;}
+  .poster-title{position:relative; margin-top:-30px; padding-bottom:8px; text-align:center; z-index:2;}
+  .pt-main{font-size:44px; font-weight:900; letter-spacing:2px; color:#fff; line-height:.95;
+    text-shadow:0 4px 0 var(--gold), 0 5px 12px rgba(0,0,0,.4);}
+  .pt-tag{font-size:11px; color:var(--mut); letter-spacing:1px; margin-top:10px;}
+  #poster-painel{padding:16px 16px 26px;}
+  .cracha{background:var(--card); border:1.5px solid var(--gold); border-radius:14px;
+    padding:11px 13px; display:flex; align-items:center; gap:11px; box-shadow:0 4px 18px rgba(0,0,0,.35);}
+  .cracha-foto{width:44px; height:50px; border-radius:7px; background:var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;}
+  .cracha-body{flex:1; min-width:0;}
+  .cracha-label{font-size:8px; letter-spacing:1.5px; color:var(--gold);}
+  .cracha input{width:100%; background:transparent; border:none; border-bottom:1px dashed var(--line);
+    border-radius:0; color:var(--txt); font-size:17px; font-weight:700; padding:4px 0 3px; margin:2px 0 0;
+    outline:none; caret-color:var(--acc);}
+  .cracha input:focus{border-bottom-color:var(--acc);}
+  .cracha-id{font-size:8px; letter-spacing:.5px; color:#5B6B85; margin-top:4px;}
+  #btn-start{margin-top:14px;}
+  .link-regras{display:block; width:100%; margin-top:14px; background:none; border:none;
+    color:var(--mut); font-size:13px; cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
+  #poster-painel .rules{margin-top:10px;}
+
+  .campo-card{background:var(--card); border:1px solid #6f2626; border-radius:12px; padding:10px 12px;
+    animation:slideUp .22s ease;}
+  .campo-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:9px;}
+  .campo-head span:first-child{font-size:11px; letter-spacing:.6px; color:var(--sell); font-weight:800;}
+  .campo-x{font-size:14px; color:var(--mut); cursor:pointer; padding:2px 6px;}
+  .campo-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+  .campo-grid .chip{flex:none; padding:14px 6px; font-size:13px;}
+
+  .btn-install{background:var(--gold); color:#3a2e05; box-shadow:0 3px 0 #a9891f; margin-top:12px;}
+  .install-dica{background:var(--card); border:1px solid var(--gold); border-radius:10px;
+    padding:10px 12px; font-size:12px; color:var(--txt); margin-top:12px; text-align:center; line-height:1.5;}
+  .install-dica b{color:var(--gold);}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- START -->
+  <div id="s-start" class="screen on">
+    <div id="poster">
+      <div class="poster-corp">★ CONTINENTAL CAPITAL ★</div>
+      <svg id="poster-svg" viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+        <defs>
+          <linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3A4E78"/>
+            <stop offset="1" stop-color="#1C2949"/>
+          </linearGradient>
+          <radialGradient id="spot" cx="0.5" cy="0.32" r="0.6">
+            <stop offset="0" stop-color="#5A72A8" stop-opacity="0.55"/>
+            <stop offset="1" stop-color="#5A72A8" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect x="0" y="0" width="380" height="300" fill="url(#pg)"/>
+        <rect x="0" y="0" width="380" height="300" fill="url(#spot)"/>
+        <g opacity="0.85">
+          <rect x="24" y="196" width="70" height="42" rx="4" fill="#101826" stroke="#0A0F1C" stroke-width="2.5"/>
+          <rect x="30" y="202" width="30" height="4" fill="#FF9F1C"/>
+          <rect x="30" y="210" width="44" height="3" fill="#FF9F1C" opacity="0.6"/>
+          <rect x="30" y="216" width="36" height="3" fill="#FF9F1C" opacity="0.45"/>
+          <polyline points="30,232 44,224 58,228 74,216 88,220" fill="none" stroke="#22C55E" stroke-width="2.5"/>
+          <rect x="286" y="196" width="70" height="42" rx="4" fill="#101826" stroke="#0A0F1C" stroke-width="2.5"/>
+          <rect x="292" y="202" width="30" height="4" fill="#FF9F1C"/>
+          <rect x="292" y="210" width="44" height="3" fill="#FF9F1C" opacity="0.6"/>
+          <polyline points="292,220 306,228 320,222 336,232 350,226" fill="none" stroke="#EF4444" stroke-width="2.5"/>
+        </g>
+        <g id="poster-mascote" transform="translate(190,150)"></g>
+      </svg>
+      <div class="poster-title">
+        <div class="pt-main">BOLETA RUSH</div>
+        <div class="pt-tag">a mesa mais caótica do mercado</div>
+      </div>
+    </div>
+
+    <div id="poster-painel">
+      <div class="cracha" id="cracha">
+        <div class="cracha-foto">🪪</div>
+        <div class="cracha-body">
+          <div class="cracha-label">CREDENCIAL · BACK OFFICE</div>
+          <input type="text" id="inp-nome" maxlength="16" placeholder="Seu nome" autocomplete="off">
+          <div class="cracha-id" id="cracha-id">ID #0042 · ADMISSÃO HOJE</div>
+        </div>
+      </div>
+
+      <button class="btn btn-main" id="btn-start" onclick="startGame()">▶ BATER O PONTO</button>
+
+      <div class="toggles">
+        <div class="tgl on" id="tgl-som" onclick="toggleSom()">🔊 Som</div>
+        <div class="tgl on" id="tgl-vib" onclick="toggleVib()">📳 Vibração</div>
+      </div>
+
+      <button class="btn btn-install" id="btn-install" style="display:none;" onclick="instalarApp()">📲 Instalar o jogo</button>
+      <div class="install-dica" id="install-ios" style="display:none;">📲 Para instalar: toque em <b>Compartilhar</b> e depois em <b>Adicionar à Tela de Início</b></div>
+
+      <div class="record center" id="recorde"></div>
+      <button class="link-regras" id="btn-regras" onclick="toggleRegras()">como se joga ▾</button>
+      <ul class="rules" id="regras" style="display:none;">
+        <li><b>Toque em um trader</b> para pegar a ordem e compare com a boleta do sistema.</li>
+        <li>Bateu? <b>Boletar</b>. Divergiu? <b>Devolver apontando o campo errado</b> — acertar o campo paga mais.</li>
+        <li>Ano 2+: ordens de <b>DIGITAÇÃO ⌨️</b> — monte a boleta na mão. Ano 3+: ordens por <b>TELEFONE 📞</b> — decore antes de sumir.</li>
+        <li><b>Combo</b>: acertos seguidos multiplicam os ganhos até 3x. Errar zera.</li>
+        <li>Fim do ano: ranking, auditoria, promoção e a <b>loja da mesa</b> — invista seu bônus em upgrades.</li>
+        <li>Bônus zerou = desligado. Chegue a <b>Sócio</b>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div id="s-game" class="screen">
+    <div class="topbar">
+      <span>Ano <b id="hud-year">1</b> · Ordens <b id="hud-trade">0</b>/<span id="hud-total">12</span></span>
+      <span class="bonus" id="hud-bonus">R$ 10.000</span>
+    </div>
+    <div class="subbar">
+      <span class="cargo" id="hud-cargo">ESTAGIÁRIO</span>
+      <span class="combo" id="hud-combo"></span>
+    </div>
+
+    <svg id="cena" viewBox="0 0 420 396" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#F7B267"/>
+          <stop offset="0.55" stop-color="#E2748A"/>
+          <stop offset="1" stop-color="#6C5B9E"/>
+        </linearGradient>
+        <linearGradient id="parede" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#33456B"/>
+          <stop offset="1" stop-color="#28375A"/>
+        </linearGradient>
+        <pattern id="piso" width="56" height="28" patternUnits="userSpaceOnUse" patternTransform="translate(0,4)">
+          <rect width="56" height="28" fill="#3A4A6E"/>
+          <path d="M0,14 L28,0 L56,14 L28,28 Z" fill="#425379"/>
+        </pattern>
+      </defs>
+
+      <rect x="0" y="0" width="420" height="150" fill="url(#parede)"/>
+      <rect x="0" y="146" width="420" height="7" fill="#1E2A47"/>
+      <rect x="0" y="152" width="420" height="244" fill="url(#piso)"/>
+
+      <g>
+        <rect x="16" y="16" width="150" height="112" rx="6" fill="#1B2440"/>
+        <rect x="21" y="21" width="140" height="102" rx="4" fill="url(#ceu)"/>
+        <circle cx="126" cy="52" r="12" fill="#FFE08A"/>
+        <rect x="27" y="70" width="16" height="53" fill="#3A2F55"/>
+        <rect x="47" y="56" width="20" height="67" fill="#453763"/>
+        <rect x="71" y="78" width="14" height="45" fill="#3A2F55"/>
+        <rect x="89" y="48" width="22" height="75" fill="#4B3C6B"/>
+        <rect x="115" y="84" width="18" height="39" fill="#3A2F55"/>
+        <rect x="137" y="66" width="16" height="57" fill="#453763"/>
+        <rect x="50" y="62" width="4" height="4" fill="#FFE08A"/><rect x="58" y="72" width="4" height="4" fill="#FFD166"/>
+        <rect x="93" y="56" width="4" height="4" fill="#FFE08A"/><rect x="101" y="66" width="4" height="4" fill="#FFD166"/>
+        <rect x="93" y="76" width="4" height="4" fill="#FFE08A"/><rect x="140" y="72" width="4" height="4" fill="#FFD166"/>
+        <rect x="88" y="16" width="6" height="112" fill="#1B2440"/>
+        <rect x="16" y="68" width="150" height="5" fill="#1B2440"/>
+      </g>
+
+      <g>
+        <rect x="188" y="18" width="180" height="74" rx="8" fill="#0A0F1C" stroke="#1F2A3D" stroke-width="3"/>
+        <clipPath id="tvclip"><rect x="193" y="23" width="170" height="64" rx="5"/></clipPath>
+        <g clip-path="url(#tvclip)">
+          <rect x="193" y="23" width="170" height="64" fill="#060B14"/>
+          <polyline points="196,72 210,64 222,68 236,54 250,58 264,44 278,50 292,38 306,44 320,32 336,40 352,30 362,34" fill="none" stroke="#22C55E" stroke-width="2.5"/>
+          <polyline points="196,44 214,50 228,46 244,58 258,52 274,62 290,56 306,66 322,60 340,68 362,62" fill="none" stroke="#EF4444" stroke-width="2" opacity="0.8"/>
+          <rect x="193" y="70" width="170" height="17" fill="#101826"/>
+          <g class="tvmarquee">
+            <text x="0" y="82" font-family="Menlo,monospace" font-size="10" fill="#FF9F1C">PTRL4 ▲38,42&#160;&#160;MNRD3 ▼61,88&#160;&#160;BNCO4 ▲34,91&#160;&#160;AGRO3 ▲29,10&#160;&#160;VRJO3 ▼9,22&#160;&#160;MTRZ3 ▲53,04&#160;&#160;CRVJ3 ▲13,01&#160;&#160;BLSA3 ▼11,08</text>
+          </g>
+        </g>
+        <rect x="270" y="92" width="16" height="8" fill="#1F2A3D"/>
+      </g>
+
+      <g>
+        <circle cx="392" cy="34" r="16" fill="#E8EAF0" stroke="#1F2A3D" stroke-width="3"/>
+        <line x1="392" y1="34" x2="392" y2="24" stroke="#2C3A55" stroke-width="2"/>
+        <line x1="392" y1="34" x2="399" y2="38" stroke="#2C3A55" stroke-width="2"/>
+      </g>
+
+      <g>
+        <rect x="184" y="104" width="188" height="26" rx="5" fill="#1B2440"/>
+        <text x="278" y="121" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="2" fill="#EAC54F" font-family="inherit">★ CONTINENTAL CAPITAL</text>
+      </g>
+
+      <g>
+        <ellipse cx="398" cy="150" rx="14" ry="5" fill="#1E2A47"/>
+        <rect x="392" y="120" width="12" height="30" rx="3" fill="#B26E2B"/>
+        <circle cx="390" cy="112" r="9" fill="#2E9E5B"/>
+        <circle cx="402" cy="106" r="10" fill="#37B56A"/>
+        <circle cx="408" cy="118" r="8" fill="#2E9E5B"/>
+      </g>
+
+      <g id="camada-mesas"></g>
+      <g id="camada-bolhas"></g>
+    </svg>
+
+    <div id="painel">
+      <div class="painel-titulo"><span>🖥️ SUA MESA · BACK OFFICE</span><span id="p-trader"></span></div>
+      <div id="dica-vazio">👆 Toque em um trader para pegar a ordem…</div>
+      <div id="p-conteudo" style="display:none;">
+        <div class="ticket ticket-ordem">
+          <div class="tag" id="o-tag">ORDEM · FRONT OFFICE</div>
+          <div class="fields mono">
+            <div class="f" id="o-lado-w"><label>LADO</label><span id="o-lado"></span></div>
+            <div class="f"><label>ATIVO</label><span id="o-ativo"></span></div>
+            <div class="f"><label>QUANTIDADE</label><span id="o-qtd"></span></div>
+            <div class="f"><label>PREÇO</label><span id="o-preco"></span></div>
+          </div>
+        </div>
+        <div class="ticket ticket-boleta" id="tk-boleta">
+          <div class="tag">BOLETA · SISTEMA</div>
+          <div class="fields mono">
+            <div class="f" id="b-lado-w"><label>LADO</label><span id="b-lado"></span></div>
+            <div class="f" id="b-ativo-w"><label>ATIVO</label><span id="b-ativo"></span></div>
+            <div class="f" id="b-qtd-w"><label>QUANTIDADE</label><span id="b-qtd"></span></div>
+            <div class="f" id="b-preco-w"><label>PREÇO</label><span id="b-preco"></span></div>
+          </div>
+        </div>
+        <div id="area-montar" style="display:none;">
+          <div class="tag2" id="m-prog"></div>
+          <div class="chips" id="m-chips"></div>
+        </div>
+        <div class="row" id="row-decisao">
+          <button class="btn btn-buy" onclick="decide(true)">✓ Boletar</button>
+          <button class="btn btn-sell" onclick="mostraCampo()">↩ Devolver</button>
+        </div>
+        <div id="area-campo" style="display:none;">
+          <div class="campo-card">
+            <div class="campo-head">
+              <span>↩ ONDE DIVERGIU?</span>
+              <span class="campo-x" onclick="cancelaCampo()">✕</span>
+            </div>
+            <div class="campo-grid">
+              <div class="chip" onclick="escolheCampo('lado')">LADO</div>
+              <div class="chip" onclick="escolheCampo('ativo')">ATIVO</div>
+              <div class="chip" onclick="escolheCampo('qtd')">QUANTIDADE</div>
+              <div class="chip" onclick="escolheCampo('preco')">PREÇO</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-ghost" id="mo" onclick="middleOffice()">🎧 Chamar middle office (3)</button>
+    </div>
+  </div>
+
+  <!-- YEAR END -->
+  <div id="s-year" class="screen center pad">
+    <div class="logo">📊</div>
+    <h1 id="y-title">Fechamento do Ano 1</h1>
+    <p class="sub">avaliação anual de performance</p>
+    <div class="card">
+      <small style="color:var(--mut);">Bônus anual</small>
+      <div class="big" id="y-bonus">R$ 0</div>
+      <div id="y-delta" style="font-size:13px;"></div>
+      <div id="y-audit"></div>
+      <div id="y-promo"></div>
+      <div class="stats">
+        <div class="stat"><b id="y-ok" style="color:var(--buy);">0</b><small>corretas</small></div>
+        <div class="stat"><b id="y-err" style="color:var(--sell);">0</b><small>erros</small></div>
+        <div class="stat"><b id="y-combo" style="color:var(--amber);">0</b><small>maior combo</small></div>
+      </div>
+      <h2 style="text-align:left;">🏆 Ranking da mesa</h2>
+      <table class="rank" id="y-rank"></table>
+      <h2 style="text-align:left; margin-top:14px;">🛒 Loja da mesa</h2>
+      <div class="shop" id="y-shop"></div>
+      <button class="btn btn-main" onclick="nextYear()" id="y-next">Começar Ano 2 →</button>
+      <div class="spacer"></div>
+      <small style="color:var(--mut);" id="y-warn"></small>
+    </div>
+  </div>
+
+  <!-- GAME OVER -->
+  <div id="s-over" class="screen center pad">
+    <div class="logo">📦</div>
+    <h1>Desligado</h1>
+    <p class="sub">o bônus zerou — o RH já preparou a caixinha</p>
+    <div class="card">
+      <div class="cargo" id="g-cargo" style="margin-bottom:10px;"></div>
+      <div class="stats">
+        <div class="stat"><b id="g-years">0</b><small>anos na mesa</small></div>
+        <div class="stat"><b id="g-combo" style="color:var(--amber);">0</b><small>maior combo</small></div>
+        <div class="stat"><b id="g-best" style="font-size:14px;">R$ 0</b><small>pico do bônus</small></div>
+      </div>
+      <button class="btn btn-main" onclick="startGame()">Recomeçar carreira</button>
+    </div>
+  </div>
+
+</div>
+<div id="toast" class="mono"></div>
+
+<script>
+"use strict";
+
+/* ============ DADOS (universo ficcional) ============ */
+var ATIVOS = {
+  "PTRL4": { p: 38.4, n: "Petrolina Energia PN" },
+  "PTRL3": { p: 41.9, n: "Petrolina Energia ON" },
+  "MNRD3": { p: 62.1, n: "Minerados do Vale" },
+  "BNCO4": { p: 34.7, n: "Banco Continental PN" },
+  "BNCO3": { p: 30.2, n: "Banco Continental ON" },
+  "SDRG4": { p: 13.8, n: "Siderúrgica Guanabara PN" },
+  "SDRG3": { p: 12.5, n: "Siderúrgica Guanabara ON" },
+  "AGRO3": { p: 28.9, n: "AgroNorte" },
+  "AGRA3": { p: 34.1, n: "Agrária Sul" },
+  "MTRZ3": { p: 52.6, n: "Motriz Máquinas" },
+  "VRJO3": { p: 9.4,  n: "Varejão Digital" },
+  "CRVJ3": { p: 12.9, n: "Cervejaria União" },
+  "BLSA3": { p: 11.2, n: "Bolsa Brasil" },
+  "LGST3": { p: 8.7,  n: "LogiStar" },
+  "LGTC3": { p: 12.1, n: "LogTech Cargo" }
+};
+var PARES = {
+  "PTRL4": "PTRL3", "PTRL3": "PTRL4", "BNCO4": "BNCO3", "BNCO3": "BNCO4",
+  "SDRG4": "SDRG3", "SDRG3": "SDRG4", "AGRO3": "AGRA3", "AGRA3": "AGRO3",
+  "LGST3": "LGTC3", "LGTC3": "LGST3"
+};
+var TRADERS = ["Pantera", "Ferrão", "Nina", "Careca", "Max", "Duda", "Peixe", "Guga", "Xerife", "Formiga"];
+var SKINS  = ["#F5C89B", "#E0A878", "#8D5A3B", "#FADCB8", "#C98D5E"];
+var HAIRS  = ["#2B2118", "#6B3F1D", "#B3541E", "#1F2937", "#D9A441", "#7A2E2E"];
+var SHIRTS = ["#4F8EF7", "#22C55E", "#EF4444", "#F5A623", "#9B59B6", "#16A085", "#E85D9E"];
+var NPCS_BASE = [
+  { n: "Montenegro",     skill: 0.85 },
+  { n: "Renata Kim",     skill: 0.75 },
+  { n: "Serginho Malta", skill: 0.60 },
+  { n: "Bia Cardoso",    skill: 0.55 },
+  { n: "Otávio Lins",    skill: 0.50 },
+  { n: "Douglas Prado",  skill: 0.40 },
+  { n: "Fê Nogueira",    skill: 0.30 }
+];
+var CARGOS = [
+  { t: "Estagiário", y: 0 }, { t: "Analista Jr", y: 1 }, { t: "Analista Pleno", y: 3 },
+  { t: "Analista Sênior", y: 5 }, { t: "Coordenador", y: 7 },
+  { t: "Head de Operações", y: 10 }, { t: "Sócio", y: 12 }
+];
+var SHOP = [
+  { id: "cafe",     icon: "☕", nome: "Café premium",   desc: "Traders esperam 25% mais", preco: 3000 },
+  { id: "headset",  icon: "🎧", nome: "Headset novo",   desc: "+2 middle office por ano", preco: 2500 },
+  { id: "cdi",      icon: "💰", nome: "Aplicação CDI",  desc: "Bônus rende 5% todo fechamento", preco: 4000 },
+  { id: "terminal", icon: "🖥️", nome: "Terminal Pro",   desc: "Menos iscas na digitação", preco: 3500 }
+];
+var QTDS = [100, 200, 500, 1000, 2000, 3000, 5000, 10000, 25000];
+var TRADES_ANO = 12;
+var BONUS_INICIAL = 10000;
+var V = { bater: 500, devolver: 750, fone: 750, foneDev: 1000, montar: 800,
+          erro: 1000, campoErrado: 400, montarErro: 800, timeout: 500 };
+var SLOTS = [
+  { x: 18,  y: 168 },
+  { x: 226, y: 168 },
+  { x: 122, y: 262 }
+];
+
+/* ============ ESTADO / PERSISTÊNCIA ============ */
+var S = null;
+var SET = { som: true, vib: true, nome: "", bestBonus: 0, bestAno: 0, bestCargo: 0, bestCombo: 0 };
+var loopId = null, toastId = null;
+
+function safeSave(){
+  try { localStorage.setItem("boletarush", JSON.stringify(SET)); } catch (e) {}
+}
+function safeLoad(){
+  try {
+    var d = JSON.parse(localStorage.getItem("boletarush") || "null");
+    if (d) {
+      SET.som = d.som !== false;
+      SET.vib = d.vib !== false;
+      SET.nome = d.nome || "";
+      SET.bestBonus = d.bestBonus || 0;
+      SET.bestAno = d.bestAno || 0;
+      SET.bestCargo = d.bestCargo || 0;
+      SET.bestCombo = d.bestCombo || 0;
+    }
+  } catch (e) {}
+}
+
+/* ============ HELPERS ============ */
+function rnd(a){ return a[Math.floor(Math.random() * a.length)]; }
+function shuffle(a){
+  var b = a.slice();
+  for (var i = b.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = b[i]; b[i] = b[j]; b[j] = t;
+  }
+  return b;
+}
+function fmt(n){ return "R$ " + n.toLocaleString("pt-BR"); }
+function fmtP(n){ return "R$ " + n.toFixed(2).replace(".", ","); }
+function fmtQ(n){ return n.toLocaleString("pt-BR"); }
+function el(id){ return document.getElementById(id); }
+function show(id){
+  var scr = document.querySelectorAll(".screen");
+  for (var i = 0; i < scr.length; i++) scr[i].classList.remove("on");
+  el(id).classList.add("on");
+}
+function toast(msg, cls){
+  var t = el("toast");
+  t.textContent = msg;
+  t.className = "mono show" + (cls ? " " + cls : "");
+  clearTimeout(toastId);
+  toastId = setTimeout(function(){ t.className = "mono"; }, 1900);
+}
+function showFloat(txt, cls){
+  try {
+    var d = document.createElement("div");
+    d.className = "float " + cls;
+    d.textContent = txt;
+    d.style.left = (35 + Math.random() * 30) + "%";
+    el("painel").appendChild(d);
+    setTimeout(function(){ if (d.parentNode) d.parentNode.removeChild(d); }, 980);
+  } catch (e) {}
+}
+function cargoAtual(ano){
+  var c = CARGOS[0], idx = 0;
+  for (var i = 0; i < CARGOS.length; i++) {
+    if (ano >= CARGOS[i].y) { c = CARGOS[i]; idx = i; }
+  }
+  return { c: c, idx: idx };
+}
+
+/* ============ SOM & VIBRAÇÃO ============ */
+var AC = null;
+function beep(f, dur, tipo, vol, delay){
+  if (!SET.som) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    var t0 = AC.currentTime + (delay || 0);
+    var o = AC.createOscillator(), g = AC.createGain();
+    o.type = tipo || "sine";
+    o.frequency.value = f;
+    g.gain.setValueAtTime(vol || 0.07, t0);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(AC.destination);
+    o.start(t0); o.stop(t0 + dur);
+  } catch (e) {}
+}
+function somAcerto(){ beep(660, 0.12); beep(880, 0.18, "sine", 0.07, 0.1); }
+function somCombo(n){ beep(660 + Math.min(8, n) * 60, 0.14, "triangle", 0.07); }
+function somErro(){ beep(170, 0.35, "sawtooth", 0.06); }
+function somTick(){ beep(1050, 0.05, "square", 0.03); }
+function somPop(){ beep(520, 0.08, "triangle", 0.06); beep(720, 0.09, "triangle", 0.05, 0.07); }
+function somCaixa(){ beep(523, 0.12); beep(659, 0.12, "sine", 0.07, 0.11); beep(784, 0.2, "sine", 0.07, 0.22); }
+function somPromo(){ beep(523, 0.15); beep(659, 0.15, "sine", 0.07, 0.14); beep(784, 0.15, "sine", 0.07, 0.28); beep(1047, 0.3, "sine", 0.08, 0.42); }
+function vib(p){
+  if (SET.vib && navigator.vibrate) { try { navigator.vibrate(p); } catch (e) {} }
+}
+function toggleSom(){
+  SET.som = !SET.som;
+  el("tgl-som").className = "tgl" + (SET.som ? " on" : "");
+  el("tgl-som").textContent = SET.som ? "🔊 Som" : "🔇 Som";
+  safeSave();
+}
+function toggleVib(){
+  SET.vib = !SET.vib;
+  el("tgl-vib").className = "tgl" + (SET.vib ? " on" : "");
+  safeSave();
+}
+
+/* ============ CENÁRIO SVG ============ */
+function svgMesa(){
+  var s = "";
+  s += "<path d='M4,66 L142,66 L170,34 L32,34 Z' fill='#D98E3F' stroke='#8F5A22' stroke-width='2'/>";
+  s += "<path d='M4,66 L142,66 L142,86 L4,86 Z' fill='#B26E2B'/>";
+  s += "<path d='M142,66 L170,34 L170,54 L142,86 Z' fill='#9C5F24'/>";
+  s += "<rect x='16' y='78' width='8' height='16' fill='#7A4A1B'/>";
+  s += "<rect x='120' y='78' width='8' height='16' fill='#7A4A1B'/>";
+  for (var m = 0; m < 3; m++) {
+    var mx = 18 + m * 44;
+    var my = 18 - m * 4;
+    s += "<rect x='" + (mx + 14) + "' y='" + (my + 28) + "' width='8' height='7' fill='#1F2A3D'/>";
+    s += "<rect x='" + mx + "' y='" + my + "' width='36' height='28' rx='3' fill='#101826' stroke='#1F2A3D' stroke-width='2.5'/>";
+    s += "<rect x='" + (mx + 3) + "' y='" + (my + 3) + "' width='30' height='22' rx='1.5' fill='#060B14'/>";
+    s += "<rect x='" + (mx + 5) + "' y='" + (my + 5) + "' width='16' height='2.5' fill='#FF9F1C'/>";
+    s += "<rect x='" + (mx + 5) + "' y='" + (my + 9) + "' width='24' height='2' fill='#FF9F1C' opacity='0.7'" + (m === 1 ? " class='scrblink'" : "") + "/>";
+    s += "<rect x='" + (mx + 5) + "' y='" + (my + 12.5) + "' width='20' height='2' fill='#FF9F1C' opacity='0.5'/>";
+    var up = (m !== 1);
+    s += "<polyline points='" + (mx + 5) + "," + (my + 22) + " " + (mx + 11) + "," + (my + (up ? 19 : 20)) + " " + (mx + 17) + "," + (my + (up ? 20 : 17)) + " " + (mx + 23) + "," + (my + (up ? 16 : 21)) + " " + (mx + 29) + "," + (my + (up ? 17 : 15)) + "' fill='none' stroke='" + (up ? "#22C55E" : "#EF4444") + "' stroke-width='1.8'/>";
+  }
+  s += "<rect x='40' y='48' width='46' height='13' rx='2.5' fill='#E8EAF0' stroke='#9AA3B5' stroke-width='1'/>";
+  var teclas = ["#EF4444", "#F5C518", "#22C55E", "#4F8EF7"];
+  for (var k = 0; k < 4; k++) {
+    s += "<rect x='" + (43 + k * 5) + "' y='50' width='4' height='3.5' rx='1' fill='" + teclas[k] + "'/>";
+  }
+  for (var r = 0; r < 2; r++) {
+    for (var c = 0; c < 8; c++) {
+      s += "<rect x='" + (43 + c * 5) + "' y='" + (55 + r * 4.5) + "' width='4' height='3' rx='1' fill='#B7BECC'/>";
+    }
+  }
+  s += "<rect x='96' y='50' width='9' height='11' rx='2' fill='#C7CEDB'/>";
+  s += "<path d='M112,58 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0' fill='#FFFFFF' stroke='#9AA3B5'/>";
+  s += "<rect x='121' y='55' width='3' height='4' fill='#9AA3B5'/>";
+  s += "<rect x='8' y='50' width='18' height='12' fill='#F1E4C8' stroke='#C9B68C' stroke-width='1' transform='rotate(-6 17 56)'/>";
+  return s;
+}
+
+function svgTrader(t){
+  var s = "<g class='charwrap'>";
+  s += "<ellipse cx='30' cy='76' rx='18' ry='5' fill='rgba(0,0,0,0.25)'/>";
+  s += "<rect x='14' y='36' width='32' height='36' rx='10' fill='" + t.shirt + "'/>";
+  s += "<rect x='14' y='36' width='32' height='10' rx='5' fill='rgba(255,255,255,0.22)'/>";
+  s += "<polygon points='30,40 26,48 30,58 34,48' fill='#1F2A3D'/>";
+  s += "<rect x='8' y='40' width='9' height='22' rx='4.5' fill='" + t.shirt + "'/>";
+  s += "<rect x='43' y='40' width='9' height='22' rx='4.5' fill='" + t.shirt + "'/>";
+  s += "<circle cx='12.5' cy='63' r='4' fill='" + t.skin + "'/>";
+  s += "<circle cx='47.5' cy='63' r='4' fill='" + t.skin + "'/>";
+  s += "<circle cx='30' cy='20' r='15' fill='" + t.skin + "'/>";
+  s += "<path d='M15,18 a15,15 0 0,1 30,0 l0,-4 a15,13 0 0,0 -30,0 Z' fill='" + t.hair + "'/>";
+  s += "<path d='M15,18 q-2,8 2,12 l1,-10 Z' fill='" + t.hair + "'/>";
+  s += "<path d='M45,18 q2,8 -2,12 l-1,-10 Z' fill='" + t.hair + "'/>";
+  s += "<circle cx='24.5' cy='21' r='2' fill='#1F2430'/>";
+  s += "<circle cx='35.5' cy='21' r='2' fill='#1F2430'/>";
+  s += "<path d='M25,28 q5,4 10,0' fill='none' stroke='#8A5A3B' stroke-width='1.8' stroke-linecap='round'/>";
+  s += "<circle cx='21' cy='25' r='2.5' fill='rgba(239,120,120,0.35)'/>";
+  s += "<circle cx='39' cy='25' r='2.5' fill='rgba(239,120,120,0.35)'/>";
+  s += "</g>";
+  return s;
+}
+
+function svgBolha(o){
+  var corLado = o.ordem.lado === "COMPRA" ? "#158741" : "#C22F2F";
+  var borda = o.ev === "lx" ? "#EAC54F" : (o.ev === "st" ? "#EF4444" : "#C9D2E3");
+  var fundo = o.ev === "lx" ? "#FFF6DA" : "#FFFFFF";
+  var icone = (o.ev === "lx" ? "✨" : "") + (o.ev === "st" ? "🔥" : "") +
+              (o.tipo === "montar" ? "⌨️" : "") + (o.tipo === "fone" ? "📞" : "");
+  var s = "";
+  s += "<rect x='2' y='4' width='128' height='58' rx='10' fill='rgba(0,0,0,0.28)'/>";
+  s += "<rect class='bolha-rect' x='0' y='0' width='128' height='58' rx='10' fill='" + fundo + "' stroke='" + borda + "' stroke-width='2'/>";
+  s += "<polygon points='58,58 74,58 64,70' fill='" + fundo + "'/>";
+  if (o.tipo === "fone" && o.hidden) {
+    s += "<text x='10' y='19' font-size='12' font-weight='800' fill='#5B6B85' font-family='Menlo,monospace'>📞 ﹖﹖﹖</text>";
+    s += "<text x='10' y='34' font-size='11' font-weight='700' fill='#8A97AC' font-family='Menlo,monospace'>decorou?</text>";
+    s += "<text x='10' y='47' font-size='11' fill='#B0BACB' font-family='Menlo,monospace'>de cabeça!</text>";
+  } else {
+    s += "<text x='10' y='19' font-size='12' font-weight='800' fill='" + corLado + "' font-family='Menlo,monospace'>" + o.ordem.lado + " " + icone + "</text>";
+    s += "<text x='10' y='34' font-size='12' font-weight='700' fill='#1F2A3D' font-family='Menlo,monospace'>" + fmtQ(o.ordem.qtd) + " " + o.ordem.ativo + "</text>";
+    s += "<text x='10' y='47' font-size='11' fill='#5B6B85' font-family='Menlo,monospace'>@ " + fmtP(o.ordem.preco) + "</text>";
+  }
+  s += "<rect x='10' y='50' width='108' height='4' rx='2' fill='#E4E9F2'/>";
+  s += "<rect id='pb-" + o.id + "' x='10' y='50' width='108' height='4' rx='2' fill='#22C55E'/>";
+  return s;
+}
+
+function montaMesas(){
+  var camada = el("camada-mesas");
+  var html = "";
+  for (var i = 0; i < SLOTS.length; i++) {
+    html += "<g id='slot-char-" + i + "' transform='translate(" + (SLOTS[i].x + 55) + "," + (SLOTS[i].y - 62) + ")'></g>";
+    html += "<g transform='translate(" + SLOTS[i].x + "," + SLOTS[i].y + ")'>" + svgMesa() + "</g>";
+  }
+  camada.innerHTML = html;
+}
+
+/* ============ FLUXO DO JOGO ============ */
+function startGame(){
+  var nome = el("inp-nome").value.trim() || "Você";
+  SET.nome = nome;
+  safeSave();
+  var npcs = [];
+  for (var i = 0; i < NPCS_BASE.length; i++) {
+    npcs.push({ n: NPCS_BASE[i].n, skill: NPCS_BASE[i].skill, bonus: BONUS_INICIAL });
+  }
+  S = {
+    year: 1, bonus: BONUS_INICIAL, best: BONUS_INICIAL,
+    ok: 0, err: 0, exp: 0, yOk: 0, yErr: 0, yExp: 0,
+    hints: 3, bonusIni: BONUS_INICIAL,
+    npcs: npcs, cargoIdx: 0, nome: nome,
+    orders: [], spawned: 0, resolved: 0, nextId: 1,
+    selId: null, lastSpawn: 0, encerrando: false,
+    combo: 0, maxCombo: 0, rushAvisado: false,
+    up: { cafe: false, headset: false, cdi: false, terminal: false }
+  };
+  montaMesas();
+  iniciaAno();
+  show("s-game");
+}
+
+function iniciaAno(){
+  S.orders = [];
+  S.spawned = 0; S.resolved = 0;
+  S.selId = null; S.encerrando = false;
+  S.rushAvisado = false;
+  S.lastSpawn = -99999;
+  el("camada-bolhas").innerHTML = "";
+  for (var i = 0; i < SLOTS.length; i++) el("slot-char-" + i).innerHTML = "";
+  renderHud();
+  renderPainel();
+  clearInterval(loopId);
+  loopId = setInterval(tick, 100);
+}
+
+function maxSimul(){ return S.year >= 4 ? 3 : (S.year >= 2 ? 2 : 1); }
+function paciencia(){ return Math.max(8, 20 - S.year) * (S.up.cafe ? 1.25 : 1); }
+function intervaloSpawn(){ return Math.max(1600, 3600 - S.year * 200); }
+function chanceErro(){ return Math.min(0.65, 0.35 + S.year * 0.05); }
+function comboMult(){ return 1 + Math.min(8, S.combo) * 0.25; }
+function hintsAno(){ return 3 + (S.up.headset ? 2 : 0); }
+
+function genTrade(){
+  var ativo = rnd(Object.keys(ATIVOS));
+  var lado = Math.random() < 0.5 ? "COMPRA" : "VENDA";
+  var qtd = rnd(QTDS);
+  var preco = Math.round(ATIVOS[ativo].p * (0.92 + Math.random() * 0.16) * 100) / 100;
+  var ordem = { ativo: ativo, lado: lado, qtd: qtd, preco: preco };
+  var boleta = { ativo: ativo, lado: lado, qtd: qtd, preco: preco };
+  var divergente = Math.random() < chanceErro();
+  var campo = null;
+
+  if (divergente) {
+    campo = rnd(["preco", "qtd", "lado", "ativo"]);
+    if (campo === "lado") {
+      boleta.lado = (lado === "COMPRA") ? "VENDA" : "COMPRA";
+    } else if (campo === "ativo") {
+      boleta.ativo = PARES[ativo] || rnd(Object.keys(ATIVOS).filter(function(a){ return a !== ativo; }));
+    } else if (campo === "qtd") {
+      if (S.year <= 2 && Math.random() < 0.5) {
+        boleta.qtd = qtd * 10;
+      } else {
+        var dq = rnd([100, 200, 1000]);
+        boleta.qtd = Math.max(100, qtd + (Math.random() < 0.5 ? dq : -dq));
+        if (boleta.qtd === qtd) boleta.qtd = qtd + dq;
+      }
+    } else {
+      var delta = (S.year <= 2) ? (0.3 + Math.random() * 1.5) : (0.02 + Math.random() * 0.3);
+      var sinal = Math.random() < 0.5 ? 1 : -1;
+      boleta.preco = Math.round((preco + sinal * delta) * 100) / 100;
+      if (boleta.preco === preco || boleta.preco <= 0) boleta.preco = Math.round((preco + 0.11) * 100) / 100;
+    }
+  }
+  return { ordem: ordem, boleta: boleta, divergente: divergente, campo: campo };
+}
+
+function genOpts(ordem){
+  var menos = S.up.terminal;
+  var lados = shuffle(["COMPRA", "VENDA"]);
+  var q1 = ordem.qtd * 10;
+  var q2 = ordem.qtd + (ordem.qtd >= 1000 ? 1000 : 100);
+  var qtds = menos ? [ordem.qtd, q1] : [ordem.qtd, q1, q2];
+  var p1 = Math.round((ordem.preco + 0.13) * 100) / 100;
+  var p2 = Math.round((ordem.preco - 0.21) * 100) / 100;
+  if (p2 <= 0) p2 = Math.round((ordem.preco + 0.34) * 100) / 100;
+  var precos = menos ? [ordem.preco, p1] : [ordem.preco, p1, p2];
+  return { lado: lados, qtd: shuffle(qtds), preco: shuffle(precos) };
+}
+
+function slotLivre(){
+  for (var i = 0; i < SLOTS.length; i++) {
+    var ocupado = false;
+    for (var j = 0; j < S.orders.length; j++) {
+      if (S.orders[j].slot === i) { ocupado = true; break; }
+    }
+    if (!ocupado) return i;
+  }
+  return -1;
+}
+
+function spawnOrder(agora){
+  var slot = slotLivre();
+  if (slot < 0) return;
+  var t = genTrade();
+  var tipo = "bater";
+  if (S.year >= 2) {
+    var rt = Math.random();
+    if (rt < 0.25) tipo = "montar";
+    else if (S.year >= 3 && rt < 0.45) tipo = "fone";
+  }
+  if (tipo === "montar") {
+    t.boleta = { ativo: t.ordem.ativo, lado: t.ordem.lado, qtd: t.ordem.qtd, preco: t.ordem.preco };
+    t.divergente = false;
+    t.campo = null;
+  }
+  var ev = null;
+  if (S.year >= 2) {
+    var r = Math.random();
+    if (r < 0.10) ev = "lx"; else if (r < 0.20) ev = "st";
+  }
+  var pacTotal = paciencia() * (ev === "st" ? 0.6 : 1) * 1000;
+  var o = {
+    id: S.nextId++,
+    slot: slot,
+    tipo: tipo,
+    trader: { nome: rnd(TRADERS), skin: rnd(SKINS), hair: rnd(HAIRS), shirt: rnd(SHIRTS) },
+    ordem: t.ordem, boleta: t.boleta, divergente: t.divergente, campo: t.campo,
+    ev: ev, pacTotal: pacTotal, resta: pacTotal, hinted: false,
+    hidden: false, nasceu: agora,
+    opts: tipo === "montar" ? genOpts(t.ordem) : null,
+    mIdx: 0
+  };
+  S.orders.push(o);
+  S.spawned++;
+  S.lastSpawn = agora;
+
+  el("slot-char-" + slot).innerHTML = svgTrader(o.trader);
+  var bx = SLOTS[slot].x + 21;
+  var by = SLOTS[slot].y - 138;
+  var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  g.setAttribute("id", "ord-" + o.id);
+  g.setAttribute("class", "clicavel");
+  g.setAttribute("transform", "translate(" + bx + "," + by + ")");
+  g.innerHTML = svgBolha(o);
+  g.addEventListener("click", function(){ selectOrder(o.id); });
+  el("camada-bolhas").appendChild(g);
+
+  somPop(); vib(15);
+  renderHud();
+  if (S.selId === null) selectOrder(o.id);
+}
+
+function escondeFone(o){
+  o.hidden = true;
+  var g = el("ord-" + o.id);
+  if (g) {
+    var sel = (S.selId === o.id);
+    g.innerHTML = svgBolha(o);
+    if (sel) g.classList.add("selecionado");
+  }
+  if (S.selId === o.id) renderPainel();
+}
+
+function tick(){
+  if (!S || S.encerrando) return;
+  var agora = Date.now();
+
+  var intv = intervaloSpawn();
+  if (S.spawned >= TRADES_ANO - 3) {
+    intv = intv * 0.5;
+    if (!S.rushAvisado && S.spawned === TRADES_ANO - 3) {
+      S.rushAvisado = true;
+      toast("🔔 Leilão de fechamento! Rajada final de ordens.", "good");
+      beep(880, 0.1); beep(880, 0.1, "sine", 0.07, 0.15); beep(1100, 0.2, "sine", 0.08, 0.3);
+    }
+  }
+  if (S.spawned < TRADES_ANO && S.orders.length < maxSimul() &&
+      agora - S.lastSpawn > (S.spawned === 0 ? 400 : intv)) {
+    spawnOrder(agora);
+  }
+
+  for (var i = S.orders.length - 1; i >= 0; i--) {
+    var o = S.orders[i];
+    if (o.tipo === "fone" && !o.hidden && agora - o.nasceu > 4000) escondeFone(o);
+    o.resta -= 100;
+    var pct = Math.max(0, o.resta / o.pacTotal);
+    var pb = el("pb-" + o.id);
+    if (pb) {
+      pb.setAttribute("width", String(Math.round(108 * pct)));
+      pb.setAttribute("fill", pct > 0.5 ? "#22C55E" : (pct > 0.2 ? "#F5A623" : "#EF4444"));
+    }
+    if (pct <= 0.2 && o.resta % 1000 < 100 && o.id === S.selId) somTick();
+    if (o.resta <= 0) expiraOrder(o);
+  }
+
+  if (S.resolved >= TRADES_ANO && S.orders.length === 0) {
+    S.encerrando = true;
+    clearInterval(loopId);
+    setTimeout(endYear, 500);
+  }
+}
+
+function removeOrder(o){
+  for (var i = 0; i < S.orders.length; i++) {
+    if (S.orders[i].id === o.id) { S.orders.splice(i, 1); break; }
+  }
+  var g = el("ord-" + o.id);
+  if (g && g.parentNode) g.parentNode.removeChild(g);
+  el("slot-char-" + o.slot).innerHTML = "";
+  S.resolved++;
+  if (S.selId === o.id) {
+    S.selId = null;
+    if (S.orders.length > 0) selectOrder(S.orders[0].id);
+    else renderPainel();
+  }
+  renderHud();
+}
+
+function quebraCombo(){
+  S.combo = 0;
+  renderHud();
+}
+
+function premia(base, o, extra){
+  var ganho = Math.round(base * comboMult() * (o.ev === "lx" ? 2 : 1) / 50) * 50;
+  S.bonus += ganho;
+  S.ok++; S.yOk++;
+  S.combo++;
+  if (S.combo > S.maxCombo) S.maxCombo = S.combo;
+  if (S.combo >= 5) { somCombo(S.combo); } else { somAcerto(); }
+  vib(25);
+  showFloat("+" + fmt(ganho), "good");
+  toast("✓ " + extra + " +" + fmt(ganho) + (S.combo >= 2 ? " · combo ×" + comboMult().toFixed(2).replace(".", ",") : ""), "good");
+  if (S.bonus > S.best) S.best = S.bonus;
+  removeOrder(o);
+  renderHud();
+}
+
+function pune(base, o, extra){
+  var perda = base * (o.ev === "lx" ? 2 : 1);
+  S.bonus -= perda;
+  S.err++; S.yErr++;
+  quebraCombo();
+  somErro(); vib([80, 50, 80]);
+  el("app").classList.add("shake");
+  setTimeout(function(){ el("app").classList.remove("shake"); }, 320);
+  showFloat("-" + fmt(perda), "bad");
+  toast("✗ " + extra + " -" + fmt(perda), "bad");
+  removeOrder(o);
+  renderHud();
+  checaGameOver();
+}
+
+function expiraOrder(o){
+  var perda = V.timeout * (o.ev === "lx" ? 2 : 1);
+  S.bonus -= perda; S.exp++; S.yExp++;
+  quebraCombo();
+  somErro(); vib([60, 40, 60]);
+  showFloat("-" + fmt(perda), "bad");
+  toast("⏱ " + o.trader.nome + " perdeu a paciência e gritou na mesa! -" + fmt(perda), "bad");
+  removeOrder(o);
+  checaGameOver();
+}
+
+function selectOrder(id){
+  var existe = false;
+  for (var i = 0; i < S.orders.length; i++) { if (S.orders[i].id === id) { existe = true; break; } }
+  if (!existe) return;
+  S.selId = id;
+  var gs = el("camada-bolhas").childNodes;
+  for (var j = 0; j < gs.length; j++) {
+    gs[j].classList.remove("selecionado");
+  }
+  var g = el("ord-" + id);
+  if (g) {
+    g.classList.add("selecionado");
+    if (g.parentNode) g.parentNode.appendChild(g);
+  }
+  vib(10);
+  renderPainel();
+}
+
+function ordemSel(){
+  for (var i = 0; i < S.orders.length; i++) {
+    if (S.orders[i].id === S.selId) return S.orders[i];
+  }
+  return null;
+}
+
+function renderPainel(){
+  var o = ordemSel();
+  el("area-campo").style.display = "none";
+  el("area-montar").style.display = "none";
+  if (!o) {
+    el("dica-vazio").style.display = "block";
+    el("p-conteudo").style.display = "none";
+    el("p-trader").textContent = "";
+    return;
+  }
+  el("dica-vazio").style.display = "none";
+  el("p-conteudo").style.display = "block";
+  var etiqueta = o.tipo === "montar" ? " · ⌨️ digite a boleta" : (o.tipo === "fone" ? " · 📞 de memória" : "");
+  el("p-trader").textContent = "ordem de " + o.trader.nome + etiqueta + (o.ev === "lx" ? " · ✨ 2x" : "");
+
+  var oculto = (o.tipo === "fone" && o.hidden);
+  el("o-tag").textContent = oculto ? "ORDEM · 📞 DECOROU? ELA SUMIU!" : "ORDEM · FRONT OFFICE";
+  el("o-lado").textContent = oculto ? "❓" : o.ordem.lado;
+  el("o-ativo").textContent = oculto ? "❓" : (o.ordem.ativo + " · " + ATIVOS[o.ordem.ativo].n);
+  el("o-qtd").textContent = oculto ? "❓" : fmtQ(o.ordem.qtd);
+  el("o-preco").textContent = oculto ? "❓" : fmtP(o.ordem.preco);
+  el("o-lado-w").className = "f" + (oculto ? "" : (o.ordem.lado === "COMPRA" ? " buyside" : " sellside"));
+
+  if (o.tipo === "montar") {
+    el("tk-boleta").style.display = "none";
+    el("row-decisao").style.display = "none";
+    el("area-montar").style.display = "block";
+    renderMontar(o);
+    return;
+  }
+
+  el("tk-boleta").style.display = "block";
+  el("row-decisao").style.display = "flex";
+  el("b-lado").textContent = o.boleta.lado;
+  el("b-ativo").textContent = o.boleta.ativo;
+  el("b-qtd").textContent = fmtQ(o.boleta.qtd);
+  el("b-preco").textContent = fmtP(o.boleta.preco);
+  el("b-lado-w").className = "f " + (o.boleta.lado === "COMPRA" ? "buyside" : "sellside");
+  el("b-ativo-w").className = "f";
+  el("b-qtd-w").className = "f";
+  el("b-preco-w").className = "f";
+  if (o.hinted && o.divergente) {
+    var mapa = { preco: "b-preco-w", qtd: "b-qtd-w", lado: "b-lado-w", ativo: "b-ativo-w" };
+    var w = el(mapa[o.campo]);
+    w.className = w.className + " hint";
+  }
+}
+
+function renderMontar(o){
+  var campos = ["lado", "qtd", "preco"];
+  var rotulos = { lado: "LADO", qtd: "QUANTIDADE", preco: "PREÇO" };
+  var f = campos[o.mIdx];
+  el("m-prog").textContent = "⌨️ MONTE A BOLETA · PASSO " + (o.mIdx + 1) + "/3 · " + rotulos[f];
+  var html = "";
+  var lista = o.opts[f];
+  for (var i = 0; i < lista.length; i++) {
+    var v = lista[i];
+    var txt = f === "qtd" ? fmtQ(v) : (f === "preco" ? fmtP(v) : v);
+    html += "<div class='chip larga' onclick='montaEscolhe(" + i + ")'>" + txt + "</div>";
+  }
+  el("m-chips").innerHTML = html;
+}
+
+function montaEscolhe(i){
+  var o = ordemSel();
+  if (!o || o.tipo !== "montar") return;
+  var campos = ["lado", "qtd", "preco"];
+  var f = campos[o.mIdx];
+  var v = o.opts[f][i];
+  if (v === o.ordem[f]) {
+    o.mIdx++;
+    somPop(); vib(12);
+    if (o.mIdx >= 3) {
+      premia(V.montar, o, "Boleta digitada! " + o.trader.nome + " nem conferiu.");
+    } else {
+      renderMontar(o);
+    }
+  } else {
+    pune(V.montarErro, o, "Digitou a boleta errada! O campo " + nomeCampo(f) + " não era esse.");
+  }
+}
+
+function decide(boletar){
+  var o = ordemSel();
+  if (!o) { toast("Pegue uma ordem primeiro — toque em um trader 👆"); return; }
+  if (o.tipo === "montar") return;
+  if (!boletar) { mostraCampo(); return; }
+  if (!o.divergente) {
+    premia(o.tipo === "fone" ? V.fone : V.bater, o, "Boletada! " + o.trader.nome + " agradece.");
+  } else {
+    pune(V.erro, o, "Boletou com " + nomeCampo(o.campo) + " errado! " + o.trader.nome + " está furioso.");
+  }
+}
+
+function mostraCampo(){
+  var o = ordemSel();
+  if (!o || o.tipo === "montar") return;
+  el("row-decisao").style.display = "none";
+  el("area-campo").style.display = "block";
+}
+
+function cancelaCampo(){
+  el("area-campo").style.display = "none";
+  el("row-decisao").style.display = "flex";
+}
+
+function escolheCampo(c){
+  var o = ordemSel();
+  if (!o) return;
+  el("area-campo").style.display = "none";
+  el("row-decisao").style.display = "flex";
+  if (!o.divergente) {
+    pune(V.erro, o, "Devolveu uma boleta correta! Ela batia com a ordem.");
+  } else if (c === o.campo) {
+    premia(o.tipo === "fone" ? V.foneDev : V.devolver, o,
+      "Devolvida! Divergência de " + nomeCampo(c) + " na mosca.");
+  } else {
+    pune(V.campoErrado, o,
+      o.trader.nome + " te corrigiu na frente da mesa: era o " + nomeCampo(o.campo).toUpperCase() + "!");
+  }
+}
+
+function checaGameOver(){
+  if (S.bonus <= 0) {
+    S.encerrando = true;
+    clearInterval(loopId);
+    gameOver();
+  }
+}
+
+function nomeCampo(c){
+  if (c === "preco") return "preço";
+  if (c === "qtd") return "quantidade";
+  if (c === "lado") return "lado";
+  if (c === "ativo") return "ativo";
+  return "campo";
+}
+
+function middleOffice(){
+  if (!S) return;
+  var o = ordemSel();
+  if (!o) { toast("Pegue uma ordem primeiro 👆"); return; }
+  if (o.tipo === "montar") { toast("Middle office não digita boleta por você 🙃"); return; }
+  if (S.hints <= 0) { toast("Middle office em reunião de comitê 🙃"); return; }
+  if (o.hinted) { toast("Essa ordem já foi conferida."); return; }
+  S.hints--;
+  o.hinted = true;
+  el("mo").textContent = "🎧 Chamar middle office (" + S.hints + ")";
+  vib(20);
+  if (!o.divergente) {
+    toast("🎧 Middle office: conferi tudo, pode boletar.", "good");
+  } else {
+    toast("🎧 Middle office: olha o campo " + nomeCampo(o.campo).toUpperCase() + "...", "bad");
+  }
+  renderPainel();
+}
+
+/* ============ FIM DE ANO / RANKING / CARREIRA / LOJA ============ */
+function simulaNpcs(){
+  for (var i = 0; i < S.npcs.length; i++) {
+    var npc = S.npcs[i];
+    var base = -2800 + Math.random() * 7500;
+    var delta = Math.round((base * npc.skill + 400) / 100) * 100;
+    npc.bonus = Math.max(0, npc.bonus + delta);
+  }
+}
+
+function renderRanking(alvo){
+  var lista = [];
+  for (var i = 0; i < S.npcs.length; i++) {
+    lista.push({ n: S.npcs[i].n, b: S.npcs[i].bonus, me: false });
+  }
+  lista.push({ n: S.nome + " (você)", b: S.bonus, me: true });
+  lista.sort(function(a, b){ return b.b - a.b; });
+  var html = "";
+  var pos = 0;
+  for (var j = 0; j < lista.length; j++) {
+    if (lista[j].me) pos = j + 1;
+    html += "<tr" + (lista[j].me ? " class='me'" : "") + "><td>" + (j + 1) + "º</td><td>" +
+      lista[j].n + "</td><td>" + fmt(lista[j].b) + "</td></tr>";
+  }
+  el(alvo).innerHTML = html;
+  return pos;
+}
+
+function renderShop(){
+  var html = "";
+  for (var i = 0; i < SHOP.length; i++) {
+    var it = SHOP[i];
+    var tem = S.up[it.id];
+    var pode = !tem && S.bonus - it.preco >= 500;
+    html += "<div class='shopitem'><b>" + it.icon + " " + it.nome + "</b>" + it.desc +
+      "<span class='preco'>" + fmt(it.preco) + "</span>" +
+      "<button class='btnmini' onclick=\"comprarUp('" + it.id + "')\"" +
+      (tem || !pode ? " disabled" : "") + ">" +
+      (tem ? "✓ Comprado" : (pode ? "Comprar" : "Sem saldo")) + "</button></div>";
+  }
+  el("y-shop").innerHTML = html;
+}
+
+function comprarUp(id){
+  var it = null;
+  for (var i = 0; i < SHOP.length; i++) { if (SHOP[i].id === id) { it = SHOP[i]; break; } }
+  if (!it || S.up[id]) return;
+  if (S.bonus - it.preco < 500) { toast("Não deixe o bônus zerar comprando upgrade 🙃"); return; }
+  S.bonus -= it.preco;
+  S.up[id] = true;
+  somCaixa(); vib(25);
+  toast(it.icon + " " + it.nome + " instalado na sua mesa!", "good");
+  el("y-bonus").textContent = fmt(S.bonus);
+  renderShop();
+}
+
+function endYear(){
+  simulaNpcs();
+
+  var auditHtml = "";
+  if (S.yErr === 0) {
+    S.bonus += 1500;
+    auditHtml += "<div class='audit good'>🏅 Auditoria: ano sem erros operacionais. Selo compliance: +R$ 1.500</div>";
+  } else if (S.yErr >= 3) {
+    S.bonus -= 1500;
+    auditHtml += "<div class='audit bad'>🕵️ Auditoria: " + S.yErr + " erros no ano. Multa: -R$ 1.500</div>";
+  }
+  if (S.up.cdi && S.bonus > 0) {
+    var juros = Math.round(S.bonus * 0.05 / 100) * 100;
+    if (juros > 0) {
+      S.bonus += juros;
+      auditHtml += "<div class='audit good'>💰 Aplicação CDI rendeu: +" + fmt(juros) + "</div>";
+    }
+  }
+  el("y-audit").innerHTML = auditHtml;
+  if (S.bonus > S.best) S.best = S.bonus;
+  if (S.bonus <= 0) { gameOver(); return; }
+
+  var novoCargo = cargoAtual(S.year);
+  var promoHtml = "";
+  if (novoCargo.idx > S.cargoIdx) {
+    S.cargoIdx = novoCargo.idx;
+    promoHtml = "<div class='promo'>🎉 Promoção! Agora você é " + novoCargo.c.t + "</div>";
+    somPromo(); vib([50, 60, 50, 60, 120]);
+  } else {
+    somCaixa();
+  }
+  el("y-promo").innerHTML = promoHtml;
+
+  var delta = S.bonus - S.bonusIni;
+  var pct = S.bonusIni > 0 ? Math.round(delta / S.bonusIni * 100) : 0;
+  el("y-title").textContent = "Fechamento do Ano " + S.year;
+  el("y-bonus").textContent = fmt(S.bonus);
+  el("y-bonus").style.color = delta >= 0 ? "var(--buy)" : "var(--sell)";
+  el("y-delta").textContent = (delta >= 0 ? "+" : "") + pct + "% vs. início do ano";
+  el("y-delta").style.color = delta >= 0 ? "var(--buy)" : "var(--sell)";
+  el("y-ok").textContent = S.yOk;
+  el("y-err").textContent = S.yErr;
+  el("y-combo").textContent = "×" + comboMax();
+  renderShop();
+
+  var pos = renderRanking("y-rank");
+  el("y-next").textContent = "Começar Ano " + (S.year + 1) + " →";
+  var prox = S.year + 1;
+  var novidade = prox === 2 ? " Novidade: ordens de DIGITAÇÃO ⌨️." : (prox === 3 ? " Novidade: ordens por TELEFONE 📞." : "");
+  el("y-warn").textContent = "Você fechou em " + pos + "º na mesa. Ano " + prox + ": até " +
+    (prox >= 4 ? 3 : (prox >= 2 ? 2 : 1)) + " traders e paciência de " +
+    Math.round(Math.max(8, 20 - prox) * (S.up.cafe ? 1.25 : 1)) + "s." + novidade;
+
+  atualizaRecordes();
+  show("s-year");
+}
+
+function comboMax(){
+  return (1 + Math.min(8, S.maxCombo) * 0.25).toFixed(2).replace(".", ",").replace(",00", "");
+}
+
+function nextYear(){
+  S.year++;
+  S.yOk = 0; S.yErr = 0; S.yExp = 0;
+  S.hints = hintsAno();
+  S.bonusIni = S.bonus;
+  el("mo").textContent = "🎧 Chamar middle office (" + S.hints + ")";
+  iniciaAno();
+  show("s-game");
+}
+
+function atualizaRecordes(){
+  var mudou = false;
+  if (S.best > SET.bestBonus) { SET.bestBonus = S.best; mudou = true; }
+  if (S.year > SET.bestAno) { SET.bestAno = S.year; mudou = true; }
+  if (S.cargoIdx > SET.bestCargo) { SET.bestCargo = S.cargoIdx; mudou = true; }
+  if (S.maxCombo > SET.bestCombo) { SET.bestCombo = S.maxCombo; mudou = true; }
+  if (mudou) safeSave();
+}
+
+function renderHud(){
+  el("hud-year").textContent = S.year;
+  el("hud-trade").textContent = S.resolved;
+  el("hud-total").textContent = TRADES_ANO;
+  el("hud-cargo").textContent = CARGOS[S.cargoIdx].t.toUpperCase() + " · " + S.nome.toUpperCase();
+  var b = el("hud-bonus");
+  b.textContent = fmt(S.bonus);
+  b.className = "bonus" + (S.bonus < S.bonusIni ? " neg" : "");
+  var c = el("hud-combo");
+  if (S.combo >= 2) {
+    c.textContent = (S.combo >= 5 ? "🔥 MERCADO AQUECIDO " : "🔥 ") + "×" + comboMult().toFixed(2).replace(".", ",").replace(",00", "");
+    c.className = "combo" + (S.combo >= 5 ? " fever" : "");
+  } else {
+    c.textContent = "";
+    c.className = "combo";
+  }
+}
+
+function gameOver(){
+  clearInterval(loopId);
+  somErro(); vib([120, 80, 200]);
+  atualizaRecordes();
+  el("g-cargo").textContent = "CARREIRA ENCERRADA COMO " + CARGOS[S.cargoIdx].t.toUpperCase();
+  el("g-years").textContent = S.year;
+  el("g-combo").textContent = "×" + comboMax();
+  el("g-best").textContent = fmt(S.best);
+  show("s-over");
+}
+
+/* ============ BOOT ============ */
+function svgMascote(){
+  var m = { skin: "#F5C89B", hair: "#2B2118", shirt: "#4F8EF7" };
+  var s = "<g transform='translate(-63,-118) scale(2.1)'>";
+  s += "<ellipse cx='30' cy='76' rx='20' ry='6' fill='rgba(0,0,0,0.30)'/>";
+  s += "<rect x='14' y='36' width='32' height='36' rx='10' fill='" + m.shirt + "'/>";
+  s += "<rect x='14' y='36' width='32' height='10' rx='5' fill='rgba(255,255,255,0.22)'/>";
+  s += "<polygon points='30,40 26,48 30,58 34,48' fill='#1F2A3D'/>";
+  s += "<rect x='8' y='40' width='9' height='22' rx='4.5' fill='" + m.shirt + "'/>";
+  s += "<rect x='43' y='40' width='9' height='22' rx='4.5' fill='" + m.shirt + "'/>";
+  s += "<circle cx='12.5' cy='63' r='4' fill='" + m.skin + "'/>";
+  s += "<circle cx='47.5' cy='63' r='4' fill='" + m.skin + "'/>";
+  s += "<circle cx='30' cy='20' r='15' fill='" + m.skin + "'/>";
+  s += "<path d='M15,18 a15,15 0 0,1 30,0 l0,-4 a15,13 0 0,0 -30,0 Z' fill='" + m.hair + "'/>";
+  s += "<path d='M15,18 q-2,8 2,12 l1,-10 Z' fill='" + m.hair + "'/>";
+  s += "<path d='M45,18 q2,8 -2,12 l-1,-10 Z' fill='" + m.hair + "'/>";
+  s += "<circle cx='24.5' cy='21' r='2' fill='#1F2430'/>";
+  s += "<circle cx='35.5' cy='21' r='2' fill='#1F2430'/>";
+  s += "<path d='M25,28 q5,4 10,0' fill='none' stroke='#8A5A3B' stroke-width='1.8' stroke-linecap='round'/>";
+  s += "<circle cx='21' cy='25' r='2.5' fill='rgba(239,120,120,0.35)'/>";
+  s += "<circle cx='39' cy='25' r='2.5' fill='rgba(239,120,120,0.35)'/>";
+  s += "</g>";
+  return s;
+}
+
+function toggleRegras(){
+  var r = el("regras");
+  var aberto = r.style.display !== "none";
+  r.style.display = aberto ? "none" : "block";
+  el("btn-regras").textContent = aberto ? "como se joga ▾" : "como se joga ▴";
+}
+
+function boot(){
+  safeLoad();
+  var masc = el("poster-mascote");
+  if (masc) masc.innerHTML = svgMascote();
+  el("tgl-som").className = "tgl" + (SET.som ? " on" : "");
+  el("tgl-som").textContent = SET.som ? "🔊 Som" : "🔇 Som";
+  el("tgl-vib").className = "tgl" + (SET.vib ? " on" : "");
+  if (SET.nome) {
+    el("inp-nome").value = SET.nome;
+    el("cracha-id").textContent = "ID #0042 · READMISSÃO";
+  }
+  if (SET.bestBonus > 0) {
+    el("recorde").innerHTML = "Recorde: <b>" + fmt(SET.bestBonus) + "</b> · Ano " + SET.bestAno +
+      " · " + CARGOS[SET.bestCargo].t + (SET.bestCombo >= 2 ? " · Combo " + SET.bestCombo : "");
+  }
+}
+boot();
+
+/* ============ PWA: instalação e offline ============ */
+var deferredPrompt = null;
+
+window.addEventListener("beforeinstallprompt", function(e){
+  e.preventDefault();
+  deferredPrompt = e;
+  var b = el("btn-install");
+  if (b) b.style.display = "block";
+});
+
+window.addEventListener("appinstalled", function(){
+  deferredPrompt = null;
+  var b = el("btn-install");
+  if (b) b.style.display = "none";
+});
+
+function instalarApp(){
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(){
+    deferredPrompt = null;
+    var b = el("btn-install");
+    if (b) b.style.display = "none";
+  });
+}
+
+(function detectaIOS(){
+  var ua = window.navigator.userAgent || "";
+  var iOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  var standalone = ("standalone" in window.navigator) && window.navigator.standalone;
+  if (iOS && !standalone) {
+    var d = el("install-ios");
+    if (d) d.style.display = "block";
+  }
+})();
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("./sw.js").catch(function(){});
+  });
+}
+</script>
+</body>
+</html>

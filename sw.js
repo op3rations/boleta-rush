@@ -1,4 +1,4 @@
-const CACHE = "boleta-rush-v05";
+const CACHE = "boleta-rush-v07";
 const ASSETS = [
   "./",
   "./index.html",

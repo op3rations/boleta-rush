@@ -173,6 +173,42 @@
   .install-dica{background:var(--card); border:1px solid var(--gold); border-radius:10px;
     padding:10px 12px; font-size:12px; color:var(--txt); margin-top:12px; text-align:center; line-height:1.5;}
   .install-dica b{color:var(--gold);}
+
+  #cenawrap{position:relative;}
+  #joy{position:absolute; left:14px; bottom:14px; width:96px; height:96px; border-radius:50%;
+    background:rgba(19,28,46,.55); border:1.5px solid rgba(79,142,247,.55); display:none;
+    touch-action:none; z-index:5;}
+  #joy.on{display:block;}
+  #joyknob{position:absolute; left:26px; top:26px; width:44px; height:44px; border-radius:50%;
+    background:rgba(79,142,247,.85); box-shadow:0 2px 8px rgba(0,0,0,.4); pointer-events:none;}
+  #painel-anda{display:none;}
+  .anda-status{color:var(--mut); font-size:13px; text-align:center; padding:2px 0 10px;}
+  #acoes-anda .btn{margin-bottom:8px;}
+  #chat{position:fixed; inset:0; background:rgba(4,8,16,.72); z-index:20; display:none;
+    align-items:flex-end; justify-content:center;}
+  #chat.on{display:flex;}
+  .chat-card{width:100%; max-width:420px; background:var(--card); border:1px solid var(--line);
+    border-radius:16px 16px 0 0; padding:14px 14px 20px; max-height:74vh; display:flex; flex-direction:column;}
+  .chat-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+  .chat-head b{font-size:15px;}
+  .chat-x{color:var(--mut); font-size:18px; padding:2px 8px; cursor:pointer;}
+  #chat-log{flex:1; overflow-y:auto; min-height:110px; max-height:36vh; margin-bottom:10px;}
+  .msg{max-width:84%; padding:9px 12px; border-radius:12px; font-size:14px; margin-bottom:7px;
+    line-height:1.4; width:fit-content;}
+  .msg.eu{background:#26436F; margin-left:auto; border-bottom-right-radius:4px;}
+  .msg.ele{background:var(--card2); border:1px solid var(--line); border-bottom-left-radius:4px;}
+  .msg.sys{background:none; color:var(--mut); font-size:12px; text-align:center; max-width:100%; margin:4px auto;}
+  .chat-row{display:flex; gap:8px;}
+  .chat-row input{flex:1; margin:0;}
+  .chat-row .btn{width:auto; padding:12px 18px;}
+  #s-demitido{position:fixed; inset:0; background:#B91C1C; z-index:30; display:none;
+    align-items:center; justify-content:center; text-align:center; padding:24px;}
+  .dem-box h1{font-size:32px; color:#fff; letter-spacing:1px; margin:10px 0 0;}
+  .dem-sub{font-size:22px; color:#FECACA; font-weight:800; margin:8px 0 28px;}
+  .dem-box .btn{background:#fff; color:#B91C1C; box-shadow:0 3px 0 #7f1414;}
+  @keyframes soco{0%{transform:none;} 30%{transform:translate(-8px,4px) rotate(-2deg);}
+    60%{transform:translate(7px,-3px) rotate(2deg);} 100%{transform:none;}}
+  .soco{animation:soco .35s ease;}
 </style>
 </head>
 <body>
@@ -233,7 +269,6 @@
 
       <button class="btn btn-install" id="btn-install" style="display:none;" onclick="instalarApp()">📲 Instalar o jogo</button>
       <div class="install-dica" id="install-ios" style="display:none;">📲 Para instalar: toque em <b>Compartilhar</b> e depois em <b>Adicionar à Tela de Início</b></div>
-
       <div class="record center" id="recorde"></div>
       <button class="link-regras" id="btn-regras" onclick="toggleRegras()">como se joga ▾</button>
       <ul class="rules" id="regras" style="display:none;">
@@ -258,81 +293,86 @@
       <span class="combo" id="hud-combo"></span>
     </div>
 
-    <svg id="cena" viewBox="0 0 420 396" xmlns="http://www.w3.org/2000/svg">
+    <div id="cenawrap">
+    <svg id="cena" viewBox="0 0 420 480" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stop-color="#F7B267"/>
           <stop offset="0.55" stop-color="#E2748A"/>
           <stop offset="1" stop-color="#6C5B9E"/>
         </linearGradient>
-        <linearGradient id="parede" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#33456B"/>
-          <stop offset="1" stop-color="#28375A"/>
-        </linearGradient>
-        <pattern id="piso" width="56" height="28" patternUnits="userSpaceOnUse" patternTransform="translate(0,4)">
-          <rect width="56" height="28" fill="#3A4A6E"/>
-          <path d="M0,14 L28,0 L56,14 L28,28 Z" fill="#425379"/>
-        </pattern>
       </defs>
+      <rect x="0" y="0" width="420" height="480" fill="#141E33"/>
 
-      <rect x="0" y="0" width="420" height="150" fill="url(#parede)"/>
-      <rect x="0" y="146" width="420" height="7" fill="#1E2A47"/>
-      <rect x="0" y="152" width="420" height="244" fill="url(#piso)"/>
-
-      <g>
-        <rect x="16" y="16" width="150" height="112" rx="6" fill="#1B2440"/>
-        <rect x="21" y="21" width="140" height="102" rx="4" fill="url(#ceu)"/>
-        <circle cx="126" cy="52" r="12" fill="#FFE08A"/>
-        <rect x="27" y="70" width="16" height="53" fill="#3A2F55"/>
-        <rect x="47" y="56" width="20" height="67" fill="#453763"/>
-        <rect x="71" y="78" width="14" height="45" fill="#3A2F55"/>
-        <rect x="89" y="48" width="22" height="75" fill="#4B3C6B"/>
-        <rect x="115" y="84" width="18" height="39" fill="#3A2F55"/>
-        <rect x="137" y="66" width="16" height="57" fill="#453763"/>
-        <rect x="50" y="62" width="4" height="4" fill="#FFE08A"/><rect x="58" y="72" width="4" height="4" fill="#FFD166"/>
-        <rect x="93" y="56" width="4" height="4" fill="#FFE08A"/><rect x="101" y="66" width="4" height="4" fill="#FFD166"/>
-        <rect x="93" y="76" width="4" height="4" fill="#FFE08A"/><rect x="140" y="72" width="4" height="4" fill="#FFD166"/>
-        <rect x="88" y="16" width="6" height="112" fill="#1B2440"/>
-        <rect x="16" y="68" width="150" height="5" fill="#1B2440"/>
+      <g transform="translate(210,150) scale(-1,1) skewY(26.565)">
+        <rect x="0" y="-115" width="208" height="115" fill="#26365B"/>
+        <rect x="0" y="-9" width="208" height="9" fill="#1B2745"/>
+        <rect x="34" y="-102" width="140" height="66" rx="4" fill="#1B2440"/>
+        <rect x="38" y="-98" width="132" height="58" rx="3" fill="url(#ceu)"/>
+        <circle cx="150" cy="-80" r="9" fill="#FFE08A"/>
+        <rect x="44" y="-72" width="14" height="32" fill="#3A2F55"/>
+        <rect x="62" y="-82" width="18" height="42" fill="#453763"/>
+        <rect x="84" y="-66" width="12" height="26" fill="#3A2F55"/>
+        <rect x="100" y="-88" width="20" height="48" fill="#4B3C6B"/>
+        <rect x="124" y="-62" width="16" height="22" fill="#3A2F55"/>
+        <rect x="66" y="-76" width="4" height="4" fill="#FFE08A"/>
+        <rect x="104" y="-82" width="4" height="4" fill="#FFD166"/>
+        <rect x="106" y="-70" width="4" height="4" fill="#FFE08A"/>
+        <rect x="103" y="-98" width="5" height="58" fill="#1B2440"/>
+        <rect x="38" y="-72" width="132" height="4" fill="#1B2440"/>
       </g>
 
-      <g>
-        <rect x="188" y="18" width="180" height="74" rx="8" fill="#0A0F1C" stroke="#1F2A3D" stroke-width="3"/>
-        <clipPath id="tvclip"><rect x="193" y="23" width="170" height="64" rx="5"/></clipPath>
+      <g transform="translate(210,150) skewY(26.565)">
+        <rect x="0" y="-115" width="208" height="115" fill="#2E4066"/>
+        <rect x="0" y="-9" width="208" height="9" fill="#20304F"/>
+        <rect x="26" y="-106" width="156" height="62" rx="6" fill="#0A0F1C" stroke="#1F2A3D" stroke-width="3"/>
+        <rect x="31" y="-101" width="146" height="52" fill="#060B14"/>
+        <polyline points="34,-60 48,-68 60,-64 74,-78 88,-74 104,-86 118,-80 134,-90 150,-84 166,-94 174,-90" fill="none" stroke="#22C55E" stroke-width="2.5"/>
+        <polyline points="34,-86 50,-80 66,-84 82,-72 98,-78 114,-66 130,-72 148,-62 164,-68 174,-64" fill="none" stroke="#EF4444" stroke-width="2" opacity="0.8"/>
+        <rect x="31" y="-63" width="146" height="14" fill="#101826"/>
+        <clipPath id="tvclip"><rect x="31" y="-63" width="146" height="14"/></clipPath>
         <g clip-path="url(#tvclip)">
-          <rect x="193" y="23" width="170" height="64" fill="#060B14"/>
-          <polyline points="196,72 210,64 222,68 236,54 250,58 264,44 278,50 292,38 306,44 320,32 336,40 352,30 362,34" fill="none" stroke="#22C55E" stroke-width="2.5"/>
-          <polyline points="196,44 214,50 228,46 244,58 258,52 274,62 290,56 306,66 322,60 340,68 362,62" fill="none" stroke="#EF4444" stroke-width="2" opacity="0.8"/>
-          <rect x="193" y="70" width="170" height="17" fill="#101826"/>
           <g class="tvmarquee">
-            <text x="0" y="82" font-family="Menlo,monospace" font-size="10" fill="#FF9F1C">PTRL4 ▲38,42&#160;&#160;MNRD3 ▼61,88&#160;&#160;BNCO4 ▲34,91&#160;&#160;AGRO3 ▲29,10&#160;&#160;VRJO3 ▼9,22&#160;&#160;MTRZ3 ▲53,04&#160;&#160;CRVJ3 ▲13,01&#160;&#160;BLSA3 ▼11,08</text>
+            <text x="-240" y="-52" font-family="Menlo,monospace" font-size="10" fill="#FF9F1C">PTRL4 ▲38,42  MNRD3 ▼61,88  BNCO4 ▲34,91  AGRO3 ▲29,10  VRJO3 ▼9,22  MTRZ3 ▲53,04</text>
           </g>
         </g>
-        <rect x="270" y="92" width="16" height="8" fill="#1F2A3D"/>
+        <rect x="52" y="-34" width="114" height="18" rx="4" fill="#1B2440"/>
+        <text x="109" y="-21" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="1.5" fill="#EAC54F" font-family="inherit">★ CONTINENTAL</text>
       </g>
 
-      <g>
-        <circle cx="392" cy="34" r="16" fill="#E8EAF0" stroke="#1F2A3D" stroke-width="3"/>
-        <line x1="392" y1="34" x2="392" y2="24" stroke="#2C3A55" stroke-width="2"/>
-        <line x1="392" y1="34" x2="399" y2="38" stroke="#2C3A55" stroke-width="2"/>
+      <g id="piso-iso"></g>
+
+      <g transform="translate(352,196)">
+        <ellipse cx="14" cy="46" rx="15" ry="5" fill="#1E2A47"/>
+        <rect x="8" y="18" width="12" height="28" rx="3" fill="#B26E2B"/>
+        <circle cx="6" cy="10" r="9" fill="#2E9E5B"/>
+        <circle cx="18" cy="4" r="10" fill="#37B56A"/>
+        <circle cx="24" cy="16" r="8" fill="#2E9E5B"/>
       </g>
 
-      <g>
-        <rect x="184" y="104" width="188" height="26" rx="5" fill="#1B2440"/>
-        <text x="278" y="121" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="2" fill="#EAC54F" font-family="inherit">★ CONTINENTAL CAPITAL</text>
-      </g>
-
-      <g>
-        <ellipse cx="398" cy="150" rx="14" ry="5" fill="#1E2A47"/>
-        <rect x="392" y="120" width="12" height="30" rx="3" fill="#B26E2B"/>
-        <circle cx="390" cy="112" r="9" fill="#2E9E5B"/>
-        <circle cx="402" cy="106" r="10" fill="#37B56A"/>
-        <circle cx="408" cy="118" r="8" fill="#2E9E5B"/>
+      <g transform="translate(45,152)">
+        <rect x="0" y="0" width="54" height="92" rx="6" fill="#1B2440" stroke="#0F1726" stroke-width="3"/>
+        <rect x="6" y="8" width="42" height="34" rx="4" fill="#0A0F1C"/>
+        <rect x="10" y="12" width="14" height="26" rx="2" fill="#F15D1B" opacity="0.9"/>
+        <rect x="27" y="12" width="14" height="26" rx="2" fill="#4F8EF7" opacity="0.9"/>
+        <text x="27" y="56" text-anchor="middle" font-size="9" font-weight="700" fill="#EAC54F" font-family="inherit">CAFÉ</text>
+        <rect x="14" y="62" width="26" height="18" rx="3" fill="#0A0F1C"/>
+        <rect x="21" y="66" width="12" height="11" rx="2" fill="#E8EAF0"/>
+        <rect x="4" y="88" width="46" height="6" fill="#0F1726"/>
       </g>
 
       <g id="camada-mesas"></g>
+
+      <ellipse cx="325" cy="302" rx="42" ry="12" fill="#2C3A5C"/>
+      <text x="325" y="216" text-anchor="middle" font-size="10" font-weight="800" fill="#EAC54F" font-family="inherit">CHEFE</text>
+      <g id="chefe" transform="translate(295,229)"></g>
+
+      <g id="mesa-jogador" transform="translate(126,300)"></g>
+      <g id="player" transform="translate(180,240)"></g>
       <g id="camada-bolhas"></g>
     </svg>
+    <div id="joy"><div id="joyknob"></div></div>
+    </div>
 
     <div id="painel">
       <div class="painel-titulo"><span>🖥️ SUA MESA · BACK OFFICE</span><span id="p-trader"></span></div>
@@ -380,6 +420,11 @@
         </div>
       </div>
       <button class="btn btn-ghost" id="mo" onclick="middleOffice()">🎧 Chamar middle office (3)</button>
+      <button class="btn btn-ghost" id="btn-levantar" onclick="levantar()">🚶 Levantar da mesa</button>
+      <div id="painel-anda">
+        <div class="anda-status" id="anda-status">🚶 Você está longe da mesa — as ordens continuam chegando!</div>
+        <div id="acoes-anda"></div>
+      </div>
     </div>
   </div>
 
@@ -425,6 +470,24 @@
     </div>
   </div>
 
+</div>
+<div id="chat">
+  <div class="chat-card">
+    <div class="chat-head"><b id="chat-nome">Trader</b><span class="chat-x" onclick="fechaChat()">✕</span></div>
+    <div id="chat-log"></div>
+    <div class="chat-row">
+      <input type="text" id="chat-inp" maxlength="140" placeholder="Diga o que pensa…" autocomplete="off">
+      <button class="btn btn-main" onclick="enviaChat()">➤</button>
+    </div>
+  </div>
+</div>
+<div id="s-demitido">
+  <div class="dem-box">
+    <div style="font-size:56px;">👊💼</div>
+    <h1>VOCÊ FOI DEMITIDO.</h1>
+    <div class="dem-sub">Se fudeu.</div>
+    <button class="btn" onclick="recomecaEstagiario()">Recomeçar como estagiário</button>
+  </div>
 </div>
 <div id="toast" class="mono"></div>
 
@@ -484,9 +547,49 @@ var BONUS_INICIAL = 10000;
 var V = { bater: 500, devolver: 750, fone: 750, foneDev: 1000, montar: 800,
           erro: 1000, campoErrado: 400, montarErro: 800, timeout: 500 };
 var SLOTS = [
-  { x: 18,  y: 168 },
-  { x: 226, y: 168 },
-  { x: 122, y: 262 }
+  { x: 45,  y: 178 },
+  { x: 194, y: 178 },
+  { x: 120, y: 232 }
+];
+var JOGADOR = { skin: "#F5C89B", hair: "#6B3F1D", shirt: "#F7F7F7" };
+var CHEFE_SKIN = { skin: "#E0A878", hair: "#9CA3AF", shirt: "#374151" };
+var ISO = { cx: 210, cy: 150, hw: 23, hh: 11.5, n: 9, min: 0.6, max: 8.4 };
+function isoX(i, j){ return ISO.cx + (i - j) * ISO.hw; }
+function isoY(i, j){ return ISO.cy + (i + j) * ISO.hh; }
+function tileDe(x, y){
+  var a = (x - ISO.cx) / ISO.hw, b = (y - ISO.cy) / ISO.hh;
+  return { i: (a + b) / 2, j: (b - a) / 2 };
+}
+function clampTile(t){
+  return { i: Math.max(ISO.min, Math.min(ISO.max, t.i)),
+           j: Math.max(ISO.min, Math.min(ISO.max, t.j)) };
+}
+var SEAT = { i: 6.8, j: 6.76 };
+var ALVOS_FIXOS = {
+  mesa:  { i: 6.8, j: 6.76 },
+  cafe:  { i: 0.9, j: 6.9 },
+  chefe: { i: 8.4, j: 4.24 }
+};
+var CAFE_CUSTO_SEG = 30;
+
+var XINGA_PESADO = ["caralho","krl","crlh","porra","pqp","foda","foder","fode-","fode ","fodase","foda-se","fudeu","fudido","merda","bosta","puta","arrombado","cuzao","cuzão","vsf","fdp","desgraça","desgraca","escroto","vai se f"];
+var XINGA_MEDIO = ["incompetente","burro","idiota","imbecil","inutil","inútil","lixo","ridiculo","ridículo","vergonha","palhaço","palhaco","animal","jumento","otario","otário","babaca","horrivel","horrível","pessimo","péssimo","preguiçoso","preguicoso","folgado"];
+var XINGA_DURO = ["erro","errado","errou","cuidado","atenção","atencao","presta","de novo","sempre erra","cansado","saco","chato","atrapalha","prejudica","vacilo","vacilou"];
+var RESPOSTAS = [
+  [ "Foi mal mesmo, a boleta saiu torta. Próxima vai redonda, prometo.",
+    "Tá certo, anotei. Valeu por avisar na educação — raridade nessa mesa.",
+    "Justo. Eu ajusto. Te devo um café da máquina." ],
+  [ "Calma, campeão. Todo mundo erra... menos o back office, né, que só confere.",
+    "Uau, levantou da mesa pra isso? Manda por e-mail da próxima.",
+    "Anota no teu controle então, já que tu ama planilha mais que gente." ],
+  [ "Olha o carimbador de boleta dando lição! Volta pra tua mesinha, vai.",
+    "Eu movimento milhões, tu movimenta Ctrl+C. Senta lá, gênio.",
+    "Fala mais alto que do topo da minha meta eu não te escuto.",
+    "Tu confere número o dia inteiro e ainda erra o tom. Impressionante." ],
+  [ "Vai à merda, boleteiro! Eu GERO receita, tu só carimba papel, porra!",
+    "Atravessou a sala inteira pra pagar de valentão? Sai da minha mesa, caralho!",
+    "Puta que pariu, chega de mimimi — vai conferir boleta, é teu único talento!",
+    "Fala com a minha mão, arrombado. E na volta traz um café pra mim." ]
 ];
 
 /* ============ ESTADO / PERSISTÊNCIA ============ */
@@ -688,6 +791,272 @@ function montaMesas(){
   camada.innerHTML = html;
 }
 
+/* ============ JOGADOR ANDÁVEL / MODOS ============ */
+function montaPiso(){
+  var g = el("piso-iso");
+  if (g.innerHTML) return;
+  var html2 = "";
+  for (var i = 0; i < ISO.n; i++) {
+    for (var j = 0; j < ISO.n; j++) {
+      var x = isoX(i, j), y = isoY(i, j);
+      var cor = ((i + j) % 2 === 0) ? "#3A4A6E" : "#425379";
+      html2 += "<polygon points='" + x + "," + y + " " + (x + ISO.hw) + "," + (y + ISO.hh) + " " +
+        x + "," + (y + 2 * ISO.hh) + " " + (x - ISO.hw) + "," + (y + ISO.hh) +
+        "' fill='" + cor + "' stroke='#2C3A5C' stroke-width='0.8'/>";
+    }
+  }
+  g.innerHTML = html2;
+}
+
+function montaExtras(){
+  montaPiso();
+  el("chefe").innerHTML = svgTrader(CHEFE_SKIN);
+  el("mesa-jogador").innerHTML = svgMesa();
+  renderPlayer(true);
+  renderModo();
+}
+
+function renderPlayer(rebuild){
+  var p = el("player");
+  var sx = isoX(S.pi, S.pj) - 30, sy = isoY(S.pi, S.pj) - 68;
+  p.setAttribute("transform", "translate(" + Math.round(sx) + "," + Math.round(sy) + ")");
+  if (rebuild) {
+    p.innerHTML = svgTrader(JOGADOR) +
+      (S.modo === "cafe" ? "<text x='44' y='6' font-size='16'>☕</text>" : "");
+  }
+}
+
+function renderModo(){
+  var fora = S.modo !== "mesa";
+  el("joy").className = (S.modo === "anda") ? "on" : "";
+  el("painel-anda").style.display = fora ? "block" : "none";
+  el("btn-levantar").style.display = fora ? "none" : "block";
+  el("mo").style.display = fora ? "none" : "block";
+  if (fora) {
+    el("dica-vazio").style.display = "none";
+    el("p-conteudo").style.display = "none";
+    S.alvo = "__force__";
+    renderAcoes(calcAlvo());
+  } else {
+    renderPainel();
+  }
+  renderPlayer(true);
+}
+
+function levantar(){
+  if (!S || S.encerrando) return;
+  S.modo = "anda";
+  vib(15); somPop();
+  renderModo();
+}
+
+function sentar(){
+  S.modo = "mesa";
+  S.pi = SEAT.i; S.pj = SEAT.j;
+  vib(15); somPop();
+  renderModo();
+}
+
+function calcAlvo(){
+  var melhor = null, melhorD = 1.35;
+  function tenta(tipo, ti, tj, dado){
+    var d = Math.sqrt((S.pi - ti) * (S.pi - ti) + (S.pj - tj) * (S.pj - tj));
+    if (d < melhorD) { melhorD = d; melhor = { tipo: tipo, dado: dado }; }
+  }
+  tenta("mesa", ALVOS_FIXOS.mesa.i, ALVOS_FIXOS.mesa.j, null);
+  tenta("cafe", ALVOS_FIXOS.cafe.i, ALVOS_FIXOS.cafe.j, null);
+  tenta("chefe", ALVOS_FIXOS.chefe.i, ALVOS_FIXOS.chefe.j, null);
+  for (var i = 0; i < S.orders.length; i++) {
+    var o = S.orders[i];
+    var t = clampTile(tileDe(SLOTS[o.slot].x + 85, SLOTS[o.slot].y + 14));
+    tenta("trader", t.i, t.j, o.id);
+  }
+  return melhor;
+}
+
+function renderAcoes(alvo){
+  var chave = alvo ? (alvo.tipo + ":" + alvo.dado) : "nada";
+  if (S.alvo === chave) return;
+  S.alvo = chave;
+  var html = "";
+  if (S.modo === "cafe") {
+    el("anda-status").textContent = "☕ Bebendo café... -R$ " + CAFE_CUSTO_SEG + " por segundo. Vida boa, né?";
+    html = "<button class='btn btn-main acao' onclick='paraCafe()'>🚶 Voltar ao trabalho</button>";
+  } else if (!alvo) {
+    el("anda-status").textContent = "🚶 Você está longe da mesa — as ordens continuam chegando!";
+    html = "<div class='anda-status'>ande até um trader, o café, o chefe ou sua mesa…</div>";
+  } else if (alvo.tipo === "mesa") {
+    el("anda-status").textContent = "💺 Sua mesa está aqui do lado.";
+    html = "<button class='btn btn-buy' onclick='sentar()'>💺 Sentar e voltar a boletar</button>";
+  } else if (alvo.tipo === "cafe") {
+    el("anda-status").textContent = "🥤 A máquina de conveniência te encara.";
+    html = "<button class='btn btn-main' onclick='iniciaCafe()'>☕ Tomar um café (-R$ " + CAFE_CUSTO_SEG + "/s)</button>";
+  } else if (alvo.tipo === "chefe") {
+    el("anda-status").textContent = "👔 O chefe está bem na sua frente. Pense bem.";
+    html = "<button class='btn btn-sell' onclick='baterNoChefe()'>👊 Bater no chefe</button>";
+  } else if (alvo.tipo === "trader") {
+    var o = achaOrdem(alvo.dado);
+    if (o) {
+      el("anda-status").textContent = "😤 " + o.trader.nome + " está aqui na sua frente.";
+      html = "<button class='btn btn-sell' onclick='abreChat(" + o.id + ")'>💬 Dar satisfação pro " + o.trader.nome + "</button>";
+    }
+  }
+  el("acoes-anda").innerHTML = html;
+}
+
+function achaOrdem(id){
+  for (var i = 0; i < S.orders.length; i++) {
+    if (S.orders[i].id === id) return S.orders[i];
+  }
+  return null;
+}
+
+function tickJogador(){
+  if (S.modo === "anda") {
+    if (S.joy.x !== 0 || S.joy.y !== 0) {
+      var spd = 9;
+      S.pi += (S.joy.x / (2 * ISO.hw) + S.joy.y / (2 * ISO.hh)) * spd;
+      S.pj += (S.joy.y / (2 * ISO.hh) - S.joy.x / (2 * ISO.hw)) * spd;
+      var c = clampTile({ i: S.pi, j: S.pj }); S.pi = c.i; S.pj = c.j;
+      renderPlayer(false);
+    }
+    renderAcoes(calcAlvo());
+  } else if (S.modo === "cafe") {
+    S.cafeAcc += 100;
+    if (S.cafeAcc >= 1000) {
+      S.cafeAcc -= 1000;
+      S.bonus -= CAFE_CUSTO_SEG;
+      showFloat("-R$ " + CAFE_CUSTO_SEG, "bad");
+      renderHud();
+      checaGameOver();
+    }
+  }
+}
+
+function iniciaCafe(){
+  S.modo = "cafe";
+  S.cafeAcc = 0;
+  S.pi = 1.7; S.pj = 6.7;
+  somCaixa(); vib(15);
+  S.alvo = "__force__";
+  renderModo();
+}
+
+function paraCafe(){
+  S.modo = "anda";
+  S.alvo = "__force__";
+  renderModo();
+}
+
+/* ============ CONFRONTO COM O TRADER ============ */
+function abreChat(ordId){
+  S.chatOrdId = ordId;
+  var o = achaOrdem(ordId);
+  if (!o) return;
+  el("chat-nome").textContent = "😤 " + o.trader.nome + " · front office";
+  el("chat-log").innerHTML = "<div class='msg sys'>você levantou da mesa só pra isso. as ordens continuam drenando…</div>";
+  el("chat-inp").value = "";
+  el("chat").className = "on";
+}
+
+function fechaChat(){
+  el("chat").className = "";
+  S.chatOrdId = null;
+}
+
+function mideTier(txt){
+  var t = txt.toLowerCase();
+  var tier = 0;
+  var i;
+  for (i = 0; i < XINGA_PESADO.length; i++) { if (t.indexOf(XINGA_PESADO[i]) >= 0) { tier = 3; break; } }
+  if (tier < 3) {
+    for (i = 0; i < XINGA_MEDIO.length; i++) { if (t.indexOf(XINGA_MEDIO[i]) >= 0) { tier = 2; break; } }
+  }
+  if (tier < 2) {
+    for (i = 0; i < XINGA_DURO.length; i++) { if (t.indexOf(XINGA_DURO[i]) >= 0) { tier = 1; break; } }
+  }
+  var letras = txt.replace(/[^a-zA-ZÀ-ú]/g, "");
+  var caps = letras.replace(/[^A-ZÀ-Ú]/g, "");
+  if (letras.length > 6 && caps.length / letras.length > 0.6) tier = Math.min(3, tier + 1);
+  if ((txt.match(/!/g) || []).length >= 2) tier = Math.min(3, tier + 1);
+  return tier;
+}
+
+function enviaChat(){
+  var inp = el("chat-inp");
+  var txt = (inp.value || "").trim();
+  if (!txt) return;
+  inp.value = "";
+  var log = el("chat-log");
+  log.innerHTML += "<div class='msg eu'>" + escapaHtml(txt) + "</div>";
+  log.scrollTop = log.scrollHeight;
+  var o = achaOrdem(S.chatOrdId);
+  var tier = mideTier(txt);
+  setTimeout(function(){
+    if (!o || !achaOrdem(S.chatOrdId)) {
+      log.innerHTML += "<div class='msg sys'>(ele já largou você falando sozinho e voltou pro pregão)</div>";
+    } else {
+      var resp = rnd(RESPOSTAS[tier]);
+      log.innerHTML += "<div class='msg ele'>" + resp + "</div>";
+      if (tier >= 2) { somErro(); vib([40, 30, 40]); } else { somPop(); }
+    }
+    log.scrollTop = log.scrollHeight;
+  }, 650);
+}
+
+function escapaHtml(s){
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/* ============ SOCO NO CHEFE / DEMISSÃO ============ */
+function baterNoChefe(){
+  if (S.encerrando) return;
+  S.encerrando = true;
+  clearInterval(loopId);
+  beep(90, 0.3, "sawtooth", 0.1); beep(60, 0.4, "sawtooth", 0.09, 0.12);
+  vib([120, 60, 200]);
+  el("app").classList.add("soco");
+  el("chefe").innerHTML = svgTrader(CHEFE_SKIN) + "<text x='6' y='6' font-size='22'>💥</text>";
+  atualizaRecordes();
+  setTimeout(function(){
+    el("app").classList.remove("soco");
+    fechaChat();
+    el("s-demitido").style.display = "flex";
+  }, 700);
+}
+
+function recomecaEstagiario(){
+  el("s-demitido").style.display = "none";
+  startGame();
+}
+
+/* ============ JOYSTICK ============ */
+function attachJoy(){
+  var joy = el("joy"), knob = el("joyknob");
+  function aplica(cx, cy){
+    var r = joy.getBoundingClientRect();
+    var dx = cx - (r.left + r.width / 2);
+    var dy = cy - (r.top + r.height / 2);
+    var d = Math.sqrt(dx * dx + dy * dy) || 1;
+    var m = Math.min(d, 34);
+    if (S) { S.joy.x = (dx / d) * (m / 34); S.joy.y = (dy / d) * (m / 34); }
+    knob.style.left = (26 + (dx / d) * m) + "px";
+    knob.style.top = (26 + (dy / d) * m) + "px";
+  }
+  function solta(){
+    if (S) { S.joy.x = 0; S.joy.y = 0; }
+    knob.style.left = "26px"; knob.style.top = "26px";
+  }
+  joy.addEventListener("touchstart", function(e){ e.preventDefault(); aplica(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+  joy.addEventListener("touchmove", function(e){ e.preventDefault(); aplica(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+  joy.addEventListener("touchend", function(e){ e.preventDefault(); solta(); }, { passive: false });
+  var mouseOn = false;
+  joy.addEventListener("mousedown", function(e){ mouseOn = true; aplica(e.clientX, e.clientY); });
+  window.addEventListener("mousemove", function(e){ if (mouseOn) aplica(e.clientX, e.clientY); });
+  window.addEventListener("mouseup", function(){ if (mouseOn) { mouseOn = false; solta(); } });
+}
+
+
 /* ============ FLUXO DO JOGO ============ */
 function startGame(){
   var nome = el("inp-nome").value.trim() || "Você";
@@ -705,9 +1074,12 @@ function startGame(){
     orders: [], spawned: 0, resolved: 0, nextId: 1,
     selId: null, lastSpawn: 0, encerrando: false,
     combo: 0, maxCombo: 0, rushAvisado: false,
-    up: { cafe: false, headset: false, cdi: false, terminal: false }
+    up: { cafe: false, headset: false, cdi: false, terminal: false },
+    modo: "mesa", pi: SEAT.i, pj: SEAT.j,
+    joy: { x: 0, y: 0 }, alvo: null, cafeAcc: 0, chatOrdId: null
   };
   montaMesas();
+  montaExtras();
   iniciaAno();
   show("s-game");
 }
@@ -718,10 +1090,13 @@ function iniciaAno(){
   S.selId = null; S.encerrando = false;
   S.rushAvisado = false;
   S.lastSpawn = -99999;
+  S.modo = "mesa"; S.pi = SEAT.i; S.pj = SEAT.j;
+  S.joy.x = 0; S.joy.y = 0; S.chatOrdId = null; S.alvo = null;
+  el("chat").className = "";
   el("camada-bolhas").innerHTML = "";
   for (var i = 0; i < SLOTS.length; i++) el("slot-char-" + i).innerHTML = "";
   renderHud();
-  renderPainel();
+  renderModo();
   clearInterval(loopId);
   loopId = setInterval(tick, 100);
 }
@@ -886,6 +1261,8 @@ function tick(){
     if (o.resta <= 0) expiraOrder(o);
   }
 
+  tickJogador();
+
   if (S.resolved >= TRADES_ANO && S.orders.length === 0) {
     S.encerrando = true;
     clearInterval(loopId);
@@ -903,9 +1280,12 @@ function removeOrder(o){
   S.resolved++;
   if (S.selId === o.id) {
     S.selId = null;
-    if (S.orders.length > 0) selectOrder(S.orders[0].id);
-    else renderPainel();
+    if (S.modo === "mesa") {
+      if (S.orders.length > 0) selectOrder(S.orders[0].id);
+      else renderPainel();
+    }
   }
+  if (S.modo !== "mesa") { S.alvo = "__force__"; renderAcoes(calcAlvo()); }
   renderHud();
 }
 
@@ -956,6 +1336,7 @@ function expiraOrder(o){
 }
 
 function selectOrder(id){
+  if (S.modo !== "mesa") { toast("Sente na sua mesa pra boletar 💺"); return; }
   var existe = false;
   for (var i = 0; i < S.orders.length; i++) { if (S.orders[i].id === id) { existe = true; break; } }
   if (!existe) return;
@@ -981,6 +1362,7 @@ function ordemSel(){
 }
 
 function renderPainel(){
+  if (S && S.modo !== "mesa") return;
   var o = ordemSel();
   el("area-campo").style.display = "none";
   el("area-montar").style.display = "none";
@@ -1336,6 +1718,9 @@ function toggleRegras(){
 
 function boot(){
   safeLoad();
+  attachJoy();
+  var ci = el("chat-inp");
+  if (ci) ci.addEventListener("keydown", function(e){ if (e.key === "Enter") enviaChat(); });
   var masc = el("poster-mascote");
   if (masc) masc.innerHTML = svgMascote();
   el("tgl-som").className = "tgl" + (SET.som ? " on" : "");

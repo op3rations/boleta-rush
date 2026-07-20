@@ -179,6 +179,9 @@
     background:rgba(19,28,46,.55); border:1.5px solid rgba(79,142,247,.55); display:none;
     touch-action:none; z-index:5;}
   #joy.on{display:block;}
+  @keyframes pingpulse{0%{opacity:.9; transform:scale(.6);} 100%{opacity:0; transform:scale(1.5);}}
+  .ping-on{animation:pingpulse 1s ease-out infinite;}
+  #cena{touch-action:manipulation;}
   #joyknob{position:absolute; left:26px; top:26px; width:44px; height:44px; border-radius:50%;
     background:rgba(79,142,247,.85); box-shadow:0 2px 8px rgba(0,0,0,.4); pointer-events:none;}
   #painel-anda{display:none;}
@@ -192,6 +195,10 @@
   .chat-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
   .chat-head b{font-size:15px;}
   .chat-x{color:var(--mut); font-size:18px; padding:2px 8px; cursor:pointer;}
+  .raiva-wrap{display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:10px;
+    letter-spacing:.5px; color:var(--mut); text-transform:uppercase;}
+  .raiva-bar{flex:1; height:6px; background:var(--card2); border-radius:3px; overflow:hidden;}
+  #raiva-fill{height:100%; width:0%; background:var(--buy); border-radius:3px; transition:width .35s ease, background .35s ease;}
   #chat-log{flex:1; overflow-y:auto; min-height:110px; max-height:36vh; margin-bottom:10px;}
   .msg{max-width:84%; padding:9px 12px; border-radius:12px; font-size:14px; margin-bottom:7px;
     line-height:1.4; width:fit-content;}
@@ -308,6 +315,14 @@
     <div id="cenawrap">
     <svg id="cena" viewBox="0 0 420 480" xmlns="http://www.w3.org/2000/svg">
       <defs>
+        <radialGradient id="vinheta" cx="0.5" cy="0.42" r="0.78">
+          <stop offset="0.45" stop-color="#000000" stop-opacity="0"/>
+          <stop offset="1" stop-color="#000000" stop-opacity="0.42"/>
+        </radialGradient>
+        <radialGradient id="luzpiso" cx="0.5" cy="0.35" r="0.6">
+          <stop offset="0" stop-color="#8FA6D8" stop-opacity="0.16"/>
+          <stop offset="1" stop-color="#8FA6D8" stop-opacity="0"/>
+        </radialGradient>
         <linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stop-color="#F7B267"/>
           <stop offset="0.55" stop-color="#E2748A"/>
@@ -383,12 +398,14 @@
         <g id="chefe-wrap" transform="translate(369,257)">
           <ellipse cx="0" cy="2" rx="24" ry="8" fill="#2C3A5C"/>
           <text x="0" y="-74" text-anchor="middle" font-size="9" font-weight="800" fill="#EAC54F" font-family="inherit">CHEFE</text>
-          <g id="chefe"></g>
+          <g id="chefe-anim"><g id="chefe"></g></g>
         </g>
         <g id="mesa-jogador" transform="translate(187,231)"></g>
         <g id="player" transform="translate(231,278)"></g>
       </g>
+      <g id="ping"></g>
       <g id="camada-bolhas"></g>
+      <rect x="0" y="0" width="420" height="480" fill="url(#vinheta)" pointer-events="none"/>
     </svg>
 
     <div id="joy"><div id="joyknob"></div></div>
@@ -496,6 +513,7 @@
 <div id="chat">
   <div class="chat-card">
     <div class="chat-head"><b id="chat-nome">Trader</b><span class="chat-x" onclick="fechaChat()">✕</span></div>
+    <div class="raiva-wrap"><span id="raiva-lbl">tranquilo</span><div class="raiva-bar"><div id="raiva-fill"></div></div></div>
     <div id="chat-log"></div>
     <div class="chat-row">
       <input type="text" id="chat-inp" maxlength="140" placeholder="Diga o que pensa…" autocomplete="off">
@@ -628,6 +646,228 @@ var CAFE_CUSTO = 30;
 var XINGA_PESADO = ["caralho","krl","crlh","porra","pqp","foda","foder","fode-","fode ","fodase","foda-se","fudeu","fudido","merda","bosta","puta","arrombado","cuzao","cuzão","vsf","fdp","desgraça","desgraca","escroto","vai se f"];
 var XINGA_MEDIO = ["incompetente","burro","idiota","imbecil","inutil","inútil","lixo","ridiculo","ridículo","vergonha","palhaço","palhaco","animal","jumento","otario","otário","babaca","horrivel","horrível","pessimo","péssimo","preguiçoso","preguicoso","folgado"];
 var XINGA_DURO = ["erro","errado","errou","cuidado","atenção","atencao","presta","de novo","sempre erra","cansado","saco","chato","atrapalha","prejudica","vacilo","vacilou"];
+/* ============ MOTOR DE DIÁLOGO ============ */
+var LEX = {
+  desculpa: ["desculpa","desculpe","foi mal","foi mau","perdão","perdao","meu erro","minha culpa","erro meu","mancada","vacilei","me perdoa","sorry"],
+  saudacao: ["oi","ola","olá","bom dia","boa tarde","boa noite","e ai","e aí","eae","fala ","beleza","tudo bem","tudo bom","salve"],
+  elogio: ["parabens","parabéns","mandou bem","obrigado","obrigada","valeu","excelente","otimo","ótimo","show","top ","boa ","admiro","respeito seu","gosto de voce","gosto de você"],
+  ameaca: [" rh","processo","processar","advogado","denunciar","denuncio","sindicato","cvm","compliance","auditoria","gravando","print","provas","judicial","trabalhista"],
+  demissao: ["demissao","demissão","me demito","peço as contas","peco as contas","to fora","tô fora","peço demissão","carta de","largo tudo","desisto"],
+  trabalho: ["boleta","boletar","ordem","preço","preco","quantidade","ativo","lado","compra","venda","divergencia","divergência","conferir","confere","sistema","planilha","liquidacao","liquidação","fundo","corretora","pregao","pregão","back office","front office","middle","cota","nav","trade"],
+  dinheiro: ["bonus","bônus","salario","salário","aumento","comissao","comissão","grana","dinheiro","reais","pagamento","pagar","paga ","ganho","remuneracao","remuneração"],
+  pausa: ["cafe","café","agua","água","pausa","descanso","banheiro","almoço","almoco","respirar","cansado","exausto","dormir"],
+  ordem_cmd: ["faz ","faça","arruma","corrige","conserta","resolve","para de","pare de","quero que","exijo","manda","me da","me dá"],
+  duvida: ["por que","porque","por quê","como","quando","quem","onde","qual","sera","será","voce acha","você acha"]
+};
+
+function contem(t, lista){
+  for (var i = 0; i < lista.length; i++) if (t.indexOf(lista[i]) >= 0) return true;
+  return false;
+}
+
+function analisa(txt){
+  var t = " " + txt.toLowerCase() + " ";
+  var a = { tier: 0, intent: "generico", temas: [], pergunta: false, curto: txt.length < 12 };
+  var i;
+  for (i = 0; i < XINGA_PESADO.length; i++) { if (t.indexOf(XINGA_PESADO[i]) >= 0) { a.tier = 3; break; } }
+  if (a.tier < 3) for (i = 0; i < XINGA_MEDIO.length; i++) { if (t.indexOf(XINGA_MEDIO[i]) >= 0) { a.tier = 2; break; } }
+  if (a.tier < 2) for (i = 0; i < XINGA_DURO.length; i++) { if (t.indexOf(XINGA_DURO[i]) >= 0) { a.tier = 1; break; } }
+
+  var letras = txt.replace(/[^a-zA-ZÀ-ú]/g, "");
+  var caps = letras.replace(/[^A-ZÀ-Ú]/g, "");
+  a.grito = (letras.length > 5 && caps.length / letras.length > 0.6);
+  a.exclama = (txt.match(/!/g) || []).length;
+  a.pergunta = txt.indexOf("?") >= 0 || contem(t, LEX.duvida);
+
+  if (contem(t, LEX.trabalho)) a.temas.push("trabalho");
+  if (contem(t, LEX.dinheiro)) a.temas.push("dinheiro");
+  if (contem(t, LEX.pausa)) a.temas.push("pausa");
+
+  if (contem(t, LEX.desculpa)) a.intent = "desculpa";
+  else if (contem(t, LEX.demissao)) a.intent = "demissao";
+  else if (contem(t, LEX.ameaca)) a.intent = "ameaca";
+  else if (a.tier >= 2) a.intent = "insulto";
+  else if (contem(t, LEX.elogio)) a.intent = "elogio";
+  else if (contem(t, LEX.saudacao) && a.curto) a.intent = "saudacao";
+  else if (a.pergunta) a.intent = "pergunta";
+  else if (contem(t, LEX.ordem_cmd)) a.intent = "cobranca";
+  else if (a.temas.length) a.intent = a.temas[0];
+  else if (a.tier === 1) a.intent = "insulto";
+  return a;
+}
+
+function deltaRaiva(a){
+  var d = 0;
+  if (a.tier === 1) d += 9;
+  if (a.tier === 2) d += 24;
+  if (a.tier === 3) d += 40;
+  if (a.grito) d += 7;
+  d += Math.min(3, a.exclama) * 3;
+  if (a.intent === "ameaca") d += 18;
+  if (a.intent === "cobranca") d += 6;
+  if (a.intent === "desculpa") d -= 26;
+  if (a.intent === "elogio") d -= 18;
+  if (a.intent === "saudacao") d -= 6;
+  if (d === 0) d = -4;
+  return d;
+}
+
+var DIALOGO = {
+  chefe: {
+    abertura: [
+      ["Olha,", "Certo.", "Entendi.", "Tá.", "Beleza."],
+      ["Escuta aqui,", "Ó,", "Deixa eu ser claro:", "Presta atenção:", "Pera lá."],
+      ["Abaixa esse tom.", "Opa, opa, opa.", "Você tá passando do ponto.", "Repete isso olhando na minha cara:", "Cuidado com o que vem depois."],
+      ["PORRA!", "Que merda é essa?", "Tá me tirando, caralho?", "CHEGA!", "Puta que pariu."]
+    ],
+    nucleo: {
+      trabalho: [
+        ["boleta errada é prejuízo, e prejuízo tem nome e crachá.", "o processo existe pra isso: confere, carimba, segue.", "se o sistema divergiu da ordem, você devolve. Simples assim.", "eu quero a operação limpa no fim do dia, o resto é detalhe."],
+        ["não me venha falar de boleta quem enche a fila de erro.", "processo tá escrito, é só ler. Ou isso também é difícil?", "cada divergência que passa é dinheiro meu saindo pela porta, caralho.", "para de discutir procedimento e vai conferir a porra da tela."]
+      ],
+      dinheiro: [
+        ["bônus é resultado, não é conversa.", "quem entrega, leva. Quem erra, explica.", "seu número está na planilha, e a planilha não mente.", "aumento se pede com performance, não com discurso."],
+        ["tá pedindo grana com esse desempenho? Tenha vergonha.", "bônus? Com a tua taxa de erro, agradece por ter salário.", "o teu aumento tá na mesma pasta que as boletas que tu errou: no lixo.", "quer dinheiro? Boleta certo, porra."]
+      ],
+      pausa: [
+        ["café é rápido, o pregão não espera.", "pausa é direito seu, só não vire hobby.", "vai lá, toma teu café, mas a fila continua correndo.", "descansa cinco minutos e volta inteiro."],
+        ["pausa de novo? A mesa não é lounge.", "quer descanso? Descansa em casa, desempregado.", "tá cansado de quê, de errar?", "o dia que a máquina de café boletar, tu tira férias."]
+      ],
+      desculpa: [
+        ["desculpa aceita. Agora transforma isso em acerto.", "tudo bem, erro acontece. Duas vezes é padrão.", "valeu por assumir, isso conta pontos comigo.", "beleza. Vira a página e conserta."],
+        ["desculpa não estorna trade, mas tá anotado.", "pedir desculpa é fácil, difícil é acertar. Prova.", "tá... respira e volta pro teu lugar.", "guarda a desculpa e me entrega resultado."]
+      ],
+      elogio: [
+        ["obrigado, mas o mérito é do processo.", "puxa-saco não sobe na carreira aqui, entrega sobe.", "agradeço. Agora continua entregando.", "bom que reconhece. Reconhecimento é via de mão dupla."],
+        ["puxando meu saco agora? Tarde demais.", "elogio depois do barraco não cola comigo.", "guarda esse charme pro RH.", "não me venha com bajulação, quero número."]
+      ],
+      saudacao: [
+        ["bom dia. Como tá a fila?", "fala. Tem alguma boleta travada?", "oi. Se veio conversar, seja breve.", "e aí. Tudo rodando?"],
+        ["não vem de bom dia depois do que tu falou.", "cumprimento é o de menos agora.", "poupa a educação, já passou do ponto.", "bom dia uma ova."]
+      ],
+      pergunta: [
+        ["pergunta certa. A resposta é: conferir antes de carimbar.", "se você não sabe, pergunta ao middle office, é pra isso que existem.", "boa dúvida. Traz isso na reunião de segunda.", "depende do caso. Me mostra a boleta que eu te digo."],
+        ["tá me perguntando isso agora? Devia saber.", "pergunta pro teu manual, eu não sou tutorial.", "a resposta é: faz o teu trabalho.", "não tenho paciência pra aula agora."]
+      ],
+      cobranca: [
+        ["quem cobra aqui sou eu, mas pode falar.", "anotei teu pedido. Entra na fila.", "posso resolver, se vier com dado e não com choro.", "manda por escrito que eu levo pra diretoria."],
+        ["tá me dando ordem? Interessante.", "quem tá mandando aqui, você ou eu?", "vem cobrar de mim de novo e a gente resolve no RH.", "abaixa o dedo antes de apontar pra mim."]
+      ],
+      ameaca: [
+        ["RH? Pode ir. Levo minha planilha de erros junto.", "processo é direito seu. Só lembra que tudo aqui é auditado.", "compliance adora esse tipo de conversa. Vamos os dois?", "grava mesmo, eu falo a mesma coisa na frente de qualquer um."],
+        ["me ameaçando? Que corajoso pra quem depende de mim.", "vai no RH, vai. Eu levo o teu histórico impresso.", "processo? Tu não sabe nem processar uma boleta, arrombado.", "ameaça de novo e a gente termina isso hoje."]
+      ],
+      demissao: [
+        ["se quer sair, a porta é ali. Mas pensa direito.", "pedir as contas por causa disso? Esfria a cabeça.", "não decide carreira no calor do pregão.", "senta, respira, e a gente conversa amanhã."],
+        ["pede logo então, faz um favor pra nós dois.", "some daqui, ninguém tá te segurando.", "vai embora e leva a tua taxa de erro contigo.", "porta larga, boa viagem."]
+      ],
+      insulto: [
+        ["olha o respeito. Eu ainda sou teu chefe.", "medi minhas palavras a vida toda, mede as tuas.", "isso é falta de educação e vai pro teu histórico.", "não te dei intimidade pra falar assim comigo."],
+        ["quem tu pensa que é pra falar assim comigo, porra?", "vai tomar no cu você também, moleque.", "eu te tiro daqui num telefonema, seu merda.", "cuidado com a boca, arrombado. Muito cuidado."]
+      ],
+      generico: [
+        ["anotado. Alguma coisa que impacte a operação?", "certo. Isso muda alguma boleta?", "ok. Foca no que tá na tua fila.", "entendi. Segue."],
+        ["isso é irrelevante pra mim agora.", "não tenho tempo pra esse papo.", "fala coisa com coisa ou volta pro teu lugar.", "tô cagando pra isso, sinceramente."]
+      ]
+    },
+    fecho: [
+      ["Volta pro teu posto.", "Segue o jogo.", "Qualquer coisa, me chama.", ""],
+      ["Vamos manter o profissionalismo.", "Não me faz repetir.", "Última vez que eu explico.", ""],
+      ["Sai da minha frente.", "Some daqui antes que eu escreva isso.", "Tô te avisando.", ""],
+      ["SOME DAQUI!", "Sai da minha frente, porra!", "Última chance, tô falando sério.", "Mais uma e tu tá na rua."]
+    ]
+  },
+  trader: {
+    abertura: [
+      ["Ó,", "Tranquilo.", "Fala.", "Olha só.", "Beleza."],
+      ["Peraí,", "Sério mesmo?", "Ah, qualé.", "Poupa-me."],
+      ["Cala a boca um pouco.", "Tá de sacanagem?", "Repete essa.", "Olha o atrevimento."],
+      ["Vai se foder,", "Puta que pariu,", "Caralho,", "Sai fora,"]
+    ],
+    nucleo: {
+      trabalho: [
+        ["a ordem saiu certa da minha boca, o sistema que engoliu errado.", "eu executo, tu confere. Divisão de trabalho, lembra?", "manda no chat que eu confirmo, é mais rápido.", "se divergiu, devolve. Não precisa vir aqui fazer drama."],
+        ["não vem me ensinar ordem, eu opero isso há anos.", "eu movimento milhão, tu carimba papel. Sabe a diferença?", "a boleta é problema teu, o P&L é meu.", "vai conferir tua telinha e me deixa operar, porra."]
+      ],
+      dinheiro: [
+        ["meu bônus vem de risco, o teu vem de conferência. Cada um no seu quadrado.", "grana aqui é consequência de resultado.", "quer ganhar mais? Acerta mais.", "salário não se discute no meio do pregão."],
+        ["tu quer meu bônus? Vai gerar receita então.", "eu ganho porque arrisco, tu ganha porque existe.", "chora não, vai boletar.", "meu bônus paga teu salário, moleque."]
+      ],
+      pausa: [
+        ["vai tomar teu café, eu seguro as pontas.", "pausa é sagrada, só volta rápido.", "traz um pra mim também, vai.", "aproveita que o book tá calmo."],
+        ["café de novo? Assim eu que vou boletar.", "tu passa mais tempo na máquina que na mesa.", "trabalha um pouco antes, vai.", "descanso pra quem trabalhou, né."]
+      ],
+      desculpa: [
+        ["de boa, tá tudo certo. Bola pra frente.", "relaxa, acontece. Só avisa antes na próxima.", "tranquilo, nem esquenta.", "valeu por vir falar. Te devo um café."],
+        ["agora pede desculpa, né. Tarde.", "desculpa aceita, mas o estrago já foi.", "tá, tá. Some.", "beleza. Aprende."]
+      ],
+      elogio: [
+        ["valeu! Raro alguém do back elogiar.", "opa, obrigado. Anota aí que eu sou gente boa.", "tamo junto, parceiro.", "isso, energia positiva na mesa."],
+        ["puxa-saco agora? Depois do que falou?", "guarda o elogio, já era.", "não cola, não.", "hipócrita."]
+      ],
+      saudacao: [
+        ["e aí! Bom te ver longe da tela.", "fala, boleteiro! Tudo certo?", "oi. Veio de paz ou de cobrança?", "salve! Tá tranquilo por aí?"],
+        ["não vem com oizinho agora.", "cumprimenta a tua tela, vai.", "oi uma ova.", "poupa o teatro."]
+      ],
+      pergunta: [
+        ["pergunta boa. Confirma comigo antes de boletar, sempre.", "olha, no caso do preço, vale o que eu gritei.", "se tiver dúvida, devolve. Prefiro assim.", "pergunta no chat que é mais rápido que atravessar a sala."],
+        ["não é minha função te ensinar.", "descobre sozinho, gênio.", "pergunta pro middle, porra.", "tô ocupado ganhando dinheiro, some."]
+      ],
+      cobranca: [
+        ["pode falar, mas manda por escrito.", "anota aí e me cobra no fim do dia.", "combinado, vou prestar mais atenção.", "justo. Eu acelero minha parte."],
+        ["tu não manda em mim.", "vem cobrar de novo e a gente vê.", "eu não sou teu estagiário, cara.", "quem é tu pra me cobrar, porra?"]
+      ],
+      ameaca: [
+        ["RH? Boa sorte, o head gosta de quem dá lucro.", "vai lá, reclama. Eu tô com o número do mês do meu lado.", "compliance? Manda ver, tá tudo gravado mesmo.", "faz o que quiser, tô limpo."],
+        ["tá me ameaçando, moleque?", "vai chorar pro RH, criança.", "processo? Tu não me assusta nem um pouco.", "me ameaça de novo pra ver o que acontece."]
+      ],
+      demissao: [
+        ["não pede as contas por causa de boleta, cara.", "esfria a cabeça, todo mundo tem dia ruim.", "fica. Sem back office essa mesa afunda.", "respira. Amanhã é outro pregão."],
+        ["pede logo, ninguém segura ninguém.", "vai embora e para de encher.", "menos um pra conferir errado.", "tchau então."]
+      ],
+      insulto: [
+        ["opa, opa. Respeito é bom.", "não precisa desse tom, cara.", "assim tu perde a razão que tinha.", "eu não falei assim contigo, não fala assim comigo."],
+        ["vai tomar no cu, carimbador de papel!", "some da minha mesa, arrombado.", "quem tu pensa que é, porra?", "fala isso de novo e a gente se resolve lá fora."]
+      ],
+      generico: [
+        ["tá. Isso muda alguma ordem minha?", "beleza, mas o book tá andando.", "certo. Precisa de mais alguma coisa?", "entendi. Fala com o middle também."],
+        ["irrelevante.", "tô nem aí, sério.", "isso não me interessa agora.", "fala com quem tem paciência."]
+      ]
+    },
+    fecho: [
+      ["Tamo junto.", "Qualquer coisa grita.", "Beleza?", ""],
+      ["Agora me deixa operar.", "Vamos focar.", "Sem drama.", ""],
+      ["Sai da minha mesa.", "Some, vai.", "Chega.", ""],
+      ["SAI DA MINHA MESA, PORRA!", "Vaza daqui!", "Fala com a minha mão.", "Some antes que eu levante."]
+    ]
+  }
+};
+
+function faixaRaiva(r){ return r < 25 ? 0 : (r < 50 ? 1 : (r < 75 ? 2 : 3)); }
+
+function geraResposta(persona, txt, estado){
+  var a = analisa(txt);
+  estado.raiva = Math.max(0, Math.min(100, estado.raiva + deltaRaiva(a)));
+  var f = faixaRaiva(estado.raiva);
+  var P = DIALOGO[persona] || DIALOGO.trader;
+  var nuc = P.nucleo[a.intent] || P.nucleo.generico;
+  var partes = [];
+  if (Math.random() < 0.85) partes.push(rnd(P.abertura[f]));
+  partes.push(rnd(nuc[f >= 2 ? 1 : 0]));
+  if (Math.random() < 0.42) {
+    var extra = rnd(P.fecho[f]);
+    if (extra) partes.push(extra);
+  }
+  return { texto: partes.join(" ").replace(/\s+/g, " ").trim(), faixa: f, tier: a.tier, intent: a.intent };
+}
+
+function estadoRaiva(){
+  if (S.chatTipo === "chefe") return S.raivaChefe;
+  var id = S.chatOrdId;
+  if (!S.raivaTrader[id]) S.raivaTrader[id] = { raiva: 0 };
+  return S.raivaTrader[id];
+}
+
 var RESPOSTAS = [
   [ "Foi mal mesmo, a boleta saiu torta. Próxima vai redonda, prometo.",
     "Tá certo, anotei. Valeu por avisar na educação — raridade nessa mesa.",
@@ -681,7 +921,13 @@ function shuffle(a){
 function fmt(n){ return "R$ " + n.toLocaleString("pt-BR"); }
 function fmtP(n){ return "R$ " + n.toFixed(2).replace(".", ","); }
 function fmtQ(n){ return n.toLocaleString("pt-BR"); }
-function el(id){ return document.getElementById(id); }
+var _elc = {};
+function el(id){
+  var e = _elc[id];
+  if (e === undefined) { e = document.getElementById(id); _elc[id] = e; }
+  return e;
+}
+function elForget(id){ delete _elc[id]; }
 function show(id){
   var scr = document.querySelectorAll(".screen");
   for (var i = 0; i < scr.length; i++) scr[i].classList.remove("on");
@@ -757,6 +1003,8 @@ function svgMesaIso(dir){
   function py(di, dj){ return (di + dj) * hh; }
   function P(di, dj, ex){ return px(di, dj) + "," + (py(di, dj) + (ex || 0)); }
   var s = "";
+  s += "<ellipse cx='" + px(Li/2, Lj/2) + "' cy='" + (py(Li/2, Lj/2) + 40) + "' rx='" + (Li * ISO.hw * 0.62) +
+       "' ry='" + (Li * ISO.hh * 0.72) + "' fill='rgba(0,0,0,0.26)'/>";
   s += "<polygon points='" + P(0,0) + " " + P(Li,0) + " " + P(Li,Lj) + " " + P(0,Lj) + "' fill='#D98E3F' stroke='#8F5A22' stroke-width='1.5'/>";
   s += "<polygon points='" + P(0,Lj) + " " + P(Li,Lj) + " " + P(Li,Lj,H) + " " + P(0,Lj,H) + "' fill='#B26E2B'/>";
   s += "<polygon points='" + P(Li,0) + " " + P(Li,Lj) + " " + P(Li,Lj,H) + " " + P(Li,0,H) + "' fill='#9C5F24'/>";
@@ -783,8 +1031,8 @@ function svgMesaIso(dir){
   return s;
 }
 
-function svgTrader(t){
-  var s = "<g class='charwrap'>";
+function svgTrader(t, semBob){
+  var s = semBob ? "<g>" : "<g class='charwrap'>";
   s += "<ellipse cx='30' cy='76' rx='18' ry='5' fill='rgba(0,0,0,0.25)'/>";
   s += "<rect x='14' y='36' width='32' height='36' rx='10' fill='" + t.shirt + "'/>";
   s += "<rect x='14' y='36' width='32' height='10' rx='5' fill='rgba(255,255,255,0.22)'/>";
@@ -863,7 +1111,7 @@ function montaPiso(){
 /* ===== BLOCO: mundo, chefe, camera ===== */
 function montaExtras(){
   montaPiso();
-  el("chefe").innerHTML = charAt(CHEFE_SKIN);
+  el("chefe").innerHTML = "<g transform='scale(0.8) translate(-30,-76)'>" + svgTrader(CHEFE_SKIN, true) + "</g>";
   el("mesa-jogador").innerHTML = svgMesaIso("i");
   el("maq-cafe").setAttribute("transform",
     "translate(" + isoX(CAFE_TILE.i, CAFE_TILE.j) + "," + isoY(CAFE_TILE.i, CAFE_TILE.j) + ")");
@@ -928,27 +1176,6 @@ function ordenaMundo(){
   for (var j = 0; j < itens.length; j++) m.appendChild(itens[j].alvo);
 }
 
-function renderChefe(){
-  el("chefe-wrap").setAttribute("transform",
-    "translate(" + Math.round(isoX(S.bi, S.bj)) + "," + Math.round(isoY(S.bi, S.bj)) + ")");
-  ordenaMundo();
-}
-
-function tickChefe(){
-  if (S.bPausa > 0) { S.bPausa--; return; }
-  var alvo = PATRULHA[S.bWp];
-  var di = alvo.i - S.bi, dj = alvo.j - S.bj;
-  var d = Math.sqrt(di * di + dj * dj);
-  if (d < 0.14) {
-    S.bWp = (S.bWp + 1) % PATRULHA.length;
-    S.bPausa = 10 + Math.floor(Math.random() * 25);
-    return;
-  }
-  var v = 0.05;
-  S.bi += di / d * v;
-  S.bj += dj / d * v;
-  renderChefe();
-}
 
 function toggleZoom(){
   if (!S) return;
@@ -967,16 +1194,86 @@ function updateCam(){
   c.setAttribute("viewBox", x.toFixed(1) + " " + y.toFixed(1) + " " + w + " " + h);
 }
 
+/* ============ RENDER / VISUAL ============ */
 function renderPlayer(rebuild){
   var p = el("player");
   var fx = isoX(S.pi, S.pj), fy = isoY(S.pi, S.pj);
-  p.setAttribute("transform", "translate(" + Math.round(fx) + "," + Math.round(fy) + ")");
+  p.setAttribute("transform", "translate(" + fx.toFixed(1) + "," + fy.toFixed(1) + ")");
   if (rebuild) {
-    p.innerHTML = "<g transform='scale(0.8) translate(-30,-76)'>" + svgTrader(JOGADOR) +
-      (S.modo === "cafe" ? "<text x='44' y='6' font-size='16'>\u2615</text>" : "") + "</g>";
+    p.innerHTML =
+      "<ellipse id='p-sombra' cx='0' cy='2' rx='15' ry='6' fill='rgba(0,0,0,0.3)'/>" +
+      "<g id='p-anim'><g transform='scale(0.8) translate(-30,-76)'>" + svgTrader(JOGADOR, true) + "</g></g>" +
+      "<g id='p-vapor'></g>";
   }
+  var anim = el("p-anim");
+  if (anim) {
+    var bob = 0, incl = 0;
+    if (S.andando) {
+      bob = -Math.abs(Math.sin(S.passo * 3.2)) * 3.2;
+      incl = Math.sin(S.passo * 3.2) * 2.2;
+    } else {
+      bob = Math.sin(Date.now() / 620) * 0.9;
+    }
+    anim.setAttribute("transform",
+      "translate(0," + bob.toFixed(2) + ") scale(" + S.face + ",1) rotate(" + (S.face * incl).toFixed(2) + ")");
+  }
+  var som = el("p-sombra");
+  if (som) som.setAttribute("rx", (15 + (S.andando ? Math.sin(S.passo * 3.2) * 1.6 : 0)).toFixed(1));
   ordenaMundo();
   updateCam();
+}
+
+function renderVapor(){
+  var g = el("p-vapor");
+  if (!g) return;
+  var s = "";
+  for (var k = 0; k < 3; k++) {
+    var t = (S.vaporT * 0.9 + k * 0.33) % 1;
+    var y = -46 - t * 26;
+    var op = (1 - t) * 0.5;
+    var x = 15 * S.face + Math.sin((t + k) * 6) * 3;
+    s += "<ellipse cx='" + x.toFixed(1) + "' cy='" + y.toFixed(1) + "' rx='" + (2.4 + t * 3).toFixed(1) +
+         "' ry='" + (1.8 + t * 2).toFixed(1) + "' fill='#E8EAF0' opacity='" + op.toFixed(2) + "'/>";
+  }
+  g.innerHTML = s;
+}
+
+function renderChefe(dt){
+  var w = el("chefe-wrap");
+  w.setAttribute("transform",
+    "translate(" + isoX(S.bi, S.bj).toFixed(1) + "," + isoY(S.bi, S.bj).toFixed(1) + ")");
+  var anim = el("chefe-anim");
+  if (anim) {
+    var bob = S.bAndando ? -Math.abs(Math.sin(S.bPasso * 3.2)) * 2.6 : Math.sin(Date.now() / 700) * 0.8;
+    anim.setAttribute("transform", "translate(0," + bob.toFixed(2) + ") scale(" + S.bFace + ",1)");
+  }
+  ordenaMundo();
+}
+
+function tickChefe(dt){
+  if (S.bPausaMs > 0) {
+    S.bPausaMs -= dt * 1000;
+    S.bAndando = false;
+    renderChefe(dt);
+    return;
+  }
+  var alvo = PATRULHA[S.bWp];
+  var di = alvo.i - S.bi, dj = alvo.j - S.bj;
+  var d = Math.sqrt(di * di + dj * dj);
+  if (d < 0.16) {
+    S.bWp = (S.bWp + 1) % PATRULHA.length;
+    S.bPausaMs = 900 + Math.random() * 2600;
+    S.bAndando = false;
+    return;
+  }
+  var v = 1.35 * dt;
+  S.bi += di / d * v;
+  S.bj += dj / d * v;
+  S.bPasso += v * 3.4;
+  S.bAndando = true;
+  var dx = (di - dj);
+  if (Math.abs(dx) > 0.05) S.bFace = dx > 0 ? 1 : -1;
+  renderChefe(dt);
 }
 
 function calcAlvo(){
@@ -1021,24 +1318,209 @@ function renderAcoes(alvo){
   el("acoes-anda").innerHTML = html;
 }
 
-function tickJogador(){
-  tickChefe();
-  if (S.modo === "anda") {
-    if (S.joy.x !== 0 || S.joy.y !== 0) {
-      var spd = 9;
-      S.pi += (S.joy.x / (2 * ISO.hw) + S.joy.y / (2 * ISO.hh)) * spd;
-      S.pj += (S.joy.y / (2 * ISO.hh) - S.joy.x / (2 * ISO.hw)) * spd;
-      var c = clampTile({ i: S.pi, j: S.pj }); S.pi = c.i; S.pj = c.j;
-      renderPlayer(false);
+/* ============ MOVIMENTO E LOOP (60fps, dt real) ============ */
+var OBSTACULOS = [
+  { i0: 0.8, i1: 3.6, j0: 1.0, j1: 2.1 },
+  { i0: 5.0, i1: 7.8, j0: 1.0, j1: 2.1 },
+  { i0: 1.3, i1: 2.4, j0: 3.4, j1: 6.2 },
+  { i0: 4.6, i1: 7.4, j0: 5.6, j1: 6.7 },
+  { i0: 1.5, i1: 2.5, j0: 7.7, j1: 8.5 }
+];
+var RAIO = 0.34;
+var VEL_MAX = 3.6;
+var ACEL = 12;
+
+function colide(i, j){
+  for (var k = 0; k < OBSTACULOS.length; k++) {
+    var o = OBSTACULOS[k];
+    if (i > o.i0 - RAIO && i < o.i1 + RAIO && j > o.j0 - RAIO && j < o.j1 + RAIO) return true;
+  }
+  return false;
+}
+
+function moveCom(di, dj){
+  var ni = S.pi + di, nj = S.pj + dj;
+  var c = clampTile({ i: ni, j: nj });
+  ni = c.i; nj = c.j;
+  if (!colide(ni, nj)) { S.pi = ni; S.pj = nj; return true; }
+  if (!colide(ni, S.pj)) { S.pi = ni; return true; }
+  if (!colide(S.pi, nj)) { S.pj = nj; return true; }
+  return false;
+}
+
+function telaParaTile(cx, cy){
+  var svg = el("cena");
+  var r = svg.getBoundingClientRect();
+  if (!r || !r.width) return null;
+  var vbs = (svg.getAttribute("viewBox") || "0 0 420 480").split(/[\s,]+/);
+  var vx = parseFloat(vbs[0]), vy = parseFloat(vbs[1]),
+      vw = parseFloat(vbs[2]), vh = parseFloat(vbs[3]);
+  var x = vx + (cx - r.left) / r.width * vw;
+  var y = vy + (cy - r.top) / r.height * vh;
+  return clampTile(tileDe(x, y));
+}
+
+function andarAte(cx, cy){
+  if (!S || S.modo !== "anda") return;
+  var t = telaParaTile(cx, cy);
+  if (!t) return;
+  if (colide(t.i, t.j)) {
+    var achou = null, melhor = 99;
+    for (var a = 0; a < 16; a++) {
+      var ang = a / 16 * Math.PI * 2;
+      for (var r = 0.5; r <= 2.0; r += 0.25) {
+        var ti = t.i + Math.cos(ang) * r, tj = t.j + Math.sin(ang) * r;
+        var cc = clampTile({ i: ti, j: tj });
+        if (!colide(cc.i, cc.j) && r < melhor) { melhor = r; achou = cc; }
+      }
     }
+    if (!achou) return;
+    t = achou;
+  }
+  S.dest = t;
+  pingDestino(t);
+  vib(8);
+}
+
+function pingDestino(t){
+  var g = el("ping");
+  if (!g) return;
+  g.setAttribute("transform", "translate(" + isoX(t.i, t.j).toFixed(1) + "," + isoY(t.i, t.j).toFixed(1) + ")");
+  g.setAttribute("class", "ping-on");
+  g.innerHTML = "<ellipse cx='0' cy='0' rx='15' ry='7.5' fill='none' stroke='#4F8EF7' stroke-width='2'/>" +
+                "<ellipse cx='0' cy='0' rx='6' ry='3' fill='#4F8EF7' opacity='0.55'/>";
+}
+
+function limpaPing(){
+  var g = el("ping");
+  if (g) { g.setAttribute("class", ""); g.innerHTML = ""; }
+}
+
+function moveJogador(dt){
+  var alvoVi = 0, alvoVj = 0, ativo = false;
+  if (S.joy.x !== 0 || S.joy.y !== 0) {
+    S.dest = null; limpaPing();
+    var mag = Math.min(1, Math.sqrt(S.joy.x * S.joy.x + S.joy.y * S.joy.y));
+    var ux = S.joy.x, uy = S.joy.y;
+    var n = Math.sqrt(ux * ux + uy * uy) || 1;
+    ux /= n; uy /= n;
+    alvoVi = (ux / (2 * ISO.hw) + uy / (2 * ISO.hh)) * VEL_MAX * mag * 23;
+    alvoVj = (uy / (2 * ISO.hh) - ux / (2 * ISO.hw)) * VEL_MAX * mag * 23;
+    ativo = true;
+  } else if (S.dest) {
+    var di = S.dest.i - S.pi, dj = S.dest.j - S.pj;
+    var d = Math.sqrt(di * di + dj * dj);
+    if (d < 0.18) { S.dest = null; limpaPing(); }
+    else {
+      var v = VEL_MAX * (d < 0.9 ? Math.max(0.35, d / 0.9) : 1);
+      alvoVi = di / d * v; alvoVj = dj / d * v;
+      ativo = true;
+    }
+  }
+  var k = Math.min(1, dt * ACEL);
+  S.vi += (alvoVi - S.vi) * k;
+  S.vj += (alvoVj - S.vj) * k;
+  var vel = Math.sqrt(S.vi * S.vi + S.vj * S.vj);
+  if (vel < 0.05 && !ativo) { S.vi = 0; S.vj = 0; }
+  if (vel > 0.02) {
+    if (!moveCom(S.vi * dt, S.vj * dt)) { S.vi *= 0.3; S.vj *= 0.3; S.dest = null; limpaPing(); }
+    var dx = (S.vi - S.vj);
+    if (Math.abs(dx) > 0.15) S.face = dx > 0 ? 1 : -1;
+    S.passo += vel * dt * 3.4;
+    S.andando = true;
+  } else {
+    S.andando = false;
+  }
+  renderPlayer(false);
+}
+
+/* ============ LOOP ============ */
+var _raf = null, _ultimo = 0;
+
+function frame(ts){
+  _raf = null;
+  if (!S || S.encerrando) return;
+  if (!_ultimo) _ultimo = ts;
+  var dt = ts - _ultimo;
+  _ultimo = ts;
+  if (dt > 120) dt = 120;
+  atualiza(dt);
+  if (S && !S.encerrando) _raf = requestAnimationFrame(frame);
+}
+
+function iniciaLoop(){
+  paraLoop();
+  _ultimo = 0;
+  if (typeof requestAnimationFrame === "function") _raf = requestAnimationFrame(frame);
+  else loopId = setInterval(function(){ atualiza(100); }, 100);
+}
+
+function paraLoop(){
+  if (_raf && typeof cancelAnimationFrame === "function") cancelAnimationFrame(_raf);
+  _raf = null;
+  if (loopId) { paraLoop(); loopId = null; }
+}
+
+function tick(){ atualiza(100); }
+
+function atualiza(dtMs){
+  if (!S || S.encerrando) return;
+  var dt = dtMs / 1000;
+  var agora = Date.now();
+
+  var intv = intervaloSpawn();
+  if (S.spawned >= TRADES_ANO - 3) {
+    intv = intv * 0.5;
+    if (!S.rushAvisado && S.spawned === TRADES_ANO - 3) {
+      S.rushAvisado = true;
+      toast("🔔 Leilão de fechamento! Rajada final de ordens.", "good");
+      beep(880, 0.1); beep(880, 0.1, "sine", 0.07, 0.15); beep(1100, 0.2, "sine", 0.08, 0.3);
+    }
+  }
+  if (S.spawned < TRADES_ANO && S.orders.length < maxSimul() &&
+      agora - S.lastSpawn > (S.spawned === 0 ? 400 : intv)) {
+    spawnOrder(agora);
+  }
+
+  for (var i = S.orders.length - 1; i >= 0; i--) {
+    var o = S.orders[i];
+    if (o.tipo === "fone" && !o.hidden && agora - o.nasceu > 4000) escondeFone(o);
+    o.resta -= dtMs;
+    var pct = Math.max(0, o.resta / o.pacTotal);
+    if (Math.abs(pct - o.pctUlt) > 0.008) {
+      o.pctUlt = pct;
+      var pb = el("pb-" + o.id);
+      if (pb) {
+        pb.setAttribute("width", (108 * pct).toFixed(1));
+        pb.setAttribute("fill", pct > 0.5 ? "#22C55E" : (pct > 0.2 ? "#F5A623" : "#EF4444"));
+      }
+    }
+    if (pct <= 0.2 && o.id === S.selId) {
+      o.bipAcc += dtMs;
+      if (o.bipAcc > 520) { o.bipAcc = 0; somTick(); }
+    }
+    if (o.resta <= 0) expiraOrder(o);
+  }
+
+  tickChefe(dt);
+  if (S.modo === "anda") {
+    moveJogador(dt);
     renderAcoes(calcAlvo());
   } else if (S.modo === "cafe") {
-    if (Date.now() >= S.cafeFim) {
+    S.vaporT += dt;
+    renderVapor();
+    if (agora >= S.cafeFim) {
       S.modo = "anda";
       S.alvo = "__force__";
-      toast("\u2615 Café tomado. De volta ao caos.", "good");
+      toast("☕ Café tomado. De volta ao caos.", "good");
       renderModo();
     }
+  }
+
+  if (S.resolved >= TRADES_ANO && S.orders.length === 0) {
+    S.encerrando = true;
+    paraLoop();
+    setTimeout(endYear, 500);
   }
 }
 
@@ -1104,7 +1586,17 @@ function abreChat(tipo, id){
   el("chat-nome").textContent = nome;
   el("chat-log").innerHTML = "<div class='msg sys'>" + intro + "</div>";
   el("chat-inp").value = "";
+  renderRaiva(estadoRaiva().raiva);
   el("chat").className = "on";
+}
+
+function renderRaiva(r){
+  var f = el("raiva-fill"), l = el("raiva-lbl");
+  if (!f) return;
+  f.style.width = Math.round(r) + "%";
+  var cor = r < 25 ? "var(--buy)" : (r < 50 ? "var(--amber)" : (r < 75 ? "#F97316" : "var(--sell)"));
+  f.style.background = cor;
+  if (l) l.textContent = r < 25 ? "tranquilo" : (r < 50 ? "irritado" : (r < 75 ? "puto" : "fervendo"));
 }
 
 function fechaChat(){
@@ -1126,25 +1618,21 @@ function enviaChat(){
   var o = ehChefe ? null : achaOrdem(S.chatOrdId);
   setTimeout(function(){
     if (ehChefe) {
-      if (tier >= 3) {
-        S.avisosChefe++;
-        if (S.avisosChefe >= 2) {
-          log.innerHTML += "<div class='msg ele'>Acabou. Pega tuas coisas e some da minha mesa.</div>";
-          log.scrollTop = log.scrollHeight;
-          somErro(); vib([120, 60, 200]);
-          setTimeout(function(){
-            demite("Você xingou o chefe na cara dele. Duas vezes.");
-          }, 900);
-          return;
-        }
+      var g = geraResposta("chefe", txt, S.raivaChefe);
+      log.innerHTML += "<div class='msg ele'>" + escapaHtml(g.texto) + "</div>";
+      renderRaiva(S.raivaChefe.raiva);
+      if (g.faixa >= 2) { somErro(); vib([40, 30, 40]); } else { somPop(); }
+      if (S.raivaChefe.raiva >= 100) {
+        setTimeout(function(){ demite("Você levou o chefe ao limite. Ele explodiu na frente da mesa inteira."); }, 900);
+        return;
       }
-      log.innerHTML += "<div class='msg ele'>" + rnd(RESPOSTAS_CHEFE[tier]) + "</div>";
-      if (tier >= 2) { somErro(); vib([40, 30, 40]); } else { somPop(); }
     } else if (!achaOrdem(S.chatOrdId)) {
       log.innerHTML += "<div class='msg sys'>(ele já largou você falando sozinho e voltou pro pregão)</div>";
     } else {
-      log.innerHTML += "<div class='msg ele'>" + rnd(RESPOSTAS[tier]) + "</div>";
-      if (tier >= 2) { somErro(); vib([40, 30, 40]); } else { somPop(); }
+      var gt = geraResposta("trader", txt, estadoRaiva());
+      log.innerHTML += "<div class='msg ele'>" + escapaHtml(gt.texto) + "</div>";
+      renderRaiva(estadoRaiva().raiva);
+      if (gt.faixa >= 2) { somErro(); vib([40, 30, 40]); } else { somPop(); }
     }
     log.scrollTop = log.scrollHeight;
   }, 650);
@@ -1154,7 +1642,7 @@ function demite(motivo){
   if (S.demitido) return;
   S.demitido = true;
   S.encerrando = true;
-  clearInterval(loopId);
+  paraLoop();
   atualizaRecordes();
   fechaChat();
   el("dem-motivo").textContent = motivo;
@@ -1164,7 +1652,7 @@ function demite(motivo){
 function baterNoChefe(){
   if (S.encerrando) return;
   S.encerrando = true;
-  clearInterval(loopId);
+  paraLoop();
   beep(90, 0.3, "sawtooth", 0.1); beep(60, 0.4, "sawtooth", 0.09, 0.12);
   vib([120, 60, 200]);
   el("app").classList.add("soco");
@@ -1231,15 +1719,20 @@ function attachJoy(){
     if (S) { S.joy.x = 0; S.joy.y = 0; }
     knob.style.left = "26px"; knob.style.top = "26px";
   }
-  joy.addEventListener("touchstart", function(e){ e.preventDefault(); aplica(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
-  joy.addEventListener("touchmove", function(e){ e.preventDefault(); aplica(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
-  joy.addEventListener("touchend", function(e){ e.preventDefault(); solta(); }, { passive: false });
+  joy.addEventListener("touchstart", function(e){ e.preventDefault(); e.stopPropagation(); aplica(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+  joy.addEventListener("touchmove", function(e){ e.preventDefault(); e.stopPropagation(); aplica(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+  joy.addEventListener("touchend", function(e){ e.preventDefault(); e.stopPropagation(); solta(); }, { passive: false });
   var mouseOn = false;
-  joy.addEventListener("mousedown", function(e){ mouseOn = true; aplica(e.clientX, e.clientY); });
+  joy.addEventListener("mousedown", function(e){ e.stopPropagation(); mouseOn = true; aplica(e.clientX, e.clientY); });
   window.addEventListener("mousemove", function(e){ if (mouseOn) aplica(e.clientX, e.clientY); });
   window.addEventListener("mouseup", function(){ if (mouseOn) { mouseOn = false; solta(); } });
-}
 
+  var cena = el("cena");
+  cena.addEventListener("click", function(e){ andarAte(e.clientX, e.clientY); });
+  cena.addEventListener("touchstart", function(e){
+    if (e.touches && e.touches.length === 1) andarAte(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+}
 
 /* ============ FLUXO DO JOGO ============ */
 function startGame(){
@@ -1261,8 +1754,10 @@ function startGame(){
     up: { cafe: false, headset: false, cdi: false, terminal: false },
     modo: "mesa", pi: SEAT.i, pj: SEAT.j,
     joy: { x: 0, y: 0 }, alvo: null, cafeFim: 0, chatOrdId: null, chatTipo: null,
-    zoom: false, _sig: "", bi: PATRULHA[0].i, bj: PATRULHA[0].j, bWp: 1, bPausa: 0,
-    avisosChefe: 0, demitido: false
+    zoom: false, _sig: "", bi: PATRULHA[0].i, bj: PATRULHA[0].j, bWp: 1, bPausaMs: 0,
+    bPasso: 0, bFace: 1, bAndando: false, demitido: false,
+    vi: 0, vj: 0, dest: null, face: 1, passo: 0, andando: false, vaporT: 0,
+    raivaChefe: { raiva: 0 }, raivaTrader: {}
   };
   montaMesas();
   montaExtras();
@@ -1278,14 +1773,14 @@ function iniciaAno(){
   S.lastSpawn = -99999;
   S.modo = "mesa"; S.pi = SEAT.i; S.pj = SEAT.j;
   S.joy.x = 0; S.joy.y = 0; S.chatOrdId = null; S.chatTipo = null; S.alvo = null;
-  S.bi = PATRULHA[0].i; S.bj = PATRULHA[0].j; S.bWp = 1; S.bPausa = 0; S._sig = "";
+  S.bi = PATRULHA[0].i; S.bj = PATRULHA[0].j; S.bWp = 1; S.bPausaMs = 0; S._sig = "";
+  S.vi = 0; S.vj = 0; S.dest = null; S.andando = false; limpaPing();
   el("chat").className = "";
   el("camada-bolhas").innerHTML = "";
   for (var i = 0; i < SLOTS.length; i++) el("slot-char-" + i).innerHTML = "";
   renderHud();
   renderModo();
-  clearInterval(loopId);
-  loopId = setInterval(tick, 100);
+  iniciaLoop();
 }
 
 function maxSimul(){ return S.year >= 4 ? 3 : (S.year >= 2 ? 2 : 1); }
@@ -1380,7 +1875,7 @@ function spawnOrder(agora){
     tipo: tipo,
     trader: { nome: rnd(TRADERS), skin: rnd(SKINS), hair: rnd(HAIRS), shirt: rnd(SHIRTS) },
     ordem: t.ordem, boleta: t.boleta, divergente: t.divergente, campo: t.campo,
-    ev: ev, pacTotal: pacTotal, resta: pacTotal, hinted: false,
+    ev: ev, pacTotal: pacTotal, resta: pacTotal, hinted: false, pctUlt: 2, bipAcc: 0,
     hidden: false, nasceu: agora,
     opts: tipo === "montar" ? genOpts(t.ordem) : null,
     mIdx: 0
@@ -1416,46 +1911,6 @@ function escondeFone(o){
   if (S.selId === o.id) renderPainel();
 }
 
-function tick(){
-  if (!S || S.encerrando) return;
-  var agora = Date.now();
-
-  var intv = intervaloSpawn();
-  if (S.spawned >= TRADES_ANO - 3) {
-    intv = intv * 0.5;
-    if (!S.rushAvisado && S.spawned === TRADES_ANO - 3) {
-      S.rushAvisado = true;
-      toast("🔔 Leilão de fechamento! Rajada final de ordens.", "good");
-      beep(880, 0.1); beep(880, 0.1, "sine", 0.07, 0.15); beep(1100, 0.2, "sine", 0.08, 0.3);
-    }
-  }
-  if (S.spawned < TRADES_ANO && S.orders.length < maxSimul() &&
-      agora - S.lastSpawn > (S.spawned === 0 ? 400 : intv)) {
-    spawnOrder(agora);
-  }
-
-  for (var i = S.orders.length - 1; i >= 0; i--) {
-    var o = S.orders[i];
-    if (o.tipo === "fone" && !o.hidden && agora - o.nasceu > 4000) escondeFone(o);
-    o.resta -= 100;
-    var pct = Math.max(0, o.resta / o.pacTotal);
-    var pb = el("pb-" + o.id);
-    if (pb) {
-      pb.setAttribute("width", String(Math.round(108 * pct)));
-      pb.setAttribute("fill", pct > 0.5 ? "#22C55E" : (pct > 0.2 ? "#F5A623" : "#EF4444"));
-    }
-    if (pct <= 0.2 && o.resta % 1000 < 100 && o.id === S.selId) somTick();
-    if (o.resta <= 0) expiraOrder(o);
-  }
-
-  tickJogador();
-
-  if (S.resolved >= TRADES_ANO && S.orders.length === 0) {
-    S.encerrando = true;
-    clearInterval(loopId);
-    setTimeout(endYear, 500);
-  }
-}
 
 function removeOrder(o){
   for (var i = 0; i < S.orders.length; i++) {
@@ -1463,6 +1918,7 @@ function removeOrder(o){
   }
   var g = el("ord-" + o.id);
   if (g && g.parentNode) g.parentNode.removeChild(g);
+  elForget("ord-" + o.id); elForget("pb-" + o.id);
   el("slot-char-" + o.slot).innerHTML = "";
   S.resolved++;
   if (S.selId === o.id) {
@@ -1674,7 +2130,7 @@ function escolheCampo(c){
 function checaGameOver(){
   if (S.bonus <= 0) {
     S.encerrando = true;
-    clearInterval(loopId);
+    paraLoop();
     gameOver();
   }
 }
@@ -1861,7 +2317,7 @@ function renderHud(){
 }
 
 function gameOver(){
-  clearInterval(loopId);
+  paraLoop();
   somErro(); vib([120, 80, 200]);
   atualizaRecordes();
   el("g-cargo").textContent = "CARREIRA ENCERRADA COMO " + CARGOS[S.cargoIdx].t.toUpperCase();
@@ -1892,6 +2348,7 @@ function montaPosterPiso(){
         x + "," + (y + 2 * hh) + " " + (x - hw) + "," + (y + hh) + "' fill='" + cor + "' stroke='#2C3A5C' stroke-width='0.7'/>";
     }
   }
+  h2 += "<polygon points='210,150 417,253.5 210,357 3,253.5' fill='url(#luzpiso)'/>";
   g.innerHTML = h2;
 }
 

@@ -142,7 +142,7 @@
   #poster-mascote{animation:bob 2.6s ease-in-out infinite;}
   .poster-title{position:relative; margin-top:-30px; padding-bottom:8px; text-align:center; z-index:2;}
   .pt-main{font-size:44px; font-weight:900; letter-spacing:2px; color:#fff; line-height:.95;
-    text-shadow:0 4px 0 var(--gold), 0 5px 12px rgba(0,0,0,.4);}
+    text-shadow:0 4px 0 var(--gold), 0 5px 12px rgba(0,0,0,.4); animation:brilho 2.8s ease-in-out infinite;}
   .pt-tag{font-size:11px; color:var(--mut); letter-spacing:1px; margin-top:10px;}
   #poster-painel{padding:16px 16px 26px;}
   .cracha{background:var(--card); border:1.5px solid var(--gold); border-radius:14px;
@@ -204,11 +204,20 @@
   #s-demitido{position:fixed; inset:0; background:#B91C1C; z-index:30; display:none;
     align-items:center; justify-content:center; text-align:center; padding:24px;}
   .dem-box h1{font-size:32px; color:#fff; letter-spacing:1px; margin:10px 0 0;}
-  .dem-sub{font-size:22px; color:#FECACA; font-weight:800; margin:8px 0 28px;}
+  .dem-sub{font-size:22px; color:#FECACA; font-weight:800; margin:8px 0 6px;}
+  .dem-motivo{font-size:13px; color:#FEE2E2; margin:0 0 26px; line-height:1.5;}
+  #btn-voltar-mesa{margin-top:2px;}
   .dem-box .btn{background:#fff; color:#B91C1C; box-shadow:0 3px 0 #7f1414;}
   @keyframes soco{0%{transform:none;} 30%{transform:translate(-8px,4px) rotate(-2deg);}
     60%{transform:translate(7px,-3px) rotate(2deg);} 100%{transform:none;}}
   .soco{animation:soco .35s ease;}
+  .zoom-btn{position:absolute; right:10px; top:10px; width:40px; height:40px; border-radius:50%;
+    background:rgba(19,28,46,.72); border:1.5px solid var(--line); color:var(--txt); font-size:17px;
+    z-index:6; display:flex; align-items:center; justify-content:center; cursor:pointer;}
+  @keyframes twk{0%,100%{opacity:.2;} 50%{opacity:1;}}
+  .twk{animation:twk 1.9s ease-in-out infinite;}
+  @keyframes brilho{0%,100%{text-shadow:0 4px 0 var(--gold), 0 5px 12px rgba(0,0,0,.4);}
+    50%{text-shadow:0 4px 0 var(--gold), 0 0 28px rgba(234,197,79,.6), 0 5px 12px rgba(0,0,0,.4);}}
 </style>
 </head>
 <body>
@@ -220,30 +229,32 @@
       <div class="poster-corp">★ CONTINENTAL CAPITAL ★</div>
       <svg id="poster-svg" viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
         <defs>
-          <linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#3A4E78"/>
-            <stop offset="1" stop-color="#1C2949"/>
-          </linearGradient>
-          <radialGradient id="spot" cx="0.5" cy="0.32" r="0.6">
-            <stop offset="0" stop-color="#5A72A8" stop-opacity="0.55"/>
+          <radialGradient id="spot" cx="0.5" cy="0.42" r="0.55">
+            <stop offset="0" stop-color="#5A72A8" stop-opacity="0.5"/>
             <stop offset="1" stop-color="#5A72A8" stop-opacity="0"/>
           </radialGradient>
         </defs>
-        <rect x="0" y="0" width="380" height="300" fill="url(#pg)"/>
-        <rect x="0" y="0" width="380" height="300" fill="url(#spot)"/>
-        <g opacity="0.85">
-          <rect x="24" y="196" width="70" height="42" rx="4" fill="#101826" stroke="#0A0F1C" stroke-width="2.5"/>
-          <rect x="30" y="202" width="30" height="4" fill="#FF9F1C"/>
-          <rect x="30" y="210" width="44" height="3" fill="#FF9F1C" opacity="0.6"/>
-          <rect x="30" y="216" width="36" height="3" fill="#FF9F1C" opacity="0.45"/>
-          <polyline points="30,232 44,224 58,228 74,216 88,220" fill="none" stroke="#22C55E" stroke-width="2.5"/>
-          <rect x="286" y="196" width="70" height="42" rx="4" fill="#101826" stroke="#0A0F1C" stroke-width="2.5"/>
-          <rect x="292" y="202" width="30" height="4" fill="#FF9F1C"/>
-          <rect x="292" y="210" width="44" height="3" fill="#FF9F1C" opacity="0.6"/>
-          <polyline points="292,220 306,228 320,222 336,232 350,226" fill="none" stroke="#EF4444" stroke-width="2.5"/>
+        <rect x="0" y="0" width="380" height="300" fill="#17223E"/>
+        <g transform="translate(190,118) scale(-1,1) skewY(26.565)">
+          <rect x="0" y="-72" width="152" height="72" fill="#26365B"/>
+          <rect x="24" y="-62" width="66" height="40" rx="3" fill="#1B2440"/>
+          <rect x="27" y="-59" width="60" height="34" rx="2" fill="url(#ceu)"/>
+          <rect x="34" y="-46" width="4" height="4" fill="#FFE08A" class="twk"/>
+          <rect x="52" y="-40" width="4" height="4" fill="#FFD166" class="twk" style="animation-delay:.5s"/>
+          <rect x="70" y="-50" width="4" height="4" fill="#FFE08A" class="twk" style="animation-delay:1s"/>
+          <rect x="0" y="-6" width="152" height="6" fill="#1B2745"/>
         </g>
-        <g id="poster-mascote" transform="translate(190,150)"></g>
+        <g transform="translate(190,118) skewY(26.565)">
+          <rect x="0" y="-72" width="152" height="72" fill="#2E4066"/>
+          <rect x="22" y="-64" width="78" height="34" rx="4" fill="#0A0F1C"/>
+          <polyline points="27,-40 39,-48 51,-44 63,-54 75,-50 89,-58 95,-55" fill="none" stroke="#22C55E" stroke-width="2"/>
+          <rect x="0" y="-6" width="152" height="6" fill="#20304F"/>
+        </g>
+        <g id="poster-piso"></g>
+        <circle cx="190" cy="190" r="120" fill="url(#spot)"/>
+        <g id="poster-mascote" transform="translate(190,252)"></g>
       </svg>
+
       <div class="poster-title">
         <div class="pt-main">BOLETA RUSH</div>
         <div class="pt-tag">a mesa mais caótica do mercado</div>
@@ -274,6 +285,7 @@
       <ul class="rules" id="regras" style="display:none;">
         <li><b>Toque em um trader</b> para pegar a ordem e compare com a boleta do sistema.</li>
         <li>Bateu? <b>Boletar</b>. Divergiu? <b>Devolver apontando o campo errado</b> — acertar o campo paga mais.</li>
+        <li>Pode <b>levantar da mesa</b>: xingue os traders, fale (ou brigue) com o chefe que patrulha o andar, tome um café — mas cada segundo longe custa caro.</li>
         <li>Ano 2+: ordens de <b>DIGITAÇÃO ⌨️</b> — monte a boleta na mão. Ano 3+: ordens por <b>TELEFONE 📞</b> — decore antes de sumir.</li>
         <li><b>Combo</b>: acertos seguidos multiplicam os ganhos até 3x. Errar zera.</li>
         <li>Fim do ano: ranking, auditoria, promoção e a <b>loja da mesa</b> — invista seu bônus em upgrades.</li>
@@ -315,9 +327,9 @@
         <rect x="84" y="-66" width="12" height="26" fill="#3A2F55"/>
         <rect x="100" y="-88" width="20" height="48" fill="#4B3C6B"/>
         <rect x="124" y="-62" width="16" height="22" fill="#3A2F55"/>
-        <rect x="66" y="-76" width="4" height="4" fill="#FFE08A"/>
-        <rect x="104" y="-82" width="4" height="4" fill="#FFD166"/>
-        <rect x="106" y="-70" width="4" height="4" fill="#FFE08A"/>
+        <rect x="66" y="-76" width="4" height="4" fill="#FFE08A" class="twk"/>
+        <rect x="104" y="-82" width="4" height="4" fill="#FFD166" class="twk" style="animation-delay:.6s"/>
+        <rect x="106" y="-70" width="4" height="4" fill="#FFE08A" class="twk" style="animation-delay:1.1s"/>
         <rect x="103" y="-98" width="5" height="58" fill="#1B2440"/>
         <rect x="38" y="-72" width="132" height="4" fill="#1B2440"/>
       </g>
@@ -333,7 +345,7 @@
         <clipPath id="tvclip"><rect x="31" y="-63" width="146" height="14"/></clipPath>
         <g clip-path="url(#tvclip)">
           <g class="tvmarquee">
-            <text x="-240" y="-52" font-family="Menlo,monospace" font-size="10" fill="#FF9F1C">PTRL4 ▲38,42  MNRD3 ▼61,88  BNCO4 ▲34,91  AGRO3 ▲29,10  VRJO3 ▼9,22  MTRZ3 ▲53,04</text>
+            <text x="-240" y="-52" font-family="Menlo,monospace" font-size="10" fill="#FF9F1C">PTRL4 ▲38,42  MNRD3 ▼61,88  BNCO4 ▲34,91  AGRO3 ▲29,10  VRJO3 ▼9,22  MTRZ3 ▲53,04</text>
           </g>
         </g>
         <rect x="52" y="-34" width="114" height="18" rx="4" fill="#1B2440"/>
@@ -342,36 +354,45 @@
 
       <g id="piso-iso"></g>
 
-      <g transform="translate(352,196)">
-        <ellipse cx="14" cy="46" rx="15" ry="5" fill="#1E2A47"/>
-        <rect x="8" y="18" width="12" height="28" rx="3" fill="#B26E2B"/>
-        <circle cx="6" cy="10" r="9" fill="#2E9E5B"/>
-        <circle cx="18" cy="4" r="10" fill="#37B56A"/>
-        <circle cx="24" cy="16" r="8" fill="#2E9E5B"/>
+      <g id="mundo">
+        <g id="planta" transform="translate(196,120) scale(0.9)">
+          <ellipse cx="14" cy="46" rx="15" ry="5" fill="#1E2A47"/>
+          <rect x="8" y="18" width="12" height="28" rx="3" fill="#B26E2B"/>
+          <circle cx="6" cy="10" r="9" fill="#2E9E5B"/>
+          <circle cx="18" cy="4" r="10" fill="#37B56A"/>
+          <circle cx="24" cy="16" r="8" fill="#2E9E5B"/>
+        </g>
+        <g id="slot-g-0"></g>
+        <g id="slot-g-2"></g>
+        <g id="slot-g-1"></g>
+        <g id="maq-cafe" transform="translate(67,267)">
+          <text x="0" y="-78" text-anchor="middle" font-size="10" font-weight="800" fill="#EAC54F" font-family="inherit">☕ CAFÉ</text>
+          <ellipse cx="0" cy="4" rx="24" ry="8" fill="#1E2A47" opacity="0.55"/>
+          <polygon points="0,-71.5 23,-60 0,-48.5 -23,-60" fill="#33456B" stroke="#1B2745" stroke-width="1.5"/>
+          <polygon points="-23,-60 0,-48.5 0,11.5 -23,0" fill="#22304A"/>
+          <polygon points="23,-60 0,-48.5 0,11.5 23,0" fill="#16203A"/>
+          <polygon points="-18,-53 -5,-46.5 -5,-24 -18,-30.5" fill="#0A0F1C" stroke="#3A4A6E" stroke-width="1"/>
+          <polygon points="-16,-49 -11,-46.5 -11,-35 -16,-37.5" fill="#F15D1B"/>
+          <polygon points="-9,-45 -6,-43.5 -6,-33 -9,-34.5" fill="#4F8EF7"/>
+          <polygon points="-17,-19 -6,-13.5 -6,-3 -17,-8.5" fill="#060B14"/>
+          <polygon points="-14,-14 -9,-11.5 -9,-6 -14,-8.5" fill="#E8EAF0"/>
+          <polygon points="5,-44 18,-50.5 18,-40 5,-33.5" fill="#0F1726"/>
+          <polygon points="5,-16 18,-22.5 18,-6 5,0.5" fill="#101826"/>
+          <circle cx="11" cy="-27" r="2.5" fill="#22C55E" class="twk"/>
+        </g>
+        <g id="chefe-wrap" transform="translate(369,257)">
+          <ellipse cx="0" cy="2" rx="24" ry="8" fill="#2C3A5C"/>
+          <text x="0" y="-74" text-anchor="middle" font-size="9" font-weight="800" fill="#EAC54F" font-family="inherit">CHEFE</text>
+          <g id="chefe"></g>
+        </g>
+        <g id="mesa-jogador" transform="translate(187,231)"></g>
+        <g id="player" transform="translate(231,278)"></g>
       </g>
-
-      <g transform="translate(45,152)">
-        <rect x="0" y="0" width="54" height="92" rx="6" fill="#1B2440" stroke="#0F1726" stroke-width="3"/>
-        <rect x="6" y="8" width="42" height="34" rx="4" fill="#0A0F1C"/>
-        <rect x="10" y="12" width="14" height="26" rx="2" fill="#F15D1B" opacity="0.9"/>
-        <rect x="27" y="12" width="14" height="26" rx="2" fill="#4F8EF7" opacity="0.9"/>
-        <text x="27" y="56" text-anchor="middle" font-size="9" font-weight="700" fill="#EAC54F" font-family="inherit">CAFÉ</text>
-        <rect x="14" y="62" width="26" height="18" rx="3" fill="#0A0F1C"/>
-        <rect x="21" y="66" width="12" height="11" rx="2" fill="#E8EAF0"/>
-        <rect x="4" y="88" width="46" height="6" fill="#0F1726"/>
-      </g>
-
-      <g id="camada-mesas"></g>
-
-      <ellipse cx="325" cy="302" rx="42" ry="12" fill="#2C3A5C"/>
-      <text x="325" y="216" text-anchor="middle" font-size="10" font-weight="800" fill="#EAC54F" font-family="inherit">CHEFE</text>
-      <g id="chefe" transform="translate(295,229)"></g>
-
-      <g id="mesa-jogador" transform="translate(126,300)"></g>
-      <g id="player" transform="translate(180,240)"></g>
       <g id="camada-bolhas"></g>
     </svg>
+
     <div id="joy"><div id="joyknob"></div></div>
+    <div class="zoom-btn" id="zoom-btn" onclick="toggleZoom()">🔍</div>
     </div>
 
     <div id="painel">
@@ -424,6 +445,7 @@
       <div id="painel-anda">
         <div class="anda-status" id="anda-status">🚶 Você está longe da mesa — as ordens continuam chegando!</div>
         <div id="acoes-anda"></div>
+        <button class="btn btn-buy" id="btn-voltar-mesa" onclick="sentar()">💺 Voltar à mesa de operações</button>
       </div>
     </div>
   </div>
@@ -486,6 +508,7 @@
     <div style="font-size:56px;">👊💼</div>
     <h1>VOCÊ FOI DEMITIDO.</h1>
     <div class="dem-sub">Se fudeu.</div>
+    <div class="dem-motivo" id="dem-motivo"></div>
     <button class="btn" onclick="recomecaEstagiario()">Recomeçar como estagiário</button>
   </div>
 </div>
@@ -547,9 +570,9 @@ var BONUS_INICIAL = 10000;
 var V = { bater: 500, devolver: 750, fone: 750, foneDev: 1000, montar: 800,
           erro: 1000, campoErrado: 400, montarErro: 800, timeout: 500 };
 var SLOTS = [
-  { x: 45,  y: 178 },
-  { x: 194, y: 178 },
-  { x: 120, y: 232 }
+  { desk: { i: 0.8, j: 1.0, dir: "i" }, char: { i: 2.2, j: 0.62 } },
+  { desk: { i: 5.0, j: 1.0, dir: "i" }, char: { i: 6.4, j: 0.62 } },
+  { desk: { i: 1.3, j: 3.4, dir: "j" }, char: { i: 0.62, j: 4.8 } }
 ];
 var JOGADOR = { skin: "#F5C89B", hair: "#6B3F1D", shirt: "#F7F7F7" };
 var CHEFE_SKIN = { skin: "#E0A878", hair: "#9CA3AF", shirt: "#374151" };
@@ -564,13 +587,43 @@ function clampTile(t){
   return { i: Math.max(ISO.min, Math.min(ISO.max, t.i)),
            j: Math.max(ISO.min, Math.min(ISO.max, t.j)) };
 }
-var SEAT = { i: 6.8, j: 6.76 };
+/* ===== BLOCO: constantes de layout ===== */
+var SEAT = { i: 6.0, j: 5.1 };
 var ALVOS_FIXOS = {
-  mesa:  { i: 6.8, j: 6.76 },
-  cafe:  { i: 0.9, j: 6.9 },
-  chefe: { i: 8.4, j: 4.24 }
+  mesa:  { i: 6.0, j: 5.1 },
+  cafe:  { i: 2.9, j: 7.9 }
 };
-var CAFE_CUSTO_SEG = 30;
+var CAFE_TILE = { i: 2.0, j: 8.2 };
+var PATRULHA = [
+  { i: 8.1, j: 1.2 }, { i: 8.1, j: 4.2 }, { i: 4.0, j: 4.2 },
+  { i: 3.6, j: 7.9 }, { i: 7.8, j: 8.0 }, { i: 8.1, j: 6.0 }
+];
+var ESTATICOS = [
+  { id: "planta",       d: 1.0 },
+  { id: "slot-g-0",     d: 3.75 },
+  { id: "slot-g-2",     d: 6.65 },
+  { id: "slot-g-1",     d: 7.95 },
+  { id: "maq-cafe",     d: 10.2 },
+  { id: "mesa-jogador", d: 12.15 }
+];
+function charAt(colors){
+  return "<g transform='scale(0.8) translate(-30,-76)'>" + svgTrader(colors) + "</g>";
+}
+var RESPOSTAS_CHEFE = [
+  [ "Falou. Anotado. Volta pro teu posto que hoje o pregão tá pegando.",
+    "Boa iniciativa vir falar comigo. Traz isso na reunião de segunda.",
+    "Tudo bem. Só não deixa a fila de boleta crescer enquanto a gente conversa." ],
+  [ "Cuidado com o tom. Quem assina teu bônus sou eu.",
+    "Reclamação anotada — junto com o teu número de erros do mês.",
+    "Se sobra tempo pra reclamar, sobra pra conferir boleta." ],
+  [ "Olha o respeito. Tô a uma ligação de te mandar pro RH.",
+    "Repete isso e a gente termina essa conversa na sala fechada.",
+    "Você tá corajoso demais pra quem depende da minha avaliação." ],
+  [ "Tá me xingando na MINHA mesa? Última chance. Vira e volta pro teu lugar.",
+    "Abaixa esse tom AGORA. Última chance, tô falando sério.",
+    "Respira. Última chance. A próxima frase decide teu emprego." ]
+];
+var CAFE_CUSTO = 30;
 
 var XINGA_PESADO = ["caralho","krl","crlh","porra","pqp","foda","foder","fode-","fode ","fodase","foda-se","fudeu","fudido","merda","bosta","puta","arrombado","cuzao","cuzão","vsf","fdp","desgraça","desgraca","escroto","vai se f"];
 var XINGA_MEDIO = ["incompetente","burro","idiota","imbecil","inutil","inútil","lixo","ridiculo","ridículo","vergonha","palhaço","palhaco","animal","jumento","otario","otário","babaca","horrivel","horrível","pessimo","péssimo","preguiçoso","preguicoso","folgado"];
@@ -698,39 +751,35 @@ function toggleVib(){
 }
 
 /* ============ CENÁRIO SVG ============ */
-function svgMesa(){
+function svgMesaIso(dir){
+  var hw = ISO.hw, hh = ISO.hh, Li = 2.8, Lj = 1.1, H = 36;
+  function px(di, dj){ return (di - dj) * hw; }
+  function py(di, dj){ return (di + dj) * hh; }
+  function P(di, dj, ex){ return px(di, dj) + "," + (py(di, dj) + (ex || 0)); }
   var s = "";
-  s += "<path d='M4,66 L142,66 L170,34 L32,34 Z' fill='#D98E3F' stroke='#8F5A22' stroke-width='2'/>";
-  s += "<path d='M4,66 L142,66 L142,86 L4,86 Z' fill='#B26E2B'/>";
-  s += "<path d='M142,66 L170,34 L170,54 L142,86 Z' fill='#9C5F24'/>";
-  s += "<rect x='16' y='78' width='8' height='16' fill='#7A4A1B'/>";
-  s += "<rect x='120' y='78' width='8' height='16' fill='#7A4A1B'/>";
+  s += "<polygon points='" + P(0,0) + " " + P(Li,0) + " " + P(Li,Lj) + " " + P(0,Lj) + "' fill='#D98E3F' stroke='#8F5A22' stroke-width='1.5'/>";
+  s += "<polygon points='" + P(0,Lj) + " " + P(Li,Lj) + " " + P(Li,Lj,H) + " " + P(0,Lj,H) + "' fill='#B26E2B'/>";
+  s += "<polygon points='" + P(Li,0) + " " + P(Li,Lj) + " " + P(Li,Lj,H) + " " + P(Li,0,H) + "' fill='#9C5F24'/>";
   for (var m = 0; m < 3; m++) {
-    var mx = 18 + m * 44;
-    var my = 18 - m * 4;
-    s += "<rect x='" + (mx + 14) + "' y='" + (my + 28) + "' width='8' height='7' fill='#1F2A3D'/>";
-    s += "<rect x='" + mx + "' y='" + my + "' width='36' height='28' rx='3' fill='#101826' stroke='#1F2A3D' stroke-width='2.5'/>";
-    s += "<rect x='" + (mx + 3) + "' y='" + (my + 3) + "' width='30' height='22' rx='1.5' fill='#060B14'/>";
-    s += "<rect x='" + (mx + 5) + "' y='" + (my + 5) + "' width='16' height='2.5' fill='#FF9F1C'/>";
-    s += "<rect x='" + (mx + 5) + "' y='" + (my + 9) + "' width='24' height='2' fill='#FF9F1C' opacity='0.7'" + (m === 1 ? " class='scrblink'" : "") + "/>";
-    s += "<rect x='" + (mx + 5) + "' y='" + (my + 12.5) + "' width='20' height='2' fill='#FF9F1C' opacity='0.5'/>";
+    var t = 0.5 + m * 0.95;
+    var bx = px(t, 0.4), by = py(t, 0.4);
+    s += "<rect x='" + (bx - 3) + "' y='" + (by - 6) + "' width='6' height='6' fill='#1F2A3D'/>";
+    s += "<rect x='" + (bx - 13) + "' y='" + (by - 27) + "' width='26' height='21' rx='2' fill='#101826' stroke='#1F2A3D' stroke-width='2'/>";
+    s += "<rect x='" + (bx - 11) + "' y='" + (by - 25) + "' width='22' height='17' fill='#060B14'/>";
+    s += "<rect x='" + (bx - 9) + "' y='" + (by - 23) + "' width='10' height='2' fill='#FF9F1C'/>";
+    s += "<rect x='" + (bx - 9) + "' y='" + (by - 19.5) + "' width='15' height='1.5' fill='#FF9F1C' opacity='0.6'" + (m === 1 ? " class='scrblink'" : "") + "/>";
     var up = (m !== 1);
-    s += "<polyline points='" + (mx + 5) + "," + (my + 22) + " " + (mx + 11) + "," + (my + (up ? 19 : 20)) + " " + (mx + 17) + "," + (my + (up ? 20 : 17)) + " " + (mx + 23) + "," + (my + (up ? 16 : 21)) + " " + (mx + 29) + "," + (my + (up ? 17 : 15)) + "' fill='none' stroke='" + (up ? "#22C55E" : "#EF4444") + "' stroke-width='1.8'/>";
+    s += "<polyline points='" + (bx - 9) + "," + (by - 11) + " " + (bx - 4) + "," + (by - (up ? 13 : 12)) + " " + (bx + 2) + "," + (by - (up ? 12 : 15)) + " " + (bx + 9) + "," + (by - (up ? 16 : 11)) + "' fill='none' stroke='" + (up ? "#22C55E" : "#EF4444") + "' stroke-width='1.6'/>";
   }
-  s += "<rect x='40' y='48' width='46' height='13' rx='2.5' fill='#E8EAF0' stroke='#9AA3B5' stroke-width='1'/>";
+  s += "<polygon points='" + P(1.0,0.62) + " " + P(1.85,0.62) + " " + P(1.85,0.95) + " " + P(1.0,0.95) + "' fill='#E8EAF0' stroke='#9AA3B5' stroke-width='0.8'/>";
   var teclas = ["#EF4444", "#F5C518", "#22C55E", "#4F8EF7"];
   for (var k = 0; k < 4; k++) {
-    s += "<rect x='" + (43 + k * 5) + "' y='50' width='4' height='3.5' rx='1' fill='" + teclas[k] + "'/>";
+    var kx = px(1.09 + k * 0.17, 0.7), ky = py(1.09 + k * 0.17, 0.7);
+    s += "<rect x='" + (kx - 1.5) + "' y='" + (ky - 1.2) + "' width='3' height='2.4' rx='0.6' fill='" + teclas[k] + "'/>";
   }
-  for (var r = 0; r < 2; r++) {
-    for (var c = 0; c < 8; c++) {
-      s += "<rect x='" + (43 + c * 5) + "' y='" + (55 + r * 4.5) + "' width='4' height='3' rx='1' fill='#B7BECC'/>";
-    }
-  }
-  s += "<rect x='96' y='50' width='9' height='11' rx='2' fill='#C7CEDB'/>";
-  s += "<path d='M112,58 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0' fill='#FFFFFF' stroke='#9AA3B5'/>";
-  s += "<rect x='121' y='55' width='3' height='4' fill='#9AA3B5'/>";
-  s += "<rect x='8' y='50' width='18' height='12' fill='#F1E4C8' stroke='#C9B68C' stroke-width='1' transform='rotate(-6 17 56)'/>";
+  s += "<ellipse cx='" + px(2.15, 0.8) + "' cy='" + py(2.15, 0.8) + "' rx='4' ry='3' fill='#FFFFFF' stroke='#9AA3B5' stroke-width='0.8'/>";
+  s += "<polygon points='" + P(0.25,0.62) + " " + P(0.62,0.62) + " " + P(0.62,0.95) + " " + P(0.25,0.95) + "' fill='#F1E4C8' stroke='#C9B68C' stroke-width='0.8'/>";
+  if (dir === "j") return "<g transform='scale(-1,1)'>" + s + "</g>";
   return s;
 }
 
@@ -782,13 +831,16 @@ function svgBolha(o){
 }
 
 function montaMesas(){
-  var camada = el("camada-mesas");
-  var html = "";
   for (var i = 0; i < SLOTS.length; i++) {
-    html += "<g id='slot-char-" + i + "' transform='translate(" + (SLOTS[i].x + 55) + "," + (SLOTS[i].y - 62) + ")'></g>";
-    html += "<g transform='translate(" + SLOTS[i].x + "," + SLOTS[i].y + ")'>" + svgMesa() + "</g>";
+    var sl = SLOTS[i];
+    sl.charX = isoX(sl.char.i, sl.char.j);
+    sl.charY = isoY(sl.char.i, sl.char.j);
+    sl.bubX = sl.charX - 64;
+    sl.bubY = sl.charY - 132;
+    el("slot-g-" + i).innerHTML =
+      "<g id='slot-char-" + i + "' transform='translate(" + sl.charX + "," + sl.charY + ")'></g>" +
+      "<g transform='translate(" + isoX(sl.desk.i, sl.desk.j) + "," + (isoY(sl.desk.i, sl.desk.j) - 36) + ")'>" + svgMesaIso(sl.desk.dir) + "</g>";
   }
-  camada.innerHTML = html;
 }
 
 /* ============ JOGADOR ANDÁVEL / MODOS ============ */
@@ -808,28 +860,24 @@ function montaPiso(){
   g.innerHTML = html2;
 }
 
+/* ===== BLOCO: mundo, chefe, camera ===== */
 function montaExtras(){
   montaPiso();
-  el("chefe").innerHTML = svgTrader(CHEFE_SKIN);
-  el("mesa-jogador").innerHTML = svgMesa();
+  el("chefe").innerHTML = charAt(CHEFE_SKIN);
+  el("mesa-jogador").innerHTML = svgMesaIso("i");
+  el("maq-cafe").setAttribute("transform",
+    "translate(" + isoX(CAFE_TILE.i, CAFE_TILE.j) + "," + isoY(CAFE_TILE.i, CAFE_TILE.j) + ")");
+  S._sig = "";
+  renderChefe();
   renderPlayer(true);
   renderModo();
-}
-
-function renderPlayer(rebuild){
-  var p = el("player");
-  var sx = isoX(S.pi, S.pj) - 30, sy = isoY(S.pi, S.pj) - 68;
-  p.setAttribute("transform", "translate(" + Math.round(sx) + "," + Math.round(sy) + ")");
-  if (rebuild) {
-    p.innerHTML = svgTrader(JOGADOR) +
-      (S.modo === "cafe" ? "<text x='44' y='6' font-size='16'>☕</text>" : "");
-  }
 }
 
 function renderModo(){
   var fora = S.modo !== "mesa";
   el("joy").className = (S.modo === "anda") ? "on" : "";
   el("painel-anda").style.display = fora ? "block" : "none";
+  el("btn-voltar-mesa").style.display = fora ? "block" : "none";
   el("btn-levantar").style.display = fora ? "none" : "block";
   el("mo").style.display = fora ? "none" : "block";
   if (fora) {
@@ -857,53 +905,6 @@ function sentar(){
   renderModo();
 }
 
-function calcAlvo(){
-  var melhor = null, melhorD = 1.35;
-  function tenta(tipo, ti, tj, dado){
-    var d = Math.sqrt((S.pi - ti) * (S.pi - ti) + (S.pj - tj) * (S.pj - tj));
-    if (d < melhorD) { melhorD = d; melhor = { tipo: tipo, dado: dado }; }
-  }
-  tenta("mesa", ALVOS_FIXOS.mesa.i, ALVOS_FIXOS.mesa.j, null);
-  tenta("cafe", ALVOS_FIXOS.cafe.i, ALVOS_FIXOS.cafe.j, null);
-  tenta("chefe", ALVOS_FIXOS.chefe.i, ALVOS_FIXOS.chefe.j, null);
-  for (var i = 0; i < S.orders.length; i++) {
-    var o = S.orders[i];
-    var t = clampTile(tileDe(SLOTS[o.slot].x + 85, SLOTS[o.slot].y + 14));
-    tenta("trader", t.i, t.j, o.id);
-  }
-  return melhor;
-}
-
-function renderAcoes(alvo){
-  var chave = alvo ? (alvo.tipo + ":" + alvo.dado) : "nada";
-  if (S.alvo === chave) return;
-  S.alvo = chave;
-  var html = "";
-  if (S.modo === "cafe") {
-    el("anda-status").textContent = "☕ Bebendo café... -R$ " + CAFE_CUSTO_SEG + " por segundo. Vida boa, né?";
-    html = "<button class='btn btn-main acao' onclick='paraCafe()'>🚶 Voltar ao trabalho</button>";
-  } else if (!alvo) {
-    el("anda-status").textContent = "🚶 Você está longe da mesa — as ordens continuam chegando!";
-    html = "<div class='anda-status'>ande até um trader, o café, o chefe ou sua mesa…</div>";
-  } else if (alvo.tipo === "mesa") {
-    el("anda-status").textContent = "💺 Sua mesa está aqui do lado.";
-    html = "<button class='btn btn-buy' onclick='sentar()'>💺 Sentar e voltar a boletar</button>";
-  } else if (alvo.tipo === "cafe") {
-    el("anda-status").textContent = "🥤 A máquina de conveniência te encara.";
-    html = "<button class='btn btn-main' onclick='iniciaCafe()'>☕ Tomar um café (-R$ " + CAFE_CUSTO_SEG + "/s)</button>";
-  } else if (alvo.tipo === "chefe") {
-    el("anda-status").textContent = "👔 O chefe está bem na sua frente. Pense bem.";
-    html = "<button class='btn btn-sell' onclick='baterNoChefe()'>👊 Bater no chefe</button>";
-  } else if (alvo.tipo === "trader") {
-    var o = achaOrdem(alvo.dado);
-    if (o) {
-      el("anda-status").textContent = "😤 " + o.trader.nome + " está aqui na sua frente.";
-      html = "<button class='btn btn-sell' onclick='abreChat(" + o.id + ")'>💬 Dar satisfação pro " + o.trader.nome + "</button>";
-    }
-  }
-  el("acoes-anda").innerHTML = html;
-}
-
 function achaOrdem(id){
   for (var i = 0; i < S.orders.length; i++) {
     if (S.orders[i].id === id) return S.orders[i];
@@ -911,7 +912,117 @@ function achaOrdem(id){
   return null;
 }
 
+function ordenaMundo(){
+  var itens = [];
+  for (var k = 0; k < ESTATICOS.length; k++) {
+    itens.push({ nome: ESTATICOS[k].id, alvo: el(ESTATICOS[k].id), d: ESTATICOS[k].d });
+  }
+  itens.push({ nome: "player", alvo: el("player"), d: S.pi + S.pj + 0.02 });
+  itens.push({ nome: "chefe-wrap", alvo: el("chefe-wrap"), d: S.bi + S.bj });
+  itens.sort(function(a, b){ return a.d - b.d; });
+  var sig = "";
+  for (var i = 0; i < itens.length; i++) sig += itens[i].nome + "|";
+  if (sig === S._sig) return;
+  S._sig = sig;
+  var m = el("mundo");
+  for (var j = 0; j < itens.length; j++) m.appendChild(itens[j].alvo);
+}
+
+function renderChefe(){
+  el("chefe-wrap").setAttribute("transform",
+    "translate(" + Math.round(isoX(S.bi, S.bj)) + "," + Math.round(isoY(S.bi, S.bj)) + ")");
+  ordenaMundo();
+}
+
+function tickChefe(){
+  if (S.bPausa > 0) { S.bPausa--; return; }
+  var alvo = PATRULHA[S.bWp];
+  var di = alvo.i - S.bi, dj = alvo.j - S.bj;
+  var d = Math.sqrt(di * di + dj * dj);
+  if (d < 0.14) {
+    S.bWp = (S.bWp + 1) % PATRULHA.length;
+    S.bPausa = 10 + Math.floor(Math.random() * 25);
+    return;
+  }
+  var v = 0.05;
+  S.bi += di / d * v;
+  S.bj += dj / d * v;
+  renderChefe();
+}
+
+function toggleZoom(){
+  if (!S) return;
+  S.zoom = !S.zoom;
+  el("zoom-btn").textContent = S.zoom ? "\uD83D\uDD0E" : "\uD83D\uDD0D";
+  updateCam();
+}
+
+function updateCam(){
+  var c = el("cena");
+  if (!S || !S.zoom) { c.setAttribute("viewBox", "0 0 420 480"); return; }
+  var w = 290, h = 331.4;
+  var fx = isoX(S.pi, S.pj), fy = isoY(S.pi, S.pj) - 30;
+  var x = Math.max(0, Math.min(420 - w, fx - w / 2));
+  var y = Math.max(0, Math.min(480 - h, fy - h / 2));
+  c.setAttribute("viewBox", x.toFixed(1) + " " + y.toFixed(1) + " " + w + " " + h);
+}
+
+function renderPlayer(rebuild){
+  var p = el("player");
+  var fx = isoX(S.pi, S.pj), fy = isoY(S.pi, S.pj);
+  p.setAttribute("transform", "translate(" + Math.round(fx) + "," + Math.round(fy) + ")");
+  if (rebuild) {
+    p.innerHTML = "<g transform='scale(0.8) translate(-30,-76)'>" + svgTrader(JOGADOR) +
+      (S.modo === "cafe" ? "<text x='44' y='6' font-size='16'>\u2615</text>" : "") + "</g>";
+  }
+  ordenaMundo();
+  updateCam();
+}
+
+function calcAlvo(){
+  var melhor = null, melhorD = 1.5;
+  function tenta(tipo, ti, tj, dado, raio){
+    var d = Math.sqrt((S.pi - ti) * (S.pi - ti) + (S.pj - tj) * (S.pj - tj));
+    if (d < (raio || 1.5) && d < melhorD) { melhorD = d; melhor = { tipo: tipo, dado: dado }; }
+  }
+  tenta("cafe", ALVOS_FIXOS.cafe.i, ALVOS_FIXOS.cafe.j, null, 1.7);
+  tenta("chefe", S.bi, S.bj, null, 1.7);
+  for (var i = 0; i < S.orders.length; i++) {
+    var o = S.orders[i];
+    tenta("trader", SLOTS[o.slot].char.i, SLOTS[o.slot].char.j, o.id, 1.6);
+  }
+  return melhor;
+}
+
+function renderAcoes(alvo){
+  var chave = alvo ? (alvo.tipo + ":" + alvo.dado) : "nada";
+  if (S.modo === "cafe") chave = "cafe-bebendo";
+  if (S.alvo === chave) return;
+  S.alvo = chave;
+  var html = "";
+  if (S.modo === "cafe") {
+    el("anda-status").textContent = "\u2615 Tomando um café... o pregão que espere.";
+  } else if (!alvo) {
+    el("anda-status").textContent = "\uD83D\uDEB6 Longe da mesa — as ordens continuam chegando!";
+  } else if (alvo.tipo === "cafe") {
+    el("anda-status").textContent = "\uD83E\uDD64 A máquina de conveniência te encara.";
+    html = "<button class='btn btn-main' onclick='iniciaCafe()'>\u2615 Tomar um café (-R$ " + CAFE_CUSTO + ")</button>";
+  } else if (alvo.tipo === "chefe") {
+    el("anda-status").textContent = "\uD83D\uDC54 O chefe está bem na sua frente. Pense bem.";
+    html = "<button class='btn btn-main' onclick=\"abreChat('chefe',0)\">\uD83D\uDCAC Falar com o chefe</button>" +
+           "<button class='btn btn-sell' onclick='baterNoChefe()'>\uD83D\uDC4A Bater no chefe</button>";
+  } else if (alvo.tipo === "trader") {
+    var o = achaOrdem(alvo.dado);
+    if (o) {
+      el("anda-status").textContent = "\uD83D\uDE24 " + o.trader.nome + " está aqui na sua frente.";
+      html = "<button class='btn btn-sell' onclick=\"abreChat('trader'," + o.id + ")\">\uD83D\uDCAC Dar satisfação pro " + o.trader.nome + "</button>";
+    }
+  }
+  el("acoes-anda").innerHTML = html;
+}
+
 function tickJogador(){
+  tickChefe();
   if (S.modo === "anda") {
     if (S.joy.x !== 0 || S.joy.y !== 0) {
       var spd = 9;
@@ -922,24 +1033,28 @@ function tickJogador(){
     }
     renderAcoes(calcAlvo());
   } else if (S.modo === "cafe") {
-    S.cafeAcc += 100;
-    if (S.cafeAcc >= 1000) {
-      S.cafeAcc -= 1000;
-      S.bonus -= CAFE_CUSTO_SEG;
-      showFloat("-R$ " + CAFE_CUSTO_SEG, "bad");
-      renderHud();
-      checaGameOver();
+    if (Date.now() >= S.cafeFim) {
+      S.modo = "anda";
+      S.alvo = "__force__";
+      toast("\u2615 Café tomado. De volta ao caos.", "good");
+      renderModo();
     }
   }
 }
 
 function iniciaCafe(){
+  if (S.modo === "cafe") return;
   S.modo = "cafe";
-  S.cafeAcc = 0;
-  S.pi = 1.7; S.pj = 6.7;
-  somCaixa(); vib(15);
+  S.bonus -= CAFE_CUSTO;
+  S.pi = ALVOS_FIXOS.cafe.i; S.pj = ALVOS_FIXOS.cafe.j;
+  S.cafeFim = Date.now() + 5000;
+  showFloat("-" + fmt(CAFE_CUSTO), "bad");
+  somCafe();
+  vib([25, 60, 25]);
+  renderHud();
   S.alvo = "__force__";
   renderModo();
+  checaGameOver();
 }
 
 function paraCafe(){
@@ -948,22 +1063,8 @@ function paraCafe(){
   renderModo();
 }
 
+
 /* ============ CONFRONTO COM O TRADER ============ */
-function abreChat(ordId){
-  S.chatOrdId = ordId;
-  var o = achaOrdem(ordId);
-  if (!o) return;
-  el("chat-nome").textContent = "😤 " + o.trader.nome + " · front office";
-  el("chat-log").innerHTML = "<div class='msg sys'>você levantou da mesa só pra isso. as ordens continuam drenando…</div>";
-  el("chat-inp").value = "";
-  el("chat").className = "on";
-}
-
-function fechaChat(){
-  el("chat").className = "";
-  S.chatOrdId = null;
-}
-
 function mideTier(txt){
   var t = txt.toLowerCase();
   var tier = 0;
@@ -982,6 +1083,36 @@ function mideTier(txt){
   return tier;
 }
 
+function escapaHtml(s){
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/* ===== BLOCO: chat generalizado (trader + chefe) ===== */
+function abreChat(tipo, id){
+  S.chatTipo = tipo;
+  S.chatOrdId = id;
+  var nome, intro;
+  if (tipo === "chefe") {
+    nome = "\uD83D\uDC54 Chefe · head da mesa";
+    intro = "ele tira os olhos da tela e te encara. as ordens continuam drenando…";
+  } else {
+    var o = achaOrdem(id);
+    if (!o) return;
+    nome = "\uD83D\uDE24 " + o.trader.nome + " · front office";
+    intro = "você levantou da mesa só pra isso. as ordens continuam drenando…";
+  }
+  el("chat-nome").textContent = nome;
+  el("chat-log").innerHTML = "<div class='msg sys'>" + intro + "</div>";
+  el("chat-inp").value = "";
+  el("chat").className = "on";
+}
+
+function fechaChat(){
+  el("chat").className = "";
+  S.chatOrdId = null;
+  S.chatTipo = null;
+}
+
 function enviaChat(){
   var inp = el("chat-inp");
   var txt = (inp.value || "").trim();
@@ -990,25 +1121,46 @@ function enviaChat(){
   var log = el("chat-log");
   log.innerHTML += "<div class='msg eu'>" + escapaHtml(txt) + "</div>";
   log.scrollTop = log.scrollHeight;
-  var o = achaOrdem(S.chatOrdId);
   var tier = mideTier(txt);
+  var ehChefe = (S.chatTipo === "chefe");
+  var o = ehChefe ? null : achaOrdem(S.chatOrdId);
   setTimeout(function(){
-    if (!o || !achaOrdem(S.chatOrdId)) {
+    if (ehChefe) {
+      if (tier >= 3) {
+        S.avisosChefe++;
+        if (S.avisosChefe >= 2) {
+          log.innerHTML += "<div class='msg ele'>Acabou. Pega tuas coisas e some da minha mesa.</div>";
+          log.scrollTop = log.scrollHeight;
+          somErro(); vib([120, 60, 200]);
+          setTimeout(function(){
+            demite("Você xingou o chefe na cara dele. Duas vezes.");
+          }, 900);
+          return;
+        }
+      }
+      log.innerHTML += "<div class='msg ele'>" + rnd(RESPOSTAS_CHEFE[tier]) + "</div>";
+      if (tier >= 2) { somErro(); vib([40, 30, 40]); } else { somPop(); }
+    } else if (!achaOrdem(S.chatOrdId)) {
       log.innerHTML += "<div class='msg sys'>(ele já largou você falando sozinho e voltou pro pregão)</div>";
     } else {
-      var resp = rnd(RESPOSTAS[tier]);
-      log.innerHTML += "<div class='msg ele'>" + resp + "</div>";
+      log.innerHTML += "<div class='msg ele'>" + rnd(RESPOSTAS[tier]) + "</div>";
       if (tier >= 2) { somErro(); vib([40, 30, 40]); } else { somPop(); }
     }
     log.scrollTop = log.scrollHeight;
   }, 650);
 }
 
-function escapaHtml(s){
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+function demite(motivo){
+  if (S.demitido) return;
+  S.demitido = true;
+  S.encerrando = true;
+  clearInterval(loopId);
+  atualizaRecordes();
+  fechaChat();
+  el("dem-motivo").textContent = motivo;
+  el("s-demitido").style.display = "flex";
 }
 
-/* ============ SOCO NO CHEFE / DEMISSÃO ============ */
 function baterNoChefe(){
   if (S.encerrando) return;
   S.encerrando = true;
@@ -1016,13 +1168,45 @@ function baterNoChefe(){
   beep(90, 0.3, "sawtooth", 0.1); beep(60, 0.4, "sawtooth", 0.09, 0.12);
   vib([120, 60, 200]);
   el("app").classList.add("soco");
-  el("chefe").innerHTML = svgTrader(CHEFE_SKIN) + "<text x='6' y='6' font-size='22'>💥</text>";
-  atualizaRecordes();
+  el("chefe").innerHTML = charAt(CHEFE_SKIN) + "<text x='-14' y='-52' font-size='22'>\uD83D\uDCA5</text>";
   setTimeout(function(){
     el("app").classList.remove("soco");
-    fechaChat();
-    el("s-demitido").style.display = "flex";
+    S.encerrando = false;
+    demite("Você acertou um soco na cara do chefe.");
   }, 700);
+}
+
+function somCafe(){
+  if (!SET.som) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    var t0 = AC.currentTime, dur = 5;
+    var o = AC.createOscillator(), g = AC.createGain();
+    o.type = "sawtooth"; o.frequency.value = 68;
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.05, t0 + 0.35);
+    g.gain.setValueAtTime(0.05, t0 + dur - 0.7);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(AC.destination);
+    o.start(t0); o.stop(t0 + dur);
+
+    var len = Math.floor(AC.sampleRate * dur);
+    var buf = AC.createBuffer(1, len, AC.sampleRate);
+    var data = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    var src = AC.createBufferSource(); src.buffer = buf;
+    var bp = AC.createBiquadFilter(); bp.type = "bandpass";
+    bp.frequency.value = 950; bp.Q.value = 0.7;
+    var ng = AC.createGain();
+    ng.gain.setValueAtTime(0.0001, t0);
+    ng.gain.exponentialRampToValueAtTime(0.04, t0 + 0.4);
+    ng.gain.setValueAtTime(0.04, t0 + dur - 1.4);
+    ng.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    src.connect(bp); bp.connect(ng); ng.connect(AC.destination);
+    src.start(t0); src.stop(t0 + dur);
+
+    for (var k = 0; k < 4; k++) beep(1150 - k * 90, 0.05, "sine", 0.045, 3.4 + k * 0.35);
+  } catch (e) {}
 }
 
 function recomecaEstagiario(){
@@ -1076,7 +1260,9 @@ function startGame(){
     combo: 0, maxCombo: 0, rushAvisado: false,
     up: { cafe: false, headset: false, cdi: false, terminal: false },
     modo: "mesa", pi: SEAT.i, pj: SEAT.j,
-    joy: { x: 0, y: 0 }, alvo: null, cafeAcc: 0, chatOrdId: null
+    joy: { x: 0, y: 0 }, alvo: null, cafeFim: 0, chatOrdId: null, chatTipo: null,
+    zoom: false, _sig: "", bi: PATRULHA[0].i, bj: PATRULHA[0].j, bWp: 1, bPausa: 0,
+    avisosChefe: 0, demitido: false
   };
   montaMesas();
   montaExtras();
@@ -1091,7 +1277,8 @@ function iniciaAno(){
   S.rushAvisado = false;
   S.lastSpawn = -99999;
   S.modo = "mesa"; S.pi = SEAT.i; S.pj = SEAT.j;
-  S.joy.x = 0; S.joy.y = 0; S.chatOrdId = null; S.alvo = null;
+  S.joy.x = 0; S.joy.y = 0; S.chatOrdId = null; S.chatTipo = null; S.alvo = null;
+  S.bi = PATRULHA[0].i; S.bj = PATRULHA[0].j; S.bWp = 1; S.bPausa = 0; S._sig = "";
   el("chat").className = "";
   el("camada-bolhas").innerHTML = "";
   for (var i = 0; i < SLOTS.length; i++) el("slot-char-" + i).innerHTML = "";
@@ -1202,9 +1389,9 @@ function spawnOrder(agora){
   S.spawned++;
   S.lastSpawn = agora;
 
-  el("slot-char-" + slot).innerHTML = svgTrader(o.trader);
-  var bx = SLOTS[slot].x + 21;
-  var by = SLOTS[slot].y - 138;
+  el("slot-char-" + slot).innerHTML = charAt(o.trader);
+  var bx = SLOTS[slot].bubX;
+  var by = SLOTS[slot].bubY;
   var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
   g.setAttribute("id", "ord-" + o.id);
   g.setAttribute("class", "clicavel");
@@ -1685,30 +1872,6 @@ function gameOver(){
 }
 
 /* ============ BOOT ============ */
-function svgMascote(){
-  var m = { skin: "#F5C89B", hair: "#2B2118", shirt: "#4F8EF7" };
-  var s = "<g transform='translate(-63,-118) scale(2.1)'>";
-  s += "<ellipse cx='30' cy='76' rx='20' ry='6' fill='rgba(0,0,0,0.30)'/>";
-  s += "<rect x='14' y='36' width='32' height='36' rx='10' fill='" + m.shirt + "'/>";
-  s += "<rect x='14' y='36' width='32' height='10' rx='5' fill='rgba(255,255,255,0.22)'/>";
-  s += "<polygon points='30,40 26,48 30,58 34,48' fill='#1F2A3D'/>";
-  s += "<rect x='8' y='40' width='9' height='22' rx='4.5' fill='" + m.shirt + "'/>";
-  s += "<rect x='43' y='40' width='9' height='22' rx='4.5' fill='" + m.shirt + "'/>";
-  s += "<circle cx='12.5' cy='63' r='4' fill='" + m.skin + "'/>";
-  s += "<circle cx='47.5' cy='63' r='4' fill='" + m.skin + "'/>";
-  s += "<circle cx='30' cy='20' r='15' fill='" + m.skin + "'/>";
-  s += "<path d='M15,18 a15,15 0 0,1 30,0 l0,-4 a15,13 0 0,0 -30,0 Z' fill='" + m.hair + "'/>";
-  s += "<path d='M15,18 q-2,8 2,12 l1,-10 Z' fill='" + m.hair + "'/>";
-  s += "<path d='M45,18 q2,8 -2,12 l-1,-10 Z' fill='" + m.hair + "'/>";
-  s += "<circle cx='24.5' cy='21' r='2' fill='#1F2430'/>";
-  s += "<circle cx='35.5' cy='21' r='2' fill='#1F2430'/>";
-  s += "<path d='M25,28 q5,4 10,0' fill='none' stroke='#8A5A3B' stroke-width='1.8' stroke-linecap='round'/>";
-  s += "<circle cx='21' cy='25' r='2.5' fill='rgba(239,120,120,0.35)'/>";
-  s += "<circle cx='39' cy='25' r='2.5' fill='rgba(239,120,120,0.35)'/>";
-  s += "</g>";
-  return s;
-}
-
 function toggleRegras(){
   var r = el("regras");
   var aberto = r.style.display !== "none";
@@ -1716,13 +1879,30 @@ function toggleRegras(){
   el("btn-regras").textContent = aberto ? "como se joga ▾" : "como se joga ▴";
 }
 
+function montaPosterPiso(){
+  var g = el("poster-piso");
+  if (!g || g.innerHTML) return;
+  var cx = 190, cy = 118, hw = 19, hh = 9.5, n = 8;
+  var h2 = "";
+  for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+      var x = cx + (i - j) * hw, y = cy + (i + j) * hh;
+      var cor = ((i + j) % 2 === 0) ? "#33436B" : "#3A4B77";
+      h2 += "<polygon points='" + x + "," + y + " " + (x + hw) + "," + (y + hh) + " " +
+        x + "," + (y + 2 * hh) + " " + (x - hw) + "," + (y + hh) + "' fill='" + cor + "' stroke='#2C3A5C' stroke-width='0.7'/>";
+    }
+  }
+  g.innerHTML = h2;
+}
+
 function boot(){
   safeLoad();
   attachJoy();
+  montaPosterPiso();
   var ci = el("chat-inp");
   if (ci) ci.addEventListener("keydown", function(e){ if (e.key === "Enter") enviaChat(); });
   var masc = el("poster-mascote");
-  if (masc) masc.innerHTML = svgMascote();
+  if (masc) masc.innerHTML = "<g transform='scale(2.0) translate(-30,-76)'>" + svgTrader({ skin: "#F5C89B", hair: "#2B2118", shirt: "#4F8EF7" }) + "</g>";
   el("tgl-som").className = "tgl" + (SET.som ? " on" : "");
   el("tgl-som").textContent = SET.som ? "🔊 Som" : "🔇 Som";
   el("tgl-vib").className = "tgl" + (SET.vib ? " on" : "");

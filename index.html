@@ -171,10 +171,14 @@
   .campo-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
   .campo-grid .chip{flex:none; padding:14px 6px; font-size:13px;}
   .f.fin{background:#241d0a; border:1px solid var(--gold);}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+  .row2 .btn{padding:11px 6px; font-size:13.5px;}
+  .painel-titulo{margin-bottom:5px; font-size:10px;}
+  #row-decisao .btn{padding:11px 6px;}
   .tickets2{display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:start;}
-  .tickets2 .ticket{margin:0 0 8px; padding:8px;}
+  .tickets2 .ticket{margin:0 0 6px; padding:7px 8px;}
   .tickets2 .fields{grid-template-columns:1fr; gap:4px;}
-  .tickets2 .f{padding:4px 7px;}
+  .tickets2 .f{padding:3px 7px;}
   .tickets2 .f label{font-size:7.5px;}
   .tickets2 .f span{font-size:12px;}
   .tickets2 .tag{font-size:8px; margin-bottom:6px; padding:3px 6px;}
@@ -580,8 +584,10 @@
           </div>
         </div>
       </div>
-      <button class="btn btn-ghost" id="mo" onclick="middleOffice()">🎧 Chamar middle office (3)</button>
-      <button class="btn btn-ghost" id="btn-levantar" onclick="levantar()">🚶 Levantar da mesa</button>
+      <div class="row2" id="row-mesa-acoes">
+        <button class="btn btn-ghost" id="mo" onclick="middleOffice()">🎧 Middle office (3)</button>
+        <button class="btn btn-ghost" id="btn-levantar" onclick="levantar()">🚶 Levantar</button>
+      </div>
       <div id="painel-anda">
         <div class="anda-status" id="anda-status">🚶 Você está longe da mesa — as ordens continuam chegando!</div>
         <div id="acoes-anda"></div>
@@ -1602,8 +1608,7 @@ function renderModo(){
   
   el("painel-anda").style.display = fora ? "block" : "none";
   el("btn-voltar-mesa").style.display = fora ? "block" : "none";
-  el("btn-levantar").style.display = fora ? "none" : "block";
-  el("mo").style.display = fora ? "none" : "block";
+  el("row-mesa-acoes").style.display = fora ? "none" : "grid";
   if (fora) {
     el("dica-vazio").style.display = "none";
     el("p-conteudo").style.display = "none";
@@ -1623,6 +1628,7 @@ function levantar(){
 }
 
 function sentar(){
+  if (S.sala === "copa") trocaSala("mesa");
   S.modo = "mesa";
   S.pi = SEAT.i; S.pj = SEAT.j;
   vib(15); somPop();
@@ -1643,12 +1649,15 @@ function ordenaMundo(){
   for (var k = 0; k < lista.length; k++) {
     itens.push({ nome: lista[k].id, alvo: el(lista[k].id), d: lista[k].d });
   }
-  itens.push({ nome: "player", alvo: el("player"), d: S.pi + S.pj + 0.02 });
+  itens.push({ nome: "player", alvo: el("player"), d: Math.round((S.pi + S.pj) / 0.3) * 0.3 + 0.02 });
   if (S.sala !== "copa") itens.push({ nome: "chefe-wrap", alvo: el("chefe-wrap"), d: S.bi + S.bj });
   itens.sort(function(a, b){ return a.d - b.d; });
   var sig = S.sala + ":";
   for (var i = 0; i < itens.length; i++) sig += itens[i].nome + "|";
   if (sig === S._sig) return;
+  var agora2 = Date.now();
+  if (S._ordT && agora2 - S._ordT < 130) return;
+  S._ordT = agora2;
   S._sig = sig;
   for (var j = 0; j < itens.length; j++) cont.appendChild(itens[j].alvo);
 }
@@ -1663,7 +1672,10 @@ function toggleZoom(){
 
 function updateCam(){
   var c = el("cena");
-  if (!S || !S.zoom) { c.setAttribute("viewBox", "0 0 420 480"); return; }
+  if (!S || !S.zoom) {
+    c.setAttribute("viewBox", S.modo === "mesa" ? "0 14 420 398" : "0 0 420 480");
+    return;
+  }
   var w = 290, h = 331.4;
   var fx = isoX(S.pi, S.pj), fy = isoY(S.pi, S.pj) - 30;
   var x = Math.max(0, Math.min(420 - w, fx - w / 2));
@@ -1834,6 +1846,9 @@ function renderAcoes(alvos){
     for (var c = 0; c < alvos.length; c++) chave += alvos[c].tipo + ":" + alvos[c].dado + "|";
   }
   if (S.alvo === chave) return;
+  var agoraA = Date.now();
+  if (S._acT && agoraA - S._acT < 160) return;
+  S._acT = agoraA;
   S.alvo = chave;
   var html = "", status = "";
   if (S.modo === "acao") {
@@ -1935,6 +1950,16 @@ function limpaPing(){
 }
 
 function moveJogador(dt){
+  if (colide(S.pi, S.pj)) {
+    busca:
+    for (var r8 = 0.45; r8 <= 2.3; r8 += 0.45) {
+      for (var a8 = 0; a8 < 12; a8++) {
+        var an8 = a8 / 12 * 6.283;
+        var cc8 = clampTile({ i: S.pi + Math.cos(an8) * r8, j: S.pj + Math.sin(an8) * r8 });
+        if (!colide(cc8.i, cc8.j)) { S.pi = cc8.i; S.pj = cc8.j; break busca; }
+      }
+    }
+  }
   var alvoVi = 0, alvoVj = 0, ativo = false;
   if (S.joy.x !== 0 || S.joy.y !== 0) {
     S.dest = null; limpaPing();
@@ -1961,7 +1986,7 @@ function moveJogador(dt){
   var vel = Math.sqrt(S.vi * S.vi + S.vj * S.vj);
   if (vel < 0.05 && !ativo) { S.vi = 0; S.vj = 0; }
   if (vel > 0.02) {
-    if (!moveCom(S.vi * dt, S.vj * dt)) { S.vi *= 0.3; S.vj *= 0.3; S.dest = null; limpaPing(); }
+    if (!moveCom(S.vi * dt, S.vj * dt)) { S.vi = 0; S.vj = 0; S.dest = null; limpaPing(); }
     var dx = (S.vi - S.vj);
     if (Math.abs(dx) > 0.15) S.face = dx > 0 ? 1 : -1;
     S.passo += vel * dt * 3.4;

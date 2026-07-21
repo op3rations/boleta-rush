@@ -168,6 +168,9 @@
   .campo-x{font-size:14px; color:var(--mut); cursor:pointer; padding:2px 6px;}
   .campo-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
   .campo-grid .chip{flex:none; padding:14px 6px; font-size:13px;}
+  .f.fin{background:#241d0a; border:1px solid var(--gold);}
+  .f.fin span{color:var(--gold); font-size:15px;}
+  .chip.fin-chip{grid-column:1/3; border-color:var(--gold); color:var(--gold);}
 
   .btn-install{background:var(--gold); color:#3a2e05; box-shadow:0 3px 0 #a9891f; margin-top:12px;}
   .install-dica{background:var(--card); border:1px solid var(--gold); border-radius:10px;
@@ -331,7 +334,7 @@
       </defs>
       <rect x="0" y="0" width="420" height="480" fill="#141E33"/>
 
-      <g transform="translate(210,150) scale(-1,1) skewY(26.565)">
+      <g id="parede-esq" transform="translate(210,150) scale(-1,1) skewY(26.565)">
         <rect x="0" y="-115" width="208" height="115" fill="#26365B"/>
         <rect x="0" y="-9" width="208" height="9" fill="#1B2745"/>
         <rect x="34" y="-102" width="140" height="66" rx="4" fill="#1B2440"/>
@@ -347,15 +350,27 @@
         <rect x="106" y="-70" width="4" height="4" fill="#FFE08A" class="twk" style="animation-delay:1.1s"/>
         <rect x="103" y="-98" width="5" height="58" fill="#1B2440"/>
         <rect x="38" y="-72" width="132" height="4" fill="#1B2440"/>
+        <rect x="178" y="-86" width="27" height="86" rx="2" fill="#1B2745" stroke="#141E33" stroke-width="2"/>
+        <rect x="182" y="-82" width="19" height="78" rx="1.5" fill="#22304A"/>
+        <circle cx="199" cy="-42" r="2" fill="#EAC54F"/>
+        <rect x="180" y="-96" width="23" height="8" rx="2" fill="#1B2440"/>
+        <text x="191.5" y="-90" text-anchor="middle" font-size="6" font-weight="800" fill="#EAC54F" transform="scale(-1,1) translate(-383,0)">COPA</text>
       </g>
 
-      <g transform="translate(210,150) skewY(26.565)">
+      <g id="parede-dir" transform="translate(210,150) skewY(26.565)">
         <rect x="0" y="-115" width="208" height="115" fill="#2E4066"/>
         <rect x="0" y="-9" width="208" height="9" fill="#20304F"/>
         <rect x="26" y="-106" width="156" height="62" rx="6" fill="#0A0F1C" stroke="#1F2A3D" stroke-width="3"/>
         <rect x="31" y="-101" width="146" height="52" fill="#060B14"/>
         <polyline points="34,-60 48,-68 60,-64 74,-78 88,-74 104,-86 118,-80 134,-90 150,-84 166,-94 174,-90" fill="none" stroke="#22C55E" stroke-width="2.5"/>
         <polyline points="34,-86 50,-80 66,-84 82,-72 98,-78 114,-66 130,-72 148,-62 164,-68 174,-64" fill="none" stroke="#EF4444" stroke-width="2" opacity="0.8"/>
+        <rect x="31" y="-76" width="146" height="12" fill="#7f1d1d"/>
+        <rect x="31" y="-76" width="30" height="12" fill="#991b1b"/>
+        <text x="46" y="-67.5" text-anchor="middle" font-size="6.5" font-weight="800" fill="#FFFFFF">AO VIVO</text>
+        <clipPath id="newsclip"><rect x="63" y="-76" width="114" height="12"/></clipPath>
+        <g clip-path="url(#newsclip)">
+          <text id="tv-news" x="66" y="-67.5" font-size="7" font-weight="600" fill="#FDE68A" font-family="inherit">● BC mantém Selic em 11,25% e sinaliza pausa no ciclo</text>
+        </g>
         <rect x="31" y="-63" width="146" height="14" fill="#101826"/>
         <clipPath id="tvclip"><rect x="31" y="-63" width="146" height="14"/></clipPath>
         <g clip-path="url(#tvclip)">
@@ -403,6 +418,58 @@
         <g id="mesa-jogador" transform="translate(187,231)"></g>
         <g id="player" transform="translate(231,278)"></g>
       </g>
+      <g id="sala-copa" style="display:none">
+        <g transform="translate(210,150) scale(-1,1) skewY(26.565)">
+          <rect x="0" y="-115" width="208" height="115" fill="#2E4A6B"/>
+          <rect x="0" y="-9" width="208" height="9" fill="#22385A"/>
+          <rect x="10" y="-108" width="188" height="88" rx="5" fill="#F0F2F6"/>
+          <rect x="16" y="-102" width="176" height="76" rx="3" fill="#8FD0F7"/>
+          <circle cx="160" cy="-84" r="11" fill="#FFE08A"/>
+          <ellipse cx="60" cy="-88" rx="16" ry="6" fill="#FFFFFF" opacity="0.9"/>
+          <ellipse cx="76" cy="-84" rx="12" ry="5" fill="#FFFFFF" opacity="0.8"/>
+          <ellipse cx="120" cy="-94" rx="13" ry="5" fill="#FFFFFF" opacity="0.85"/>
+          <path d="M 16 -46 Q 60 -70 110 -50 T 192 -54 L 192 -26 L 16 -26 Z" fill="#5BB268"/>
+          <path d="M 16 -38 Q 70 -54 130 -40 T 192 -42 L 192 -26 L 16 -26 Z" fill="#3E9E52"/>
+          <rect x="46" y="-64" width="7" height="22" fill="#7A4A1B"/>
+          <circle cx="44" cy="-66" r="11" fill="#2E9E5B"/>
+          <circle cx="56" cy="-72" r="12" fill="#37B56A"/>
+          <circle cx="60" cy="-60" r="9" fill="#2E9E5B"/>
+          <circle cx="98" cy="-32" r="2.5" fill="#E85D9E" class="twk"/>
+          <circle cx="112" cy="-30" r="2" fill="#F5C518" class="twk" style="animation-delay:.5s"/>
+          <circle cx="128" cy="-33" r="2.5" fill="#EF4444" class="twk" style="animation-delay:1s"/>
+          <circle cx="145" cy="-30" r="2" fill="#E85D9E" class="twk" style="animation-delay:1.4s"/>
+          <rect x="100" y="-102" width="5" height="76" fill="#F0F2F6"/>
+          <rect x="16" y="-66" width="176" height="4" fill="#F0F2F6"/>
+        </g>
+        <g transform="translate(210,150) skewY(26.565)">
+          <rect x="0" y="-115" width="208" height="115" fill="#31456F"/>
+          <rect x="0" y="-9" width="208" height="9" fill="#243657"/>
+          <rect x="18" y="-100" width="60" height="44" rx="3" fill="#B26E2B" stroke="#8F5A22" stroke-width="3"/>
+          <rect x="24" y="-94" width="16" height="12" fill="#F1E4C8" transform="rotate(-4 32 -88)"/>
+          <rect x="46" y="-92" width="18" height="14" fill="#CFEAF7" transform="rotate(3 55 -85)"/>
+          <rect x="30" y="-76" width="20" height="12" fill="#FDE68A" transform="rotate(-2 40 -70)"/>
+          <text x="48" y="-104" text-anchor="middle" font-size="7" font-weight="800" fill="#EAC54F">AVISOS</text>
+          <circle cx="120" cy="-80" r="14" fill="#E8EAF0" stroke="#5B6B85" stroke-width="3"/>
+          <line x1="120" y1="-80" x2="120" y2="-89" stroke="#141E33" stroke-width="2"/>
+          <line x1="120" y1="-80" x2="127" y2="-77" stroke="#141E33" stroke-width="2"/>
+          <rect x="96" y="-52" width="50" height="14" rx="3" fill="#1B2440"/>
+          <text x="121" y="-42" text-anchor="middle" font-size="8" font-weight="800" letter-spacing="1" fill="#EAC54F">☕ COPA</text>
+          <rect x="168" y="-86" width="27" height="86" rx="2" fill="#1B2745" stroke="#141E33" stroke-width="2"/>
+          <rect x="172" y="-82" width="19" height="78" rx="1.5" fill="#22304A"/>
+          <circle cx="174" cy="-42" r="2" fill="#EAC54F"/>
+          <rect x="170" y="-96" width="23" height="8" rx="2" fill="#1B2440"/>
+          <text x="181.5" y="-90" text-anchor="middle" font-size="6" font-weight="800" fill="#EAC54F">MESA</text>
+        </g>
+        <polygon points="210,150 417,253.5 210,357 3,253.5" fill="#2E9E5B" opacity="0.05"/>
+        <g id="mundo-copa">
+          <g id="copa-eletros"></g>
+          <g id="npc-g-0"></g>
+          <g id="mesa-copa-1"></g>
+          <g id="npc-g-2"></g>
+          <g id="npc-g-1"></g>
+          <g id="mesa-copa-2"></g>
+        </g>
+      </g>
       <g id="ping"></g>
       <g id="camada-bolhas"></g>
       <rect x="0" y="0" width="420" height="480" fill="url(#vinheta)" pointer-events="none"/>
@@ -423,6 +490,8 @@
             <div class="f"><label>ATIVO</label><span id="o-ativo"></span></div>
             <div class="f"><label>QUANTIDADE</label><span id="o-qtd"></span></div>
             <div class="f"><label>PREÇO</label><span id="o-preco"></span></div>
+            <div class="f"><label>C.PARTE</label><span id="o-cpart"></span></div>
+            <div class="f"><label>LIQUID.</label><span id="o-liq"></span></div>
           </div>
         </div>
         <div class="ticket ticket-boleta" id="tk-boleta">
@@ -432,6 +501,9 @@
             <div class="f" id="b-ativo-w"><label>ATIVO</label><span id="b-ativo"></span></div>
             <div class="f" id="b-qtd-w"><label>QUANTIDADE</label><span id="b-qtd"></span></div>
             <div class="f" id="b-preco-w"><label>PREÇO</label><span id="b-preco"></span></div>
+            <div class="f" id="b-cpart-w"><label>C.PARTE</label><span id="b-cpart"></span></div>
+            <div class="f" id="b-liq-w"><label>LIQUID.</label><span id="b-liq"></span></div>
+            <div class="f fin" id="b-fin-w" style="grid-column:1/3;"><label>FINANCEIRO (confere a conta!)</label><span id="b-fin"></span></div>
           </div>
         </div>
         <div id="area-montar" style="display:none;">
@@ -585,7 +657,8 @@ var SHOP = [
 var QTDS = [100, 200, 500, 1000, 2000, 3000, 5000, 10000, 25000];
 var TRADES_ANO = 12;
 var BONUS_INICIAL = 10000;
-var V = { bater: 500, devolver: 750, fone: 750, foneDev: 1000, montar: 800,
+var V = {
+  fin: 1100, bater: 500, devolver: 750, fone: 750, foneDev: 1000, montar: 800,
           erro: 1000, campoErrado: 400, montarErro: 800, timeout: 500 };
 var SLOTS = [
   { desk: { i: 0.8, j: 1.0, dir: "i" }, char: { i: 2.2, j: 0.62 } },
@@ -861,8 +934,129 @@ function geraResposta(persona, txt, estado){
   return { texto: partes.join(" ").replace(/\s+/g, " ").trim(), faixa: f, tier: a.tier, intent: a.intent };
 }
 
+/* ============ REPERTÓRIO DE VIDA + PERSONA COLEGA ============ */
+LEX.futebol = ["futebol","jogo ontem","o jogo","time","gol","campeonato","libertadores","brasileirao","brasileirão","escalação","escalacao","tecnico","técnico","zagueiro","atacante","pênalti","penalti","várzea","varzea","rodada"];
+LEX.comida = ["marmita","almoço","almoco","comida","lanche","restaurante","fome","janta","jantar","churrasco","feijoada","salgado","docinho","sobremesa","receita"];
+LEX.familia = ["filho","filha","esposa","marido","namorada","namorado","mãe","mae"," pai ","familia","família","casamento","cachorro","gato","sobrinho","aniversário","aniversario"];
+LEX.fds = ["fim de semana","final de semana","sábado","sabado","domingo","praia","férias","ferias","viagem","descanso","folga","feriado","cinema","churras"];
+LEX.fofoca = ["fofoca","ouviu falar","souberam","dizem que","comentaram","novidade","aconteceu com","viu o que","tá sabendo","ta sabendo"];
+LEX.clima = ["chuva","calor","frio","tempo lá fora","previsão","previsao","garoa","sol hoje","abafado"];
+var VIDA = ["futebol","comida","familia","fds","fofoca","clima"];
+
+var _analisaBase = analisa;
+analisa = function(txt){
+  var a = _analisaBase(txt);
+  var t = " " + txt.toLowerCase() + " ";
+  for (var k = 0; k < VIDA.length; k++) {
+    if (contem(t, LEX[VIDA[k]])) {
+      if (a.intent === "generico" || a.intent === "pergunta" || a.temas.length === 0) a.intent = VIDA[k];
+      break;
+    }
+  }
+  return a;
+};
+
+function nuc2(calmo, bravo){ return [calmo, bravo]; }
+
+DIALOGO.chefe.nucleo.futebol = nuc2(
+  ["futebol eu assisto no mudo, conferindo relatório.", "meu time é igual boleta: sofre no detalhe.", "domingo eu vi o jogo. Melhor que o nosso P&L da semana.", "aposta esportiva aqui dentro nem pensar, hein."],
+  ["quer falar de futebol com a fila cheia? Tá de brincadeira.", "teu time perde igual tu perde prazo.", "vai discutir escalação com a tua planilha.", "futebol é sábado. Hoje é pregão, porra."]);
+DIALOGO.chefe.nucleo.comida = nuc2(
+  ["marmita esquentada na copa vale mais que restaurante caro.", "come direito que boleta com fome sai errada.", "a feijoada de sexta é sagrada, isso eu respeito.", "se a copa tá abastecida, a mesa rende."],
+  ["tá pensando em comida no meio do fechamento?", "almoça rápido, o mercado não faz hora de almoço.", "teu problema não é fome, é foco.", "come logo e volta, caralho."]);
+DIALOGO.chefe.nucleo.familia = nuc2(
+  ["família em primeiro lugar. O mercado fecha, a casa não.", "manda um abraço pra sua família. Agora, sobre a fila...", "meu filho também acha que eu só grito. Exagero.", "quem tem base em casa aguenta pregão ruim."],
+  ["resolve assunto de casa em casa.", "não mistura família com fechamento.", "eu também tenho família e tô aqui focado, olha só.", "menos novela, mais boleta."]);
+DIALOGO.chefe.nucleo.fds = nuc2(
+  ["fim de semana existe pra voltar segunda inteiro.", "férias se marca depois do fechamento do ano, combinado?", "praia é ótima. Longe do circuit breaker, melhor ainda.", "descansa mesmo. Gente cansada erra campo."],
+  ["falando de folga na frente da fila? Coragem.", "teu fim de semana depende do teu fechamento, lembra disso.", "férias? Com essa taxa de erro?", "sonha não. Sexta ainda tá longe."]);
+DIALOGO.chefe.nucleo.fofoca = nuc2(
+  ["fofoca na mesa eu não alimento. Na copa, vá lá.", "sei de tudo que rola aqui. TUDO. Fica esperto.", "se for sobre gente da mesa, traz por escrito.", "rádio-peão é mais rápido que o nosso sistema, impressionante."],
+  ["vem fofocar comigo? Eu SOU o assunto da fofoca, esquece.", "cuida da tua fila que eu cuido dos boatos.", "fofoca dá demissão mais rápido que erro de boleta.", "sai daqui com esse disse-me-disse."]);
+DIALOGO.chefe.nucleo.clima = nuc2(
+  ["choveu, o mercado abre. Fez sol, o mercado abre.", "tempo bom lá fora, pena que a gente vê pela janela.", "esse calor derrete até spread.", "garoa em São Paulo é cláusula pétrea."],
+  ["conversa de elevador agora não.", "o único clima que me interessa é o da mesa.", "fala do tempo com o porteiro.", "chove lá fora e chove erro aqui dentro."]);
+
+DIALOGO.trader.nucleo.futebol = nuc2(
+  ["ontem foi jogaço! Quase gritei mais que no leilão.", "meu time tá igual small cap: promete e derrete.", "fantasy game da mesa: eu tô liderando, óbvio.", "final de campeonato eu opero de fone no ouvido, confesso."],
+  ["nem de futebol dá pra falar contigo em paz.", "teu time é rebaixado igual tua conferência.", "não fala do meu time hoje que a ferida tá aberta.", "some com esse papo, tô short e nervoso."]);
+DIALOGO.trader.nucleo.comida = nuc2(
+  ["se pá eu peço um salgado, quer?", "marmita do estagiário sempre cheira melhor, é lei.", "sexta é feijoada e eu não boleto nada depois, aviso logo.", "come bem que conferência com fome erra vírgula."],
+  ["fome? Come um gráfico.", "vai comer e me deixa operar.", "a única coisa que eu engulo agora é prejuízo.", "papo de comida no meio do pregão, pelamor."]);
+DIALOGO.trader.nucleo.fds = nuc2(
+  ["sábado tem churras da mesa, cola lá.", "praia no domingo zera a mente pro leilão de segunda.", "fim de semana eu nem olho cotação. Mentira, olho.", "folga merecida é a melhor posição comprada."],
+  ["fim de semana? Primeiro sobrevive até sexta.", "tá de folga mental já, né.", "vai descansar depois de conferir minha fila.", "meu fim de semana depende do teu carimbo, vê se acerta."]);
+
+DIALOGO.colega = {
+  abertura: [
+    ["Oi!", "Opa!", "E aí!", "Oiê,", "Fala!"],
+    ["Hmm,", "Olha...", "Ih,", "Poxa,"],
+    ["Ué,", "Calma aí,", "Nossa,", "Eita,"],
+    ["Ok, chega.", "Xiii.", "Credo.", "Aff."]
+  ],
+  nucleo: {
+    trabalho: nuc2(
+      ["aqui na copa a gente não fala de boleta, é regra não escrita.", "trabalho? Só depois do café, por favor.", "lá dentro é guerra, aqui é Suíça.", "deixa o pregão do lado de lá da porta."],
+      ["nem aqui você desliga, hein?", "trabalho de novo? Tô de pausa.", "fala com teu chefe, não comigo.", "a copa é sagrada, respeita."]),
+    futebol: nuc2(
+      ["viu o jogo? QUE jogo. Discutimos no grupo até meia-noite.", "meu palpite pra rodada: zebra feia vindo aí.", "o técnico precisa mudar esse esquema, todo mundo vê.", "bolão da firma abre amanhã, entra!"],
+      ["nem me fala de futebol que eu perdi o bolão.", "meu time me envelhece dez anos por rodada.", "não toca nesse assunto hoje.", "tá querendo briga falando do meu time?"]),
+    comida: nuc2(
+      ["a marmita da Dona Lurdes hoje tá cheirando QUE É UM ABSURDO.", "quem esquenta peixe no micro-ondas merece advertência.", "sexta tem bolo de aniversário no RH, passa lá.", "esse café da máquina nova até que melhorou, viu."],
+      ["alguém ROUBOU meu iogurte de novo. De novo!", "se esquentarem peixe aqui hoje eu grito.", "tô de dieta, não me tenta.", "come e some, tô sem paciência."]),
+    familia: nuc2(
+      ["meu filho começou a andar! Olha o vídeo depois.", "casamento da minha prima sábado, tô só na logística.", "cachorro novo lá em casa, adeus sofá.", "minha mãe manda sempre marmita, sou privilegiada."],
+      ["lá em casa tá um caos, nem pergunta.", "sogra em casa há três semanas. TRÊS.", "não pergunta do meu gato que eu choro.", "família é ótima de longe hoje."]),
+    fds: nuc2(
+      ["fim de semana vou pra praia, finalmente!", "domingo é dia de feira e sofá, imexível.", "tô planejando férias pro litoral, me indica pousada?", "sábado tem niver do Juca, todo mundo vai."],
+      ["que fim de semana o quê, plantão de novo.", "minhas férias foram canceladas, tô de luto.", "nem me lembra que segunda existe.", "descanso é lenda urbana."]),
+    fofoca: nuc2(
+      ["você SOUBE? Não posso falar alto... depois te conto.", "dizem que vem promoção aí no back office, hein!", "o pessoal do TI ganhou cadeira nova, olha o privilégio.", "a Renatinha viu o chefe ASSOBIANDO ontem. Assobiar!"],
+      ["fofoca comigo não, depois sobra pra mim.", "sei de coisa que não posso contar e tá me corroendo.", "não fui eu que espalhei aquilo, juro.", "muda de assunto que tem gente olhando."]),
+    clima: nuc2(
+      ["olha essa vista do jardim, dá até pra respirar.", "se chover no fim de semana eu cancelo tudo.", "esse sol batendo no jardim é a melhor parte do prédio.", "trouxe guarda-chuva à toa de novo, claro."],
+      ["esse calor tá me derretendo, nem o ar dá conta.", "chuva + metrô = me abraça.", "friagem dessa sala vai me render uma gripe.", "clima e humor: os dois péssimos hoje."]),
+    dinheiro: nuc2(
+      ["dizem que o bônus esse ano vem bom. Tomara, né.", "vaquinha do presente da Cida tá aberta, coopera!", "consórcio: alguém aqui entende? Me salva.", "quinto dia útil é o melhor feriado que existe."],
+      ["não me fala em dinheiro que o cartão virou ontem.", "bônus? Primeiro sobrevive ao fechamento.", "tô devendo até a vaquinha do café.", "assunto proibido na minha semana."]),
+    desculpa: nuc2(
+      ["relaxa, aqui ninguém guarda mágoa.", "de boa! A copa perdoa tudo.", "esquece, toma uma água e respira.", "tá tudo certo, senta aí."],
+      ["tá desculpado, mas tô de olho.", "ok... só não repete.", "aham. Próxima vez traz bolo junto.", "tá, tá. Paz."]),
+    elogio: nuc2(
+      ["ai que fofo, obrigada!", "valeu! Você também é dos bons.", "assim eu fico sem graça, para.", "recebido! Vou contar pra todo mundo."],
+      ["hmm, tá querendo o quê?", "elogio assim do nada me deixa desconfiada.", "guarda esse charme pro RH.", "sei..."]),
+    saudacao: nuc2(
+      ["oi! Veio esticar as pernas também?", "e aí! O café de lá tá melhor que o daqui?", "opa! Senta, a vista tá linda hoje.", "oiê! Fugindo do pregão, né? Todo mundo foge."],
+      ["oi... dia difícil, desculpa a cara.", "e aí. Tô só recarregando a paciência.", "oi. Cinco minutos de paz, só peço isso.", "fala. Mas fala baixo."]),
+    pergunta: nuc2(
+      ["boa pergunta! Na dúvida: café e fé.", "hmm, pergunta pro Juca, ele sabe de tudo.", "acho que sim? A copa não julga.", "isso rende debate. Senta e vamos."],
+      ["me pergunta amanhã, hoje meu cérebro fechou.", "sei lá, tô de pausa até do raciocínio.", "pergunta difícil pra uma quarta-feira.", "passo a vez."]),
+    insulto: nuc2(
+      ["ei, sem grosseria na copa, aqui é zona de paz.", "uau, ok... respira, bebe uma água.", "vou fingir que não ouvi essa.", "a gente não faz isso aqui, tá?"],
+      ["olha o respeito, eu não sou teu trader!", "grosso desse jeito vai ficar sem bolo de sexta.", "vou me afastar antes que eu responda à altura.", "que educação, hein? Sai pra lá."]),
+    generico: nuc2(
+      ["verdade... e olha que a semana nem acabou.", "pois é! Coisas da vida.", "conta mais, aqui é o lugar certo pra isso.", "hmm, interessante. Café ajuda a pensar."],
+      ["aham... tô ouvindo pela metade, confesso.", "hoje só processo assunto leve.", "tá... e o jardim, hein? Lindo.", "vamos falar de qualquer outra coisa?"])
+  },
+  fecho: [
+    ["Pega um café!", "Fica à vontade.", "Depois me conta mais.", ""],
+    ["Vou pegar uma água.", "Enfim...", "Semana longa.", ""],
+    ["Vou ali sentar.", "Melhor mudar de assunto.", "Respira, vai.", ""],
+    ["Licença.", "Vou me afastar.", "Chega por hoje.", ""]
+  ]
+};
+DIALOGO.colega.nucleo.pausa = DIALOGO.colega.nucleo.comida;
+DIALOGO.colega.nucleo.ameaca = DIALOGO.colega.nucleo.insulto;
+DIALOGO.colega.nucleo.demissao = DIALOGO.colega.nucleo.generico;
+DIALOGO.colega.nucleo.cobranca = DIALOGO.colega.nucleo.insulto;
+
 function estadoRaiva(){
   if (S.chatTipo === "chefe") return S.raivaChefe;
+  if (S.chatTipo === "colega") {
+    var k = S.chatOrdId;
+    if (!S.raivaColega[k]) S.raivaColega[k] = { raiva: 0 };
+    return S.raivaColega[k];
+  }
   var id = S.chatOrdId;
   if (!S.raivaTrader[id]) S.raivaTrader[id] = { raiva: 0 };
   return S.raivaTrader[id];
@@ -1109,8 +1303,232 @@ function montaPiso(){
 }
 
 /* ===== BLOCO: mundo, chefe, camera ===== */
+/* ============ COPA: SALA 2 ============ */
+var PORTA_MESA = { i: 0.7, j: 7.4 };
+var PORTA_COPA = { i: 7.4, j: 0.7 };
+var SPAWN_COPA = { i: 6.6, j: 1.5 };
+var SPAWN_MESA = { i: 1.5, j: 6.6 };
+var COPA = {
+  agua:  { i: 0.95, j: 1.75 },
+  gelad: { i: 2.35, j: 1.75 },
+  micro: { i: 4.0,  j: 1.75 },
+  pia:   { i: 5.5,  j: 1.75 },
+  mesa1: { i: 3.0,  j: 4.5 },
+  mesa2: { i: 6.0,  j: 5.6 }
+};
+var NPC_SLOTS = [ { i: 2.0, j: 5.6 }, { i: 6.9, j: 4.7 }, { i: 4.4, j: 7.0 } ];
+var COLEGAS = [
+  { nome: "Cida do RH",  skin: "#8D5A3B", hair: "#1F2937", shirt: "#E85D9E" },
+  { nome: "Juca do TI",  skin: "#F5C89B", hair: "#B3541E", shirt: "#16A085" },
+  { nome: "Dona Lurdes", skin: "#C98D5E", hair: "#9CA3AF", shirt: "#9B59B6" },
+  { nome: "Renatinha",   skin: "#FADCB8", hair: "#D9A441", shirt: "#F5A623" },
+  { nome: "Seu Osmar",   skin: "#E0A878", hair: "#6B7280", shirt: "#4F8EF7" }
+];
+var OBST_COPA = [
+  { i0: 0.4, i1: 6.2, j0: 0.4, j1: 1.35 },
+  { i0: 2.4, i1: 3.6, j0: 3.9, j1: 5.1 },
+  { i0: 5.4, i1: 6.6, j0: 5.0, j1: 6.2 }
+];
+var ESTATICOS_COPA = [
+  { id: "copa-eletros", d: 5.0 },
+  { id: "npc-g-0", d: 7.6 },
+  { id: "mesa-copa-1", d: 8.2 },
+  { id: "npc-g-1", d: 11.6 },
+  { id: "mesa-copa-2", d: 12.3 },
+  { id: "npc-g-2", d: 11.4 }
+];
+
+function svgCopaEletros(){
+  var hw = ISO.hw, hh = ISO.hh;
+  function px(di, dj){ return (di - dj) * hw; }
+  function py(di, dj){ return (di + dj) * hh; }
+  function box(i0, j0, li, lj, H, cTop, cEsq, cDir){
+    var x0 = px(i0, j0), y0 = py(i0, j0);
+    function P(di, dj, ex){ return (x0 + px(di, dj)) + "," + (y0 + py(di, dj) + (ex || 0) - H) + " "; }
+    return "<polygon points='" + P(0,0) + P(li,0) + P(li,lj) + P(0,lj) + "' fill='" + cTop + "' stroke='#1B2745' stroke-width='1'/>" +
+      "<polygon points='" + P(0,lj) + P(li,lj) + P(li,lj,H) + P(0,lj,H) + "' fill='" + cEsq + "'/>" +
+      "<polygon points='" + P(li,0) + P(li,lj) + P(li,lj,H) + P(li,0,H) + "' fill='" + cDir + "'/>";
+  }
+  var s = "";
+  s += box(0.55, 1.2, 0.8, 0.8, 34, "#3A6EA5", "#2B5586", "#22456E");
+  s += "<ellipse cx='" + px(0.95, 1.6) + "' cy='" + (py(0.95, 1.6) - 44) + "' rx='9' ry='11' fill='#7EC8F5' stroke='#3A6EA5' stroke-width='2'/>";
+  s += box(1.85, 1.15, 1.0, 0.9, 62, "#E8EAF0", "#CDD3DE", "#B7BECC");
+  s += "<rect x='" + (px(2.35, 1.6) - 1) + "' y='" + (py(2.35, 1.6) - 56) + "' width='2.5' height='14' rx='1' fill='#5B6B85'/>";
+  s += "<rect x='" + (px(2.35, 1.6) - 1) + "' y='" + (py(2.35, 1.6) - 36) + "' width='2.5' height='20' rx='1' fill='#5B6B85'/>";
+  s += box(3.2, 1.15, 2.9, 0.9, 30, "#8A97AC", "#6E7A8F", "#5B6577");
+  s += box(3.65, 1.28, 0.9, 0.62, 18, "#1F2A3D", "#141C2B", "#0F1522");
+  s += "<rect x='" + (px(4.0, 1.62) - 8) + "' y='" + (py(4.0, 1.62) - 44) + "' width='13' height='9' rx='1.5' fill='#0A0F1C' stroke='#3A4A6E'/>";
+  s += "<circle cx='" + (px(4.0, 1.62) + 9) + "' cy='" + (py(4.0, 1.62) - 40) + "' r='1.6' fill='#22C55E' class='twk'/>";
+  s += "<ellipse cx='" + px(5.5, 1.62) + "' cy='" + (py(5.5, 1.62) - 31) + "' rx='12' ry='6' fill='#5B6577' stroke='#3F4756' stroke-width='1.5'/>";
+  s += "<path d='M " + (px(5.5,1.62) - 4) + " " + (py(5.5,1.62) - 47) + " q 6 -6 10 2' fill='none' stroke='#C7CEDB' stroke-width='2.5' stroke-linecap='round'/>";
+  s += "<text x='" + px(0.95, 1.0) + "' y='" + (py(0.95, 1.0) - 52) + "' text-anchor='middle' font-size='8' font-weight='800' fill='#EAC54F'>ÁGUA</text>";
+  return s;
+}
+
+function svgMesaRedonda(){
+  return "<ellipse cx='0' cy='14' rx='34' ry='13' fill='rgba(0,0,0,0.24)'/>" +
+    "<rect x='-3' y='-14' width='6' height='24' fill='#7A4A1B'/>" +
+    "<ellipse cx='0' cy='-16' rx='30' ry='13' fill='#D98E3F' stroke='#8F5A22' stroke-width='2'/>" +
+    "<ellipse cx='0' cy='-19' rx='30' ry='13' fill='#E8A055'/>" +
+    "<ellipse cx='-9' cy='-21' rx='5' ry='2.5' fill='#B26E2B'/>" +
+    "<ellipse cx='10' cy='-18' rx='4' ry='2' fill='#FFFFFF' opacity='0.85'/>" +
+    "<g transform='translate(-34,6)'><rect x='-5' y='-10' width='10' height='12' rx='2' fill='#9C5F24'/><ellipse cx='0' cy='-10' rx='6' ry='3' fill='#B26E2B'/></g>" +
+    "<g transform='translate(34,4)'><rect x='-5' y='-10' width='10' height='12' rx='2' fill='#9C5F24'/><ellipse cx='0' cy='-10' rx='6' ry='3' fill='#B26E2B'/></g>" +
+    "<g transform='translate(0,26)'><rect x='-5' y='-10' width='10' height='12' rx='2' fill='#9C5F24'/><ellipse cx='0' cy='-10' rx='6' ry='3' fill='#B26E2B'/></g>";
+}
+
+function montaCopa(){
+  el("copa-eletros").setAttribute("transform", "translate(" + ISO.cx + "," + ISO.cy + ")");
+  el("copa-eletros").innerHTML = svgCopaEletros();
+  el("mesa-copa-1").setAttribute("transform", "translate(" + isoX(COPA.mesa1.i, COPA.mesa1.j) + "," + isoY(COPA.mesa1.i, COPA.mesa1.j) + ")");
+  el("mesa-copa-1").innerHTML = svgMesaRedonda();
+  el("mesa-copa-2").setAttribute("transform", "translate(" + isoX(COPA.mesa2.i, COPA.mesa2.j) + "," + isoY(COPA.mesa2.i, COPA.mesa2.j) + ")");
+  el("mesa-copa-2").innerHTML = svgMesaRedonda();
+}
+
+function montaCopaNpcs(){
+  if (S.copaNpcs) return;
+  var pool = COLEGAS.slice();
+  S.copaNpcs = [];
+  S.chefeNaCopa = Math.random() < 0.35;
+  for (var k = 0; k < 3; k++) {
+    var ehChefe = S.chefeNaCopa && k === 1;
+    var c = ehChefe ? { nome: "Chefe", skin: CHEFE_SKIN.skin, hair: CHEFE_SKIN.hair, shirt: CHEFE_SKIN.shirt }
+                    : pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
+    S.copaNpcs.push({ idx: k, nome: c.nome, cores: c, ehChefe: ehChefe, fora: false });
+    var g = el("npc-g-" + k);
+    g.setAttribute("transform", "translate(" + isoX(NPC_SLOTS[k].i, NPC_SLOTS[k].j) + "," + isoY(NPC_SLOTS[k].i, NPC_SLOTS[k].j) + ")");
+    g.innerHTML = "<ellipse cx='0' cy='2' rx='14' ry='5.5' fill='rgba(0,0,0,0.28)'/>" + charAt(c) +
+      (ehChefe ? "<text x='0' y='-62' text-anchor='middle' font-size='8' font-weight='800' fill='#EAC54F'>CHEFE</text>" : "");
+  }
+  if (S.chefeNaCopa) el("chefe-wrap").style.display = "none";
+}
+
+function trocaSala(destino){
+  somPorta(); vib(20);
+  S.sala = destino;
+  S.dest = null; limpaPing();
+  S.vi = 0; S.vj = 0;
+  var copa = (destino === "copa");
+  if (copa) montaCopaNpcs();
+  el("sala-copa").style.display = copa ? "" : "none";
+  el("parede-esq").style.display = copa ? "none" : "";
+  el("parede-dir").style.display = copa ? "none" : "";
+  el("mundo").style.display = copa ? "none" : "";
+  if (copa) { S.pi = SPAWN_COPA.i; S.pj = SPAWN_COPA.j; }
+  else { S.pi = SPAWN_MESA.i; S.pj = SPAWN_MESA.j; }
+  S._sig = ""; S.alvo = "__force__";
+  renderModo();
+  toast(copa ? "🚪 Copa — zona livre de boleta (mas o pregão continua…)" : "🚪 De volta à mesa de operações.", "good");
+}
+
+function somPorta(){ beep(160, 0.07, "square", 0.05); beep(95, 0.12, "square", 0.05, 0.08); }
+function ruido(dur, freq, q, vol, delay){
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    var t0 = AC.currentTime + (delay || 0);
+    var len = Math.floor(AC.sampleRate * dur);
+    var buf = AC.createBuffer(1, len, AC.sampleRate);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    var src = AC.createBufferSource(); src.buffer = buf;
+    var bp = AC.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = freq; bp.Q.value = q;
+    var g = AC.createGain();
+    g.gain.setValueAtTime(vol, t0);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    src.connect(bp); bp.connect(g); g.connect(AC.destination);
+    src.start(t0); src.stop(t0 + dur);
+  } catch (e) {}
+}
+function somAgua(){ if (!SET.som) return; ruido(1.1, 700, 1.2, 0.05); beep(300, 0.08, "sine", 0.05, 0.25); beep(240, 0.08, "sine", 0.05, 0.55); beep(190, 0.1, "sine", 0.05, 0.85); }
+function somMicroFim(){ beep(940, 0.14, "square", 0.06); beep(940, 0.14, "square", 0.06, 0.24); beep(940, 0.22, "square", 0.07, 0.48); }
+function somMicro(){ if (!SET.som) return; try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); var t0 = AC.currentTime; var o = AC.createOscillator(), g = AC.createGain(); o.type = "sawtooth"; o.frequency.value = 55; g.gain.setValueAtTime(0.045, t0); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 3); o.connect(g); g.connect(AC.destination); o.start(t0); o.stop(t0 + 3); } catch (e) {} }
+function somComer(){ if (!SET.som) return; for (var k = 0; k < 4; k++) beep(200 + (k % 2) * 40, 0.09, "triangle", 0.06, k * 0.5); }
+function somLavar(){ if (!SET.som) return; ruido(1.6, 1400, 0.8, 0.045); }
+
+function iniciaAcao(tipo, ms, tile, som){
+  S.modo = "acao"; S.acaoTipo = tipo; S.acaoFim = Date.now() + ms;
+  if (tile) { S.pi = tile.i; S.pj = tile.j; }
+  if (som) som();
+  vib(15);
+  S.alvo = "__force__";
+  renderModo();
+}
+
+var ACAO_STATUS = {
+  agua: "💧 Glup glup… água geladinha.",
+  micro: "♨️ Micro-ondas girando… não olha fixamente.",
+  comendo: "🍽️ Almoçando com vista pro jardim. Merecido.",
+  lavando: "🧼 Lavando a marmita como gente civilizada."
+};
+
+function concluiAcao(){
+  var t = S.acaoTipo;
+  S.modo = "anda"; S.acaoTipo = null; S.alvo = "__force__";
+  if (t === "agua") { toast("💧 Refrescado! Mente limpa pra conferir número.", "good"); }
+  else if (t === "micro") { S.marmita = "quente"; somMicroFim(); toast("♨️ PIM! Marmita quente. Agora é sentar e comer.", "good"); }
+  else if (t === "comendo") {
+    S.marmita = "suja"; S.bonus += 400; if (S.bonus > S.best) S.best = S.bonus;
+    showFloat("+" + fmt(400), "good"); renderHud();
+    toast("🍽️ Que marmita! +R$ 400 de disposição. (agora lava, né)", "good");
+  }
+  else if (t === "lavando") {
+    S.marmita = "lavada"; S.bonus += 100; if (S.bonus > S.best) S.best = S.bonus;
+    showFloat("+" + fmt(100), "good"); renderHud();
+    toast("🧼 Marmita limpa. A copa agradece. +R$ 100", "good");
+  }
+  renderModo();
+}
+
+function acaoAgua(){ iniciaAcao("agua", 1500, { i: 1.15, j: 2.2 }, somAgua); }
+function acaoGeladeira(){
+  if (S.marmita === "geladeira") { S.marmita = "fria"; somPorta(); toast("🧊 Marmita na mão! Agora esquenta no micro-ondas.", "good"); S.alvo = "__force__"; }
+  else toast(rnd(["🧊 Só tem o iogurte etiquetado da Cida. Nem pensa.", "🧊 Uma marmita misteriosa de 2 semanas. Corre.", "🧊 Refri sem dono... melhor não arriscar.", "🧊 Sua marmita já saiu daqui hoje."]), "");
+}
+function acaoMicro(){
+  if (S.marmita === "fria") iniciaAcao("micro", 3000, { i: 4.1, j: 2.2 }, somMicro);
+  else if (S.marmita === "quente") toast("♨️ Já tá quente, vai comer antes que esfrie!", "");
+  else toast("♨️ Pega a marmita na geladeira primeiro.", "");
+}
+function acaoPia(){
+  if (S.marmita === "suja") iniciaAcao("lavando", 2000, { i: 5.6, j: 2.2 }, somLavar);
+  else toast("🧼 Nada pra lavar. A pia agradece.", "");
+}
+function acaoAlmocar(){ iniciaAcao("comendo", 4000, null, somComer); }
+
+var MANCHETES = [
+  "BC mantém Selic em 11,25% e sinaliza pausa no ciclo",
+  "PTRL4 anuncia dividendos extraordinários de R$ 2,1 bi",
+  "MNRD3: exportações batem recorde no trimestre",
+  "Continental Capital lidera ranking de fundos pelo 3º mês",
+  "AGRO3 despenca 4% após geada no Sul",
+  "Dólar fecha em queda com forte fluxo estrangeiro",
+  "BNCO4 aprova programa de recompra de ações",
+  "CVM aperta regras para boletagem manual em corretoras",
+  "Pesquisa: back office é a área mais subestimada do mercado",
+  "SDRG4 fecha contrato bilionário com montadoras",
+  "VRJO3 dispara com black friday antecipada",
+  "Leilão de fechamento movimenta R$ 2 bi em papel único",
+  "MTRZ3 inaugura fábrica e gera 3 mil empregos",
+  "Fundos de pensão ampliam posição em renda variável",
+  "LGST3 e LGTC3 negociam fusão, dizem fontes",
+  "Trader grita no pregão e vira meme; compliance investiga",
+  "Estudo: 9 em 10 analistas conferem o financeiro duas vezes",
+  "Café de máquina em mesas de operação 'está aguado', apuram fontes"
+];
+function tickTv(dtMs){
+  S.tvAcc += dtMs;
+  if (S.tvAcc >= 12000) {
+    S.tvAcc = 0;
+    S.tvIdx = (S.tvIdx + 1) % MANCHETES.length;
+    var t = el("tv-news");
+    if (t) t.textContent = "● " + MANCHETES[S.tvIdx] + "  •  " + MANCHETES[(S.tvIdx + 7) % MANCHETES.length];
+  }
+}
+
 function montaExtras(){
   montaPiso();
+  montaCopa();
   el("chefe").innerHTML = "<g transform='scale(0.8) translate(-30,-76)'>" + svgTrader(CHEFE_SKIN, true) + "</g>";
   el("mesa-jogador").innerHTML = svgMesaIso("i");
   el("maq-cafe").setAttribute("transform",
@@ -1124,6 +1542,7 @@ function montaExtras(){
 function renderModo(){
   var fora = S.modo !== "mesa";
   el("joy").className = (S.modo === "anda") ? "on" : "";
+  
   el("painel-anda").style.display = fora ? "block" : "none";
   el("btn-voltar-mesa").style.display = fora ? "block" : "none";
   el("btn-levantar").style.display = fora ? "none" : "block";
@@ -1161,19 +1580,20 @@ function achaOrdem(id){
 }
 
 function ordenaMundo(){
-  var itens = [];
-  for (var k = 0; k < ESTATICOS.length; k++) {
-    itens.push({ nome: ESTATICOS[k].id, alvo: el(ESTATICOS[k].id), d: ESTATICOS[k].d });
+  var itens = [], lista, cont;
+  if (S.sala === "copa") { lista = ESTATICOS_COPA; cont = el("mundo-copa"); }
+  else { lista = ESTATICOS; cont = el("mundo"); }
+  for (var k = 0; k < lista.length; k++) {
+    itens.push({ nome: lista[k].id, alvo: el(lista[k].id), d: lista[k].d });
   }
   itens.push({ nome: "player", alvo: el("player"), d: S.pi + S.pj + 0.02 });
-  itens.push({ nome: "chefe-wrap", alvo: el("chefe-wrap"), d: S.bi + S.bj });
+  if (S.sala !== "copa") itens.push({ nome: "chefe-wrap", alvo: el("chefe-wrap"), d: S.bi + S.bj });
   itens.sort(function(a, b){ return a.d - b.d; });
-  var sig = "";
+  var sig = S.sala + ":";
   for (var i = 0; i < itens.length; i++) sig += itens[i].nome + "|";
   if (sig === S._sig) return;
   S._sig = sig;
-  var m = el("mundo");
-  for (var j = 0; j < itens.length; j++) m.appendChild(itens[j].alvo);
+  for (var j = 0; j < itens.length; j++) cont.appendChild(itens[j].alvo);
 }
 
 
@@ -1282,8 +1702,24 @@ function calcAlvo(){
     var d = Math.sqrt((S.pi - ti) * (S.pi - ti) + (S.pj - tj) * (S.pj - tj));
     if (d < (raio || 1.5) && d < melhorD) { melhorD = d; melhor = { tipo: tipo, dado: dado }; }
   }
+  if (S.sala === "copa") {
+    tenta("porta", PORTA_COPA.i, PORTA_COPA.j, "mesa", 1.5);
+    tenta("agua", COPA.agua.i, COPA.agua.j, null, 1.4);
+    tenta("gelad", COPA.gelad.i, COPA.gelad.j, null, 1.4);
+    tenta("micro", COPA.micro.i, COPA.micro.j, null, 1.4);
+    tenta("pia", COPA.pia.i, COPA.pia.j, null, 1.4);
+    tenta("almoco", COPA.mesa1.i, COPA.mesa1.j, null, 1.7);
+    tenta("almoco", COPA.mesa2.i, COPA.mesa2.j, null, 1.7);
+    if (S.copaNpcs) {
+      for (var k = 0; k < S.copaNpcs.length; k++) {
+        if (!S.copaNpcs[k].fora) tenta("colega", NPC_SLOTS[k].i, NPC_SLOTS[k].j, k, 1.5);
+      }
+    }
+    return melhor;
+  }
+  tenta("porta", PORTA_MESA.i, PORTA_MESA.j, "copa", 1.5);
   tenta("cafe", ALVOS_FIXOS.cafe.i, ALVOS_FIXOS.cafe.j, null, 1.7);
-  tenta("chefe", S.bi, S.bj, null, 1.7);
+  if (!S.chefeNaCopa) tenta("chefe", S.bi, S.bj, null, 1.7);
   for (var i = 0; i < S.orders.length; i++) {
     var o = S.orders[i];
     tenta("trader", SLOTS[o.slot].char.i, SLOTS[o.slot].char.j, o.id, 1.6);
@@ -1294,13 +1730,42 @@ function calcAlvo(){
 function renderAcoes(alvo){
   var chave = alvo ? (alvo.tipo + ":" + alvo.dado) : "nada";
   if (S.modo === "cafe") chave = "cafe-bebendo";
+  if (S.modo === "acao") chave = "acao-" + S.acaoTipo;
   if (S.alvo === chave) return;
   S.alvo = chave;
   var html = "";
-  if (S.modo === "cafe") {
+  if (S.modo === "acao") {
+    el("anda-status").textContent = ACAO_STATUS[S.acaoTipo] || "…";
+  } else   if (S.modo === "cafe") {
     el("anda-status").textContent = "\u2615 Tomando um café... o pregão que espere.";
   } else if (!alvo) {
     el("anda-status").textContent = "\uD83D\uDEB6 Longe da mesa — as ordens continuam chegando!";
+  } else if (alvo.tipo === "porta") {
+    el("anda-status").textContent = "🚪 " + (alvo.dado === "copa" ? "A porta da copa. Cheiro de café coado." : "De volta pro campo de batalha.");
+    html = "<button class='btn btn-main' onclick=\"trocaSala('" + alvo.dado + "')\">🚪 " + (alvo.dado === "copa" ? "Ir para a copa" : "Voltar para a mesa") + "</button>";
+  } else if (alvo.tipo === "agua") {
+    el("anda-status").textContent = "💧 O bebedouro borbulha convidativo.";
+    html = "<button class='btn btn-main' onclick='acaoAgua()'>💧 Tomar uma água</button>";
+  } else if (alvo.tipo === "gelad") {
+    el("anda-status").textContent = "🧊 A geladeira coletiva. Território de disputas.";
+    html = "<button class='btn btn-main' onclick='acaoGeladeira()'>🧊 " + (S.marmita === "geladeira" ? "Pegar sua marmita" : "Fuçar a geladeira") + "</button>";
+  } else if (alvo.tipo === "micro") {
+    el("anda-status").textContent = "♨️ O micro-ondas, herói silencioso da firma.";
+    html = "<button class='btn btn-main' onclick='acaoMicro()'>♨️ Esquentar marmita</button>";
+  } else if (alvo.tipo === "pia") {
+    el("anda-status").textContent = "🧼 A pia. A esponja já viu de tudo.";
+    html = "<button class='btn btn-main' onclick='acaoPia()'>🧼 Lavar a marmita</button>";
+  } else if (alvo.tipo === "almoco") {
+    el("anda-status").textContent = "🪑 Mesa livre, vista pro jardim.";
+    html = S.marmita === "quente"
+      ? "<button class='btn btn-buy' onclick='acaoAlmocar()'>🍽️ Almoçar aqui</button>"
+      : "<div class='anda-status'>sente com uma marmita quente pra almoçar…</div>";
+  } else if (alvo.tipo === "colega") {
+    var npc = S.copaNpcs[alvo.dado];
+    if (npc && !npc.fora) {
+      el("anda-status").textContent = "😊 " + npc.nome + " tá de pausa também.";
+      html = "<button class='btn btn-main' onclick=\"abreChat('colega'," + alvo.dado + ")\">💬 Resenhar com " + npc.nome + "</button>";
+    }
   } else if (alvo.tipo === "cafe") {
     el("anda-status").textContent = "\uD83E\uDD64 A máquina de conveniência te encara.";
     html = "<button class='btn btn-main' onclick='iniciaCafe()'>\u2615 Tomar um café (-R$ " + CAFE_CUSTO + ")</button>";
@@ -1331,8 +1796,9 @@ var VEL_MAX = 3.6;
 var ACEL = 12;
 
 function colide(i, j){
-  for (var k = 0; k < OBSTACULOS.length; k++) {
-    var o = OBSTACULOS[k];
+  var lista = (S && S.sala === "copa") ? OBST_COPA : OBSTACULOS;
+  for (var k = 0; k < lista.length; k++) {
+    var o = lista[k];
     if (i > o.i0 - RAIO && i < o.i1 + RAIO && j > o.j0 - RAIO && j < o.j1 + RAIO) return true;
   }
   return false;
@@ -1503,7 +1969,10 @@ function atualiza(dtMs){
   }
 
   tickChefe(dt);
-  if (S.modo === "anda") {
+  tickTv(dtMs);
+  if (S.modo === "acao") {
+    if (agora >= S.acaoFim) concluiAcao();
+  } else if (S.modo === "anda") {
     moveJogador(dt);
     renderAcoes(calcAlvo());
   } else if (S.modo === "cafe") {
@@ -1574,10 +2043,19 @@ function abreChat(tipo, id){
   S.chatTipo = tipo;
   S.chatOrdId = id;
   var nome, intro;
+  if (tipo === "colega") {
+    var npc = S.copaNpcs[id];
+    if (!npc || npc.fora) return;
+    if (npc.ehChefe) { S.chatTipo = "chefe"; tipo = "chefe"; }
+    else {
+      nome = "😊 " + npc.nome;
+      intro = "vocês encostam perto da janela. lá fora, o jardim. lá dentro, a fila andando…";
+    }
+  }
   if (tipo === "chefe") {
     nome = "\uD83D\uDC54 Chefe · head da mesa";
     intro = "ele tira os olhos da tela e te encara. as ordens continuam drenando…";
-  } else {
+  } else if (tipo === "trader") {
     var o = achaOrdem(id);
     if (!o) return;
     nome = "\uD83D\uDE24 " + o.trader.nome + " · front office";
@@ -1625,6 +2103,21 @@ function enviaChat(){
       if (S.raivaChefe.raiva >= 100) {
         setTimeout(function(){ demite("Você levou o chefe ao limite. Ele explodiu na frente da mesa inteira."); }, 900);
         return;
+      }
+    } else if (S.chatTipo === "colega") {
+      var npc2 = S.copaNpcs[S.chatOrdId];
+      var ec = estadoRaiva();
+      var an0 = analisa(txt);
+      var gc = geraResposta("colega", txt, ec);
+      log.innerHTML += "<div class='msg ele'>" + escapaHtml(gc.texto) + "</div>";
+      renderRaiva(ec.raiva);
+      if (gc.faixa >= 2) { somErro(); vib([30, 20, 30]); } else { somPop(); }
+      if (ec.raiva >= 100 && npc2 && !npc2.fora) {
+        npc2.fora = true;
+        el("npc-g-" + npc2.idx).innerHTML = "";
+        log.innerHTML += "<div class='msg sys'>(" + npc2.nome + " balançou a cabeça e saiu da copa)</div>";
+      } else {
+        ec.raiva = Math.max(0, ec.raiva - Math.abs(deltaRaiva(an0)) * 0.4);
       }
     } else if (!achaOrdem(S.chatOrdId)) {
       log.innerHTML += "<div class='msg sys'>(ele já largou você falando sozinho e voltou pro pregão)</div>";
@@ -1757,7 +2250,9 @@ function startGame(){
     zoom: false, _sig: "", bi: PATRULHA[0].i, bj: PATRULHA[0].j, bWp: 1, bPausaMs: 0,
     bPasso: 0, bFace: 1, bAndando: false, demitido: false,
     vi: 0, vj: 0, dest: null, face: 1, passo: 0, andando: false, vaporT: 0,
-    raivaChefe: { raiva: 0 }, raivaTrader: {}
+    raivaChefe: { raiva: 0 }, raivaTrader: {}, sala: "mesa", marmita: "geladeira",
+    copaNpcs: null, chefeNaCopa: false, raivaColega: {}, acaoTipo: null, acaoFim: 0,
+    tvIdx: 0, tvAcc: 0
   };
   montaMesas();
   montaExtras();
@@ -1775,6 +2270,13 @@ function iniciaAno(){
   S.joy.x = 0; S.joy.y = 0; S.chatOrdId = null; S.chatTipo = null; S.alvo = null;
   S.bi = PATRULHA[0].i; S.bj = PATRULHA[0].j; S.bWp = 1; S.bPausaMs = 0; S._sig = "";
   S.vi = 0; S.vj = 0; S.dest = null; S.andando = false; limpaPing();
+  S.sala = "mesa"; S.marmita = "geladeira"; S.copaNpcs = null; S.chefeNaCopa = false;
+  S.acaoTipo = null; S.raivaColega = {};
+  el("sala-copa").style.display = "none";
+  el("parede-esq").style.display = "";
+  el("parede-dir").style.display = "";
+  el("mundo").style.display = "";
+  el("chefe-wrap").style.display = "";
   el("chat").className = "";
   el("camada-bolhas").innerHTML = "";
   for (var i = 0; i < SLOTS.length; i++) el("slot-char-" + i).innerHTML = "";
@@ -1790,22 +2292,37 @@ function chanceErro(){ return Math.min(0.65, 0.35 + S.year * 0.05); }
 function comboMult(){ return 1 + Math.min(8, S.combo) * 0.25; }
 function hintsAno(){ return 3 + (S.up.headset ? 2 : 0); }
 
+var CPARTES = ["Andes CTVM", "Vetor DTVM", "XBroker", "Lume Corretora", "Trópico CCTVM"];
+function fmtF(n){
+  return "R$ " + n.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 function genTrade(){
   var ativo = rnd(Object.keys(ATIVOS));
   var lado = Math.random() < 0.5 ? "COMPRA" : "VENDA";
   var qtd = rnd(QTDS);
   var preco = Math.round(ATIVOS[ativo].p * (0.92 + Math.random() * 0.16) * 100) / 100;
-  var ordem = { ativo: ativo, lado: lado, qtd: qtd, preco: preco };
-  var boleta = { ativo: ativo, lado: lado, qtd: qtd, preco: preco };
+  var cpart = rnd(CPARTES);
+  var liq = Math.random() < 0.75 ? "D+2" : "D+1";
+  var ordem = { ativo: ativo, lado: lado, qtd: qtd, preco: preco, cpart: cpart, liq: liq };
+  var boleta = { ativo: ativo, lado: lado, qtd: qtd, preco: preco, cpart: cpart, liq: liq, fin: null };
   var divergente = Math.random() < chanceErro();
   var campo = null;
 
   if (divergente) {
-    campo = rnd(["preco", "qtd", "lado", "ativo"]);
+    if (S.year >= 2 && Math.random() < 0.18) campo = "financeiro";
+    else {
+      var pool = ["preco", "qtd", "lado", "ativo"];
+      if (S.year >= 2) pool = pool.concat(["cpart", "liq"]);
+      campo = rnd(pool);
+    }
     if (campo === "lado") {
       boleta.lado = (lado === "COMPRA") ? "VENDA" : "COMPRA";
     } else if (campo === "ativo") {
       boleta.ativo = PARES[ativo] || rnd(Object.keys(ATIVOS).filter(function(a){ return a !== ativo; }));
+    } else if (campo === "cpart") {
+      boleta.cpart = rnd(CPARTES.filter(function(c){ return c !== cpart; }));
+    } else if (campo === "liq") {
+      boleta.liq = (liq === "D+2") ? "D+1" : "D+2";
     } else if (campo === "qtd") {
       if (S.year <= 2 && Math.random() < 0.5) {
         boleta.qtd = qtd * 10;
@@ -1814,11 +2331,21 @@ function genTrade(){
         boleta.qtd = Math.max(100, qtd + (Math.random() < 0.5 ? dq : -dq));
         if (boleta.qtd === qtd) boleta.qtd = qtd + dq;
       }
-    } else {
+    } else if (campo === "preco") {
       var delta = (S.year <= 2) ? (0.3 + Math.random() * 1.5) : (0.02 + Math.random() * 0.3);
       var sinal = Math.random() < 0.5 ? 1 : -1;
       boleta.preco = Math.round((preco + sinal * delta) * 100) / 100;
       if (boleta.preco === preco || boleta.preco <= 0) boleta.preco = Math.round((preco + 0.11) * 100) / 100;
+    }
+  }
+  if (S.year >= 2) {
+    var finCerto = Math.round(boleta.qtd * boleta.preco * 100) / 100;
+    if (campo === "financeiro") {
+      var m = 1 + (0.04 + Math.random() * 0.1) * (Math.random() < 0.5 ? 1 : -1);
+      boleta.fin = Math.round(finCerto * m * 100) / 100;
+      if (boleta.fin === finCerto) boleta.fin = Math.round((finCerto + 137) * 100) / 100;
+    } else {
+      boleta.fin = finCerto;
     }
   }
   return { ordem: ordem, boleta: boleta, divergente: divergente, campo: campo };
@@ -2026,6 +2553,8 @@ function renderPainel(){
   el("o-ativo").textContent = oculto ? "❓" : (o.ordem.ativo + " · " + ATIVOS[o.ordem.ativo].n);
   el("o-qtd").textContent = oculto ? "❓" : fmtQ(o.ordem.qtd);
   el("o-preco").textContent = oculto ? "❓" : fmtP(o.ordem.preco);
+  el("o-cpart").textContent = oculto ? "❓" : o.ordem.cpart;
+  el("o-liq").textContent = oculto ? "❓" : o.ordem.liq;
   el("o-lado-w").className = "f" + (oculto ? "" : (o.ordem.lado === "COMPRA" ? " buyside" : " sellside"));
 
   if (o.tipo === "montar") {
@@ -2042,12 +2571,17 @@ function renderPainel(){
   el("b-ativo").textContent = o.boleta.ativo;
   el("b-qtd").textContent = fmtQ(o.boleta.qtd);
   el("b-preco").textContent = fmtP(o.boleta.preco);
+  el("b-cpart").textContent = o.boleta.cpart;
+  el("b-liq").textContent = o.boleta.liq;
+  el("b-fin-w").style.display = (o.boleta.fin != null) ? "" : "none";
+  if (o.boleta.fin != null) el("b-fin").textContent = fmtF(o.boleta.fin);
   el("b-lado-w").className = "f " + (o.boleta.lado === "COMPRA" ? "buyside" : "sellside");
   el("b-ativo-w").className = "f";
   el("b-qtd-w").className = "f";
   el("b-preco-w").className = "f";
   if (o.hinted && o.divergente) {
-    var mapa = { preco: "b-preco-w", qtd: "b-qtd-w", lado: "b-lado-w", ativo: "b-ativo-w" };
+    var mapa = { preco: "b-preco-w", qtd: "b-qtd-w", lado: "b-lado-w", ativo: "b-ativo-w",
+      cpart: "b-cpart-w", liq: "b-liq-w", financeiro: "b-fin-w" };
     var w = el(mapa[o.campo]);
     w.className = w.className + " hint";
   }
@@ -2102,6 +2636,15 @@ function decide(boletar){
 function mostraCampo(){
   var o = ordemSel();
   if (!o || o.tipo === "montar") return;
+  var grid = document.querySelector(".campo-grid");
+  var h = "<div class='chip' onclick=\"escolheCampo('lado')\">LADO</div>" +
+          "<div class='chip' onclick=\"escolheCampo('ativo')\">ATIVO</div>" +
+          "<div class='chip' onclick=\"escolheCampo('qtd')\">QUANTIDADE</div>" +
+          "<div class='chip' onclick=\"escolheCampo('preco')\">PREÇO</div>" +
+          "<div class='chip' onclick=\"escolheCampo('cpart')\">C.PARTE</div>" +
+          "<div class='chip' onclick=\"escolheCampo('liq')\">LIQUID.</div>";
+  if (o.boleta.fin != null) h += "<div class='chip fin-chip' onclick=\"escolheCampo('financeiro')\">⚡ FINANCEIRO NÃO FECHA</div>";
+  grid.innerHTML = h;
   el("row-decisao").style.display = "none";
   el("area-campo").style.display = "block";
 }
@@ -2119,7 +2662,8 @@ function escolheCampo(c){
   if (!o.divergente) {
     pune(V.erro, o, "Devolveu uma boleta correta! Ela batia com a ordem.");
   } else if (c === o.campo) {
-    premia(o.tipo === "fone" ? V.foneDev : V.devolver, o,
+    premia(c === "financeiro" ? V.fin : (o.tipo === "fone" ? V.foneDev : V.devolver), o,
+      c === "financeiro" ? "Devolvida! Você pegou o financeiro errado NA CONTA. Respeito." :
       "Devolvida! Divergência de " + nomeCampo(c) + " na mosca.");
   } else {
     pune(V.campoErrado, o,
@@ -2140,6 +2684,9 @@ function nomeCampo(c){
   if (c === "qtd") return "quantidade";
   if (c === "lado") return "lado";
   if (c === "ativo") return "ativo";
+  if (c === "cpart") return "contraparte";
+  if (c === "liq") return "liquidação";
+  if (c === "financeiro") return "financeiro";
   return "campo";
 }
 

@@ -19,7 +19,8 @@
     --amber:#F5A623; --acc:#4F8EF7; --gold:#EAC54F;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{margin:0; padding:0;}
+  html,body{margin:0; padding:0; height:100%; width:100%; overflow:hidden; position:fixed; inset:0;}
+  #app{height:100dvh; overflow:hidden;}
   body{background:var(--bg); color:var(--txt);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     min-height:100vh; display:flex; justify-content:center;
@@ -27,7 +28,8 @@
   .mono{font-family:"SF Mono",Menlo,Consolas,monospace;}
   #app{width:100%; max-width:420px;}
   .pad{padding:14px;}
-  .screen{display:none;} .screen.on{display:block; animation:fadeIn .3s ease;}
+  .screen{display:none;} .screen.on{display:flex; flex-direction:column; height:100dvh;
+    overflow:hidden; animation:fadeIn .3s ease;}
   @keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
   @keyframes slideUp{from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:none;}}
   @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.5;}}
@@ -68,7 +70,7 @@
   .clicavel{cursor:pointer;}
   .selecionado .bolha-rect{stroke:#4F8EF7; stroke-width:3;}
   .charwrap{animation:bob 2.2s ease-in-out infinite;}
-  #painel{padding:10px 14px 24px; background:var(--bg); border-top:2px solid var(--line);
+  #painel{padding:8px 12px max(10px, env(safe-area-inset-bottom)); background:var(--bg); border-top:2px solid var(--line);
     border-radius:16px 16px 0 0; margin-top:-12px; position:relative;}
   .painel-titulo{font-size:11px; letter-spacing:.8px; color:var(--mut); font-weight:700; margin-bottom:8px;
     display:flex; justify-content:space-between;}
@@ -141,7 +143,7 @@
     font-size:10px; letter-spacing:2px; color:var(--gold); z-index:2;}
   #poster-mascote{animation:bob 2.6s ease-in-out infinite;}
   .poster-title{position:relative; margin-top:-30px; padding-bottom:8px; text-align:center; z-index:2;}
-  .pt-main{font-size:44px; font-weight:900; letter-spacing:2px; color:#fff; line-height:.95;
+  .pt-main{font-size:clamp(28px, 9.5vw, 42px); font-weight:900; letter-spacing:2px; color:#fff; line-height:.95;
     text-shadow:0 4px 0 var(--gold), 0 5px 12px rgba(0,0,0,.4); animation:brilho 2.8s ease-in-out infinite;}
   .pt-tag{font-size:11px; color:var(--mut); letter-spacing:1px; margin-top:10px;}
   #poster-painel{padding:16px 16px 26px;}
@@ -169,6 +171,23 @@
   .campo-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
   .campo-grid .chip{flex:none; padding:14px 6px; font-size:13px;}
   .f.fin{background:#241d0a; border:1px solid var(--gold);}
+  .tickets2{display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:start;}
+  .tickets2 .ticket{margin:0 0 8px; padding:8px;}
+  .tickets2 .fields{grid-template-columns:1fr; gap:4px;}
+  .tickets2 .f{padding:4px 7px;}
+  .tickets2 .f label{font-size:7.5px;}
+  .tickets2 .f span{font-size:12px;}
+  .tickets2 .tag{font-size:8px; margin-bottom:6px; padding:3px 6px;}
+  .f.fin span{font-size:12px;}
+  #area-campo{position:absolute; inset:0; z-index:8; background:rgba(11,17,29,0.97);
+    border-radius:16px 16px 0 0; padding:10px 12px; overflow:hidden;}
+  .campo-card{border:none; background:none; padding:0;}
+  .campo-grid{gap:6px;}
+  .campo-grid .chip{padding:10px 4px; font-size:11.5px;}
+  .chips{display:grid; grid-template-columns:repeat(3,1fr); gap:6px;}
+  .chips .chip{padding:9px 4px; font-size:12px; flex:none;}
+  .topbar{padding:8px 14px 2px;}
+  .subbar{padding:0 14px 6px;}
   .f.fin span{color:var(--gold); font-size:15px;}
   .chip.fin-chip{grid-column:1/3; border-color:var(--gold); color:var(--gold);}
 
@@ -176,8 +195,33 @@
   .install-dica{background:var(--card); border:1px solid var(--gold); border-radius:10px;
     padding:10px 12px; font-size:12px; color:var(--txt); margin-top:12px; text-align:center; line-height:1.5;}
   .install-dica b{color:var(--gold);}
+  #s-start.on{justify-content:flex-start;}
+  #poster{flex:1 1 auto; min-height:0; display:flex; flex-direction:column; overflow:hidden;}
+  #poster-svg{flex:1 1 auto; min-height:0; width:100%;}
+  .poster-title{margin:2px 0 0;}
+  .pt-tag{font-size:11px;}
+  #poster-painel{flex:0 0 auto; padding-top:8px; padding-bottom:max(10px, env(safe-area-inset-bottom));}
+  .cracha{padding:8px 10px;}
+  #btn-start{margin-top:8px;}
+  .toggles{margin-top:8px;}
+  .record.center{margin-top:6px; font-size:11px;}
+  .link-regras{margin-top:6px; padding:4px 0; font-size:12px;}
+  .btn-install{margin-top:8px;}
+  .install-dica{margin-top:8px; padding:8px 10px; font-size:11px;}
+  .rules{position:fixed; left:12px; right:12px; top:6dvh; bottom:6dvh; z-index:40;
+    background:var(--card); border:1.5px solid var(--line); border-radius:16px;
+    padding:16px 18px; overflow-y:auto; margin:0; box-shadow:0 12px 40px rgba(0,0,0,.5);}
+  .rules-close{list-style:none; text-align:right; color:var(--gold); font-weight:800;
+    cursor:pointer; margin-bottom:8px;}
 
-  #cenawrap{position:relative;}
+
+  #s-game.on{display:flex;}
+  .topbar{flex:0 0 auto;}
+  .subbar{flex:0 0 auto;}
+  #cenawrap{position:relative; flex:1 1 auto; min-height:120px; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;}
+  #cena{height:100%; width:auto; max-width:100%; display:block;}
+  #painel{flex:0 0 auto;}
   #joy{position:absolute; left:14px; bottom:14px; width:96px; height:96px; border-radius:50%;
     background:rgba(19,28,46,.55); border:1.5px solid rgba(79,142,247,.55); display:none;
     touch-action:none; z-index:5;}
@@ -226,6 +270,8 @@
     z-index:6; display:flex; align-items:center; justify-content:center; cursor:pointer;}
   @keyframes twk{0%,100%{opacity:.2;} 50%{opacity:1;}}
   .twk{animation:twk 1.9s ease-in-out infinite;}
+  @keyframes voa{0%{transform:translateX(-34px);} 100%{transform:translateX(215px);}}
+  .bird{animation:voa 11s linear infinite;}
   @keyframes brilho{0%,100%{text-shadow:0 4px 0 var(--gold), 0 5px 12px rgba(0,0,0,.4);}
     50%{text-shadow:0 4px 0 var(--gold), 0 0 28px rgba(234,197,79,.6), 0 5px 12px rgba(0,0,0,.4);}}
 </style>
@@ -293,6 +339,7 @@
       <div class="record center" id="recorde"></div>
       <button class="link-regras" id="btn-regras" onclick="toggleRegras()">como se joga ▾</button>
       <ul class="rules" id="regras" style="display:none;">
+        <li class="rules-close" onclick="toggleRegras()">✕ fechar</li>
         <li><b>Toque em um trader</b> para pegar a ordem e compare com a boleta do sistema.</li>
         <li>Bateu? <b>Boletar</b>. Divergiu? <b>Devolver apontando o campo errado</b> — acertar o campo paga mais.</li>
         <li>Pode <b>levantar da mesa</b>: xingue os traders, fale (ou brigue) com o chefe que patrulha o andar, tome um café — mas cada segundo longe custa caro.</li>
@@ -438,6 +485,8 @@
           <circle cx="112" cy="-30" r="2" fill="#F5C518" class="twk" style="animation-delay:.5s"/>
           <circle cx="128" cy="-33" r="2.5" fill="#EF4444" class="twk" style="animation-delay:1s"/>
           <circle cx="145" cy="-30" r="2" fill="#E85D9E" class="twk" style="animation-delay:1.4s"/>
+          <path class="bird" d="M20 -86 q4 -5 8 0 q4 -5 8 0" fill="none" stroke="#31456F" stroke-width="2" stroke-linecap="round"/>
+          <path class="bird" style="animation-delay:4.5s" d="M0 -78 q3 -4 6 0 q3 -4 6 0" fill="none" stroke="#31456F" stroke-width="1.6" stroke-linecap="round"/>
           <rect x="100" y="-102" width="5" height="76" fill="#F0F2F6"/>
           <rect x="16" y="-66" width="176" height="4" fill="#F0F2F6"/>
         </g>
@@ -483,6 +532,7 @@
       <div class="painel-titulo"><span>🖥️ SUA MESA · BACK OFFICE</span><span id="p-trader"></span></div>
       <div id="dica-vazio">👆 Toque em um trader para pegar a ordem…</div>
       <div id="p-conteudo" style="display:none;">
+        <div class="tickets2">
         <div class="ticket ticket-ordem">
           <div class="tag" id="o-tag">ORDEM · FRONT OFFICE</div>
           <div class="fields mono">
@@ -503,8 +553,9 @@
             <div class="f" id="b-preco-w"><label>PREÇO</label><span id="b-preco"></span></div>
             <div class="f" id="b-cpart-w"><label>C.PARTE</label><span id="b-cpart"></span></div>
             <div class="f" id="b-liq-w"><label>LIQUID.</label><span id="b-liq"></span></div>
-            <div class="f fin" id="b-fin-w" style="grid-column:1/3;"><label>FINANCEIRO (confere a conta!)</label><span id="b-fin"></span></div>
+            <div class="f fin" id="b-fin-w"><label>FINANCEIRO (confere!)</label><span id="b-fin"></span></div>
           </div>
+        </div>
         </div>
         <div id="area-montar" style="display:none;">
           <div class="tag2" id="m-prog"></div>
@@ -1325,9 +1376,9 @@ var COLEGAS = [
   { nome: "Seu Osmar",   skin: "#E0A878", hair: "#6B7280", shirt: "#4F8EF7" }
 ];
 var OBST_COPA = [
-  { i0: 0.4, i1: 6.2, j0: 0.4, j1: 1.35 },
-  { i0: 2.4, i1: 3.6, j0: 3.9, j1: 5.1 },
-  { i0: 5.4, i1: 6.6, j0: 5.0, j1: 6.2 }
+  { i0: 0.4, i1: 6.05, j0: 0.4, j1: 1.2 },
+  { i0: 2.5, i1: 3.5, j0: 4.0, j1: 5.0 },
+  { i0: 5.5, i1: 6.5, j0: 5.1, j1: 6.1 }
 ];
 var ESTATICOS_COPA = [
   { id: "copa-eletros", d: 5.0 },
@@ -1419,9 +1470,15 @@ function trocaSala(destino){
   else { S.pi = SPAWN_MESA.i; S.pj = SPAWN_MESA.j; }
   S._sig = ""; S.alvo = "__force__";
   renderModo();
-  toast(copa ? "🚪 Copa — zona livre de boleta (mas o pregão continua…)" : "🚪 De volta à mesa de operações.", "good");
+  if (copa) somPassaros();
+  toast(copa ? "🚪 Copa — os traders até seguram a onda por aqui (paciência drena mais devagar)." : "🚪 De volta à mesa de operações.", "good");
 }
 
+function somPassaros(){
+  if (!SET.som) return;
+  beep(1680, 0.07, "sine", 0.035, 0.1); beep(1880, 0.06, "sine", 0.03, 0.2);
+  beep(1540, 0.08, "sine", 0.035, 0.55); beep(1760, 0.06, "sine", 0.03, 0.66);
+}
 function somPorta(){ beep(160, 0.07, "square", 0.05); beep(95, 0.12, "square", 0.05, 0.08); }
 function ruido(dur, freq, q, vol, delay){
   try {
@@ -1697,89 +1754,104 @@ function tickChefe(dt){
 }
 
 function calcAlvo(){
-  var melhor = null, melhorD = 1.5;
+  var achados = [];
   function tenta(tipo, ti, tj, dado, raio){
     var d = Math.sqrt((S.pi - ti) * (S.pi - ti) + (S.pj - tj) * (S.pj - tj));
-    if (d < (raio || 1.5) && d < melhorD) { melhorD = d; melhor = { tipo: tipo, dado: dado }; }
+    if (d < raio) achados.push({ tipo: tipo, dado: dado, d: d });
   }
   if (S.sala === "copa") {
-    tenta("porta", PORTA_COPA.i, PORTA_COPA.j, "mesa", 1.5);
-    tenta("agua", COPA.agua.i, COPA.agua.j, null, 1.4);
-    tenta("gelad", COPA.gelad.i, COPA.gelad.j, null, 1.4);
-    tenta("micro", COPA.micro.i, COPA.micro.j, null, 1.4);
-    tenta("pia", COPA.pia.i, COPA.pia.j, null, 1.4);
-    tenta("almoco", COPA.mesa1.i, COPA.mesa1.j, null, 1.7);
-    tenta("almoco", COPA.mesa2.i, COPA.mesa2.j, null, 1.7);
+    tenta("porta", PORTA_COPA.i, PORTA_COPA.j, "mesa", 1.8);
+    tenta("agua", COPA.agua.i, COPA.agua.j, null, 1.9);
+    tenta("gelad", COPA.gelad.i, COPA.gelad.j, null, 1.9);
+    tenta("micro", COPA.micro.i, COPA.micro.j, null, 1.9);
+    tenta("pia", COPA.pia.i, COPA.pia.j, null, 1.9);
+    tenta("almoco", COPA.mesa1.i, COPA.mesa1.j, "m1", 2.0);
+    tenta("almoco", COPA.mesa2.i, COPA.mesa2.j, "m2", 2.0);
     if (S.copaNpcs) {
       for (var k = 0; k < S.copaNpcs.length; k++) {
-        if (!S.copaNpcs[k].fora) tenta("colega", NPC_SLOTS[k].i, NPC_SLOTS[k].j, k, 1.5);
+        if (!S.copaNpcs[k].fora) tenta("colega", NPC_SLOTS[k].i, NPC_SLOTS[k].j, k, 1.8);
       }
     }
-    return melhor;
+  } else {
+    tenta("porta", PORTA_MESA.i, PORTA_MESA.j, "copa", 1.8);
+    tenta("cafe", ALVOS_FIXOS.cafe.i, ALVOS_FIXOS.cafe.j, null, 1.8);
+    if (!S.chefeNaCopa) tenta("chefe", S.bi, S.bj, null, 1.7);
+    for (var i = 0; i < S.orders.length; i++) {
+      var o = S.orders[i];
+      tenta("trader", SLOTS[o.slot].char.i, SLOTS[o.slot].char.j, o.id, 1.6);
+    }
   }
-  tenta("porta", PORTA_MESA.i, PORTA_MESA.j, "copa", 1.5);
-  tenta("cafe", ALVOS_FIXOS.cafe.i, ALVOS_FIXOS.cafe.j, null, 1.7);
-  if (!S.chefeNaCopa) tenta("chefe", S.bi, S.bj, null, 1.7);
-  for (var i = 0; i < S.orders.length; i++) {
-    var o = S.orders[i];
-    tenta("trader", SLOTS[o.slot].char.i, SLOTS[o.slot].char.j, o.id, 1.6);
-  }
-  return melhor;
+  achados.sort(function(a, b){ return a.d - b.d; });
+  return achados.slice(0, 3);
 }
 
-function renderAcoes(alvo){
-  var chave = alvo ? (alvo.tipo + ":" + alvo.dado) : "nada";
-  if (S.modo === "cafe") chave = "cafe-bebendo";
+function btnAlvo(a){
+  if (a.tipo === "porta") {
+    return { s: "🚪 " + (a.dado === "copa" ? "A porta da copa. Cheiro de café coado." : "De volta pro campo de batalha."),
+      h: "<button class='btn btn-main' onclick=\"trocaSala('" + a.dado + "')\">🚪 " + (a.dado === "copa" ? "Ir para a copa" : "Voltar para a mesa") + "</button>" };
+  }
+  if (a.tipo === "agua") return { s: "💧 O bebedouro borbulha convidativo.",
+    h: "<button class='btn btn-main' onclick='acaoAgua()'>💧 Tomar uma água</button>" };
+  if (a.tipo === "gelad") return { s: "🧊 A geladeira coletiva. Território de disputas.",
+    h: "<button class='btn btn-main' onclick='acaoGeladeira()'>🧊 " + (S.marmita === "geladeira" ? "Pegar sua marmita" : "Fuçar a geladeira") + "</button>" };
+  if (a.tipo === "micro") return { s: "♨️ O micro-ondas, herói silencioso da firma.",
+    h: "<button class='btn btn-main' onclick='acaoMicro()'>♨️ Esquentar marmita</button>" };
+  if (a.tipo === "pia") return { s: "🧼 A pia. A esponja já viu de tudo.",
+    h: "<button class='btn btn-main' onclick='acaoPia()'>🧼 Lavar a marmita</button>" };
+  if (a.tipo === "almoco") {
+    if (S.marmita === "quente") return { s: "🪑 Mesa livre, vista pro jardim.",
+      h: "<button class='btn btn-buy' onclick='acaoAlmocar()'>🍽️ Almoçar aqui</button>" };
+    return { s: "🪑 Mesa livre. Falta uma marmita quente.", h: "" };
+  }
+  if (a.tipo === "colega") {
+    var npc = S.copaNpcs[a.dado];
+    if (npc && !npc.fora) return { s: "😊 " + npc.nome + " tá de pausa também.",
+      h: "<button class='btn btn-main' onclick=\"abreChat('colega'," + a.dado + ")\">💬 Resenhar com " + npc.nome + "</button>" };
+    return { s: "", h: "" };
+  }
+  if (a.tipo === "cafe") return { s: "🥤 A máquina de conveniência te encara.",
+    h: "<button class='btn btn-main' onclick='iniciaCafe()'>☕ Tomar um café (-R$ " + CAFE_CUSTO + ")</button>" };
+  if (a.tipo === "chefe") return { s: "👔 O chefe está bem na sua frente. Pense bem.",
+    h: "<button class='btn btn-main' onclick=\"abreChat('chefe',0)\">💬 Falar com o chefe</button>" +
+       "<button class='btn btn-sell' onclick='baterNoChefe()'>👊 Bater no chefe</button>" };
+  if (a.tipo === "trader") {
+    var o = achaOrdem(a.dado);
+    if (o) return { s: "😤 " + o.trader.nome + " está aqui na sua frente.",
+      h: "<button class='btn btn-sell' onclick=\"abreChat('trader'," + o.id + ")\">💬 Dar satisfação pro " + o.trader.nome + "</button>" };
+    return { s: "", h: "" };
+  }
+  return { s: "", h: "" };
+}
+
+var MARMITA_ROTULO = { geladeira: "na geladeira", fria: "na mão (fria)", quente: "QUENTE!", suja: "pra lavar", lavada: "guardada" };
+
+function renderAcoes(alvos){
+  var chave;
   if (S.modo === "acao") chave = "acao-" + S.acaoTipo;
+  else if (S.modo === "cafe") chave = "cafe-bebendo";
+  else {
+    chave = S.marmita + "|";
+    for (var c = 0; c < alvos.length; c++) chave += alvos[c].tipo + ":" + alvos[c].dado + "|";
+  }
   if (S.alvo === chave) return;
   S.alvo = chave;
-  var html = "";
+  var html = "", status = "";
   if (S.modo === "acao") {
-    el("anda-status").textContent = ACAO_STATUS[S.acaoTipo] || "…";
-  } else   if (S.modo === "cafe") {
-    el("anda-status").textContent = "\u2615 Tomando um café... o pregão que espere.";
-  } else if (!alvo) {
-    el("anda-status").textContent = "\uD83D\uDEB6 Longe da mesa — as ordens continuam chegando!";
-  } else if (alvo.tipo === "porta") {
-    el("anda-status").textContent = "🚪 " + (alvo.dado === "copa" ? "A porta da copa. Cheiro de café coado." : "De volta pro campo de batalha.");
-    html = "<button class='btn btn-main' onclick=\"trocaSala('" + alvo.dado + "')\">🚪 " + (alvo.dado === "copa" ? "Ir para a copa" : "Voltar para a mesa") + "</button>";
-  } else if (alvo.tipo === "agua") {
-    el("anda-status").textContent = "💧 O bebedouro borbulha convidativo.";
-    html = "<button class='btn btn-main' onclick='acaoAgua()'>💧 Tomar uma água</button>";
-  } else if (alvo.tipo === "gelad") {
-    el("anda-status").textContent = "🧊 A geladeira coletiva. Território de disputas.";
-    html = "<button class='btn btn-main' onclick='acaoGeladeira()'>🧊 " + (S.marmita === "geladeira" ? "Pegar sua marmita" : "Fuçar a geladeira") + "</button>";
-  } else if (alvo.tipo === "micro") {
-    el("anda-status").textContent = "♨️ O micro-ondas, herói silencioso da firma.";
-    html = "<button class='btn btn-main' onclick='acaoMicro()'>♨️ Esquentar marmita</button>";
-  } else if (alvo.tipo === "pia") {
-    el("anda-status").textContent = "🧼 A pia. A esponja já viu de tudo.";
-    html = "<button class='btn btn-main' onclick='acaoPia()'>🧼 Lavar a marmita</button>";
-  } else if (alvo.tipo === "almoco") {
-    el("anda-status").textContent = "🪑 Mesa livre, vista pro jardim.";
-    html = S.marmita === "quente"
-      ? "<button class='btn btn-buy' onclick='acaoAlmocar()'>🍽️ Almoçar aqui</button>"
-      : "<div class='anda-status'>sente com uma marmita quente pra almoçar…</div>";
-  } else if (alvo.tipo === "colega") {
-    var npc = S.copaNpcs[alvo.dado];
-    if (npc && !npc.fora) {
-      el("anda-status").textContent = "😊 " + npc.nome + " tá de pausa também.";
-      html = "<button class='btn btn-main' onclick=\"abreChat('colega'," + alvo.dado + ")\">💬 Resenhar com " + npc.nome + "</button>";
+    status = ACAO_STATUS[S.acaoTipo] || "…";
+  } else if (S.modo === "cafe") {
+    status = "☕ Tomando um café... o pregão que espere.";
+  } else if (!alvos.length) {
+    status = "🚶 Longe da mesa — as ordens continuam chegando!";
+  } else {
+    for (var k = 0; k < alvos.length; k++) {
+      var b = btnAlvo(alvos[k]);
+      if (!status && b.s) status = b.s;
+      html += b.h;
     }
-  } else if (alvo.tipo === "cafe") {
-    el("anda-status").textContent = "\uD83E\uDD64 A máquina de conveniência te encara.";
-    html = "<button class='btn btn-main' onclick='iniciaCafe()'>\u2615 Tomar um café (-R$ " + CAFE_CUSTO + ")</button>";
-  } else if (alvo.tipo === "chefe") {
-    el("anda-status").textContent = "\uD83D\uDC54 O chefe está bem na sua frente. Pense bem.";
-    html = "<button class='btn btn-main' onclick=\"abreChat('chefe',0)\">\uD83D\uDCAC Falar com o chefe</button>" +
-           "<button class='btn btn-sell' onclick='baterNoChefe()'>\uD83D\uDC4A Bater no chefe</button>";
-  } else if (alvo.tipo === "trader") {
-    var o = achaOrdem(alvo.dado);
-    if (o) {
-      el("anda-status").textContent = "\uD83D\uDE24 " + o.trader.nome + " está aqui na sua frente.";
-      html = "<button class='btn btn-sell' onclick=\"abreChat('trader'," + o.id + ")\">\uD83D\uDCAC Dar satisfação pro " + o.trader.nome + "</button>";
-    }
+    if (!status) status = "🚶 Ande até alguém ou algo…";
   }
+  if (S.sala === "copa" && S.modo !== "acao") status += "  ·  🍱 " + MARMITA_ROTULO[S.marmita];
+  el("anda-status").textContent = status;
   el("acoes-anda").innerHTML = html;
 }
 
@@ -1951,7 +2023,7 @@ function atualiza(dtMs){
   for (var i = S.orders.length - 1; i >= 0; i--) {
     var o = S.orders[i];
     if (o.tipo === "fone" && !o.hidden && agora - o.nasceu > 4000) escondeFone(o);
-    o.resta -= dtMs;
+    o.resta -= (S.sala === "copa" ? dtMs * 0.85 : dtMs);
     var pct = Math.max(0, o.resta / o.pacTotal);
     if (Math.abs(pct - o.pctUlt) > 0.008) {
       o.pctUlt = pct;

@@ -264,6 +264,16 @@
   .chat-row{display:flex; gap:8px;}
   .chat-row input{flex:1; margin:0;}
   .chat-row .btn{width:auto; padding:12px 18px;}
+  #s-vitoria{position:fixed; inset:0; z-index:30; display:none; align-items:center;
+    justify-content:center; text-align:center; padding:24px; overflow:hidden;
+    background:radial-gradient(circle at 50% 30%, #3d3416 0%, #141E33 70%);}
+  .vit-box h1{font-size:30px; color:var(--gold); letter-spacing:1px; margin:10px 0 0;}
+  .vit-sub{font-size:14px; color:var(--txt); margin:8px 0 14px;}
+  .vit-stats{font-size:13px; color:var(--mut); line-height:1.7; margin-bottom:22px;}
+  .vit-stats b{color:var(--gold);}
+  @keyframes cair{0%{transform:translateY(-8dvh) rotate(0);} 100%{transform:translateY(108dvh) rotate(340deg);}}
+  .confete{position:absolute; top:0; width:9px; height:14px; border-radius:2px; opacity:.9;
+    animation:cair 3.4s linear infinite;}
   #s-demitido{position:fixed; inset:0; background:#B91C1C; z-index:30; display:none;
     align-items:center; justify-content:center; text-align:center; padding:24px;}
   .dem-box h1{font-size:32px; color:#fff; letter-spacing:1px; margin:10px 0 0;}
@@ -274,6 +284,9 @@
   @keyframes soco{0%{transform:none;} 30%{transform:translate(-8px,4px) rotate(-2deg);}
     60%{transform:translate(7px,-3px) rotate(2deg);} 100%{transform:none;}}
   .soco{animation:soco .35s ease;}
+  @keyframes cbpulse{0%,100%{box-shadow:inset 0 0 0 3px rgba(239,68,68,0);}
+    50%{box-shadow:inset 0 0 0 6px rgba(239,68,68,.65);}}
+  #cenawrap.cbon{animation:cbpulse .7s ease-in-out infinite;}
   .zoom-btn{position:absolute; right:10px; top:10px; width:40px; height:40px; border-radius:50%;
     background:rgba(19,28,46,.72); border:1.5px solid var(--line); color:var(--txt); font-size:17px;
     z-index:6; display:flex; align-items:center; justify-content:center; cursor:pointer;}
@@ -346,6 +359,7 @@
       <button class="btn btn-install" id="btn-install" style="display:none;" onclick="instalarApp()">📲 Instalar o jogo</button>
       <div class="install-dica" id="install-ios" style="display:none;">📲 Para instalar: toque em <b>Compartilhar</b> e depois em <b>Adicionar à Tela de Início</b></div>
       <div class="record center" id="recorde"></div>
+      <div class="record center" id="conq-row" style="color:var(--gold); font-size:11px; margin-top:4px;"></div>
       <button class="link-regras" id="btn-regras" onclick="toggleRegras()">como se joga ▾</button>
       <ul class="rules" id="regras" style="display:none;">
         <li class="rules-close" onclick="toggleRegras()">✕ fechar</li>
@@ -653,6 +667,16 @@
       <input type="text" id="chat-inp" maxlength="140" placeholder="Diga o que pensa…" autocomplete="off">
       <button class="btn btn-main" onclick="enviaChat()">➤</button>
     </div>
+  </div>
+</div>
+<div id="s-vitoria">
+  <div id="vit-confete"></div>
+  <div class="vit-box">
+    <div style="font-size:56px;">👑</div>
+    <h1>VOCÊ VIROU SÓCIO.</h1>
+    <div class="vit-sub">Do crachá de estagiário ao topo da Continental Capital.</div>
+    <div class="vit-stats" id="vit-stats"></div>
+    <button class="btn btn-main" onclick="fechaVitoria()">Seguir no comando →</button>
   </div>
 </div>
 <div id="s-demitido">
@@ -1143,7 +1167,39 @@ var RESPOSTAS = [
 
 /* ============ ESTADO / PERSISTÊNCIA ============ */
 var S = null;
-var SET = { som: true, vib: true, nome: "", bestBonus: 0, bestAno: 0, bestCargo: 0, bestCombo: 0 };
+var SET = { som: true, vib: true, nome: "", bestBonus: 0, bestAno: 0, bestCargo: 0, bestCombo: 0, conq: {} };
+var CONQ = [
+  { id: "devolucao", e: "↩️", n: "Devolvida na lata" },
+  { id: "fin", e: "🧮", n: "Calculadora humana" },
+  { id: "combo8", e: "🔥", n: "Mercado aquecido" },
+  { id: "cb", e: "🚨", n: "Sobrevivente do breaker" },
+  { id: "marmita", e: "🍱", n: "Cidadão exemplar" },
+  { id: "diplomata", e: "🕊️", n: "Diplomata" },
+  { id: "socio", e: "👑", n: "Sócio da casa" },
+  { id: "perfeito", e: "🏅", n: "Ano impecável" }
+];
+function desbloqueia(id){
+  if (SET.conq[id]) return;
+  SET.conq[id] = 1;
+  safeSave();
+  var c = null;
+  for (var k = 0; k < CONQ.length; k++) if (CONQ[k].id === id) c = CONQ[k];
+  if (c) {
+    toast("🏆 Conquista: " + c.e + " " + c.n, "good");
+    beep(880, 0.09, "sine", 0.06); beep(1100, 0.09, "sine", 0.06, 0.1); beep(1320, 0.16, "sine", 0.07, 0.2);
+    vib([30, 40, 30]);
+  }
+  renderConq();
+}
+function renderConq(){
+  var d = el("conq-row");
+  if (!d) return;
+  var tot = 0, ems = "";
+  for (var k = 0; k < CONQ.length; k++) {
+    if (SET.conq[CONQ[k].id]) { tot++; ems += CONQ[k].e; }
+  }
+  d.textContent = tot > 0 ? ("🏆 " + tot + "/" + CONQ.length + " · " + ems) : "🏆 0/" + CONQ.length + " conquistas";
+}
 var loopId = null, toastId = null;
 
 function safeSave(){
@@ -1160,6 +1216,7 @@ function safeLoad(){
       SET.bestAno = d.bestAno || 0;
       SET.bestCargo = d.bestCargo || 0;
       SET.bestCombo = d.bestCombo || 0;
+      SET.conq = d.conq || {};
     }
   } catch (e) {}
 }
@@ -1490,6 +1547,35 @@ function somPassaros(){
   beep(1680, 0.07, "sine", 0.035, 0.1); beep(1880, 0.06, "sine", 0.03, 0.2);
   beep(1540, 0.08, "sine", 0.035, 0.55); beep(1760, 0.06, "sine", 0.03, 0.66);
 }
+var ambGain = null;
+function somAmbiente(){
+  if (ambGain || !SET.som) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    var len = Math.floor(AC.sampleRate * 2.2);
+    var buf = AC.createBuffer(1, len, AC.sampleRate);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    var src = AC.createBufferSource();
+    src.buffer = buf; src.loop = true;
+    var lp = AC.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 240;
+    ambGain = AC.createGain(); ambGain.gain.value = 0.013;
+    src.connect(lp); lp.connect(ambGain); ambGain.connect(AC.destination);
+    src.start();
+  } catch (e) {}
+}
+function somTelefoneLonge(){
+  if (!SET.som) return;
+  beep(560, 0.14, "sine", 0.018); beep(730, 0.14, "sine", 0.018, 0.05);
+  beep(560, 0.14, "sine", 0.018, 0.42); beep(730, 0.14, "sine", 0.018, 0.47);
+}
+function somSirene(){
+  if (!SET.som) return;
+  for (var k = 0; k < 3; k++) {
+    beep(720, 0.28, "sawtooth", 0.05, k * 0.6);
+    beep(520, 0.28, "sawtooth", 0.05, k * 0.6 + 0.3);
+  }
+}
 function somPorta(){ beep(160, 0.07, "square", 0.05); beep(95, 0.12, "square", 0.05, 0.08); }
 function ruido(dur, freq, q, vol, delay){
   try {
@@ -1541,7 +1627,8 @@ function concluiAcao(){
     toast("🍽️ Que marmita! +R$ 400 de disposição. (agora lava, né)", "good");
   }
   else if (t === "lavando") {
-    S.marmita = "lavada"; S.bonus += 100; if (S.bonus > S.best) S.best = S.bonus;
+    S.marmita = "lavada"; S.bonus += 100;
+    desbloqueia("marmita"); if (S.bonus > S.best) S.best = S.bonus;
     showFloat("+" + fmt(100), "good"); renderHud();
     toast("🧼 Marmita limpa. A copa agradece. +R$ 100", "good");
   }
@@ -2048,6 +2135,23 @@ function atualiza(dtMs){
   var dt = dtMs / 1000;
   var agora = Date.now();
 
+  if (S.cb > 0 && agora >= S.cb) {
+    S.cb = 0;
+    S.cbBoost = 3;
+    el("cenawrap").classList.remove("cbon");
+    toast("📈 Mercado reaberto! Prêmio ×1,5 nas próximas 3 boletas.", "good");
+    beep(520, 0.12, "sine", 0.07); beep(660, 0.12, "sine", 0.07, 0.13); beep(880, 0.2, "sine", 0.08, 0.26);
+    desbloqueia("cb");
+  }
+  if (S.cbAno && !S.cbFeito && S.resolved >= Math.floor(TRADES_ANO / 2) && S.orders.length > 0) {
+    S.cbFeito = true;
+    S.cb = agora + 3200;
+    el("cenawrap").classList.add("cbon");
+    toast("🚨 CIRCUIT BREAKER! Negociações suspensas…", "");
+    somSirene();
+    vib([80, 60, 80, 60, 160]);
+  }
+  var congelado = S.cb > 0;
   var intv = intervaloSpawn();
   if (S.spawned >= TRADES_ANO - 3) {
     intv = intv * 0.5;
@@ -2057,7 +2161,7 @@ function atualiza(dtMs){
       beep(880, 0.1); beep(880, 0.1, "sine", 0.07, 0.15); beep(1100, 0.2, "sine", 0.08, 0.3);
     }
   }
-  if (S.spawned < TRADES_ANO && S.orders.length < maxSimul() &&
+  if (!congelado && S.spawned < TRADES_ANO && S.orders.length < maxSimul() &&
       agora - S.lastSpawn > (S.spawned === 0 ? 400 : intv)) {
     spawnOrder(agora);
   }
@@ -2065,7 +2169,7 @@ function atualiza(dtMs){
   for (var i = S.orders.length - 1; i >= 0; i--) {
     var o = S.orders[i];
     if (o.tipo === "fone" && !o.hidden && agora - o.nasceu > 4000) escondeFone(o);
-    o.resta -= (S.sala === "copa" ? dtMs * 0.85 : dtMs);
+    if (!congelado) o.resta -= (S.sala === "copa" ? dtMs * 0.85 : dtMs);
     var pct = Math.max(0, o.resta / o.pacTotal);
     if (Math.abs(pct - o.pctUlt) > 0.008) {
       o.pctUlt = pct;
@@ -2084,6 +2188,13 @@ function atualiza(dtMs){
 
   tickChefe(dt);
   tickTv(dtMs);
+  if (ambGain) ambGain.gain.value = SET.som ? 0.013 : 0;
+  S.ringAcc += dtMs;
+  if (S.ringAcc >= S.ringProx) {
+    S.ringAcc = 0;
+    S.ringProx = 9000 + Math.random() * 14000;
+    if (S.sala === "mesa") somTelefoneLonge();
+  }
   if (S.modo === "acao") {
     if (agora >= S.acaoFim) concluiAcao();
   } else if (S.modo === "anda") {
@@ -2192,6 +2303,7 @@ function renderRaiva(r){
 }
 
 function fechaChat(){
+  if (S && S.chatTipo === "chefe" && S.raivaChefe.raiva >= 75 && !S.demitido) desbloqueia("diplomata");
   el("chat").className = "";
   S.chatOrdId = null;
   S.chatTipo = null;
@@ -2304,6 +2416,8 @@ function somCafe(){
   } catch (e) {}
 }
 
+function fechaVitoria(){ el("s-vitoria").style.display = "none"; }
+
 function recomecaEstagiario(){
   el("s-demitido").style.display = "none";
   startGame();
@@ -2366,10 +2480,12 @@ function startGame(){
     vi: 0, vj: 0, dest: null, face: 1, passo: 0, andando: false, vaporT: 0,
     raivaChefe: { raiva: 0 }, raivaTrader: {}, sala: "mesa", marmita: "geladeira",
     copaNpcs: null, chefeNaCopa: false, raivaColega: {}, acaoTipo: null, acaoFim: 0,
-    tvIdx: 0, tvAcc: 0
+    tvIdx: 0, tvAcc: 0, cb: 0, cbFeito: false, cbAno: false, cbBoost: 0,
+    ringAcc: 0, ringProx: 8000, vitoriaVista: false
   };
   montaMesas();
   montaExtras();
+  somAmbiente();
   iniciaAno();
   show("s-game");
 }
@@ -2385,6 +2501,8 @@ function iniciaAno(){
   S.bi = PATRULHA[0].i; S.bj = PATRULHA[0].j; S.bWp = 1; S.bPausaMs = 0; S._sig = "";
   S.vi = 0; S.vj = 0; S.dest = null; S.andando = false; limpaPing();
   S.sala = "mesa"; S.marmita = "geladeira"; S.copaNpcs = null; S.chefeNaCopa = false;
+  S.cb = 0; S.cbFeito = false; S.cbAno = (S.year >= 3 && Math.random() < 0.45); S.cbBoost = 0;
+  el("cenawrap").classList.remove("cbon");
   S.acaoTipo = null; S.raivaColega = {};
   el("sala-copa").style.display = "none";
   el("parede-esq").style.display = "";
@@ -2580,10 +2698,12 @@ function quebraCombo(){
 
 function premia(base, o, extra){
   var ganho = Math.round(base * comboMult() * (o.ev === "lx" ? 2 : 1) / 50) * 50;
+  if (S.cbBoost > 0) { ganho = Math.round(ganho * 1.5 / 50) * 50; S.cbBoost--; }
   S.bonus += ganho;
   S.ok++; S.yOk++;
   S.combo++;
   if (S.combo > S.maxCombo) S.maxCombo = S.combo;
+  if (S.combo >= 8) desbloqueia("combo8");
   if (S.combo >= 5) { somCombo(S.combo); } else { somAcerto(); }
   vib(25);
   showFloat("+" + fmt(ganho), "good");
@@ -2776,6 +2896,8 @@ function escolheCampo(c){
   if (!o.divergente) {
     pune(V.erro, o, "Devolveu uma boleta correta! Ela batia com a ordem.");
   } else if (c === o.campo) {
+    desbloqueia("devolucao");
+    if (c === "financeiro") desbloqueia("fin");
     premia(c === "financeiro" ? V.fin : (o.tipo === "fone" ? V.foneDev : V.devolver), o,
       c === "financeiro" ? "Devolvida! Você pegou o financeiro errado NA CONTA. Respeito." :
       "Devolvida! Divergência de " + nomeCampo(c) + " na mosca.");
@@ -2884,6 +3006,7 @@ function endYear(){
 
   var auditHtml = "";
   if (S.yErr === 0) {
+    desbloqueia("perfeito");
     S.bonus += 1500;
     auditHtml += "<div class='audit good'>🏅 Auditoria: ano sem erros operacionais. Selo compliance: +R$ 1.500</div>";
   } else if (S.yErr >= 3) {
@@ -2911,6 +3034,20 @@ function endYear(){
     somCaixa();
   }
   el("y-promo").innerHTML = promoHtml;
+  if (S.cargoIdx === CARGOS.length - 1 && !S.vitoriaVista) {
+    S.vitoriaVista = true;
+    desbloqueia("socio");
+    el("vit-stats").innerHTML = "Anos de mesa: <b>" + S.year + "</b> · Bônus: <b>" + fmt(S.bonus) +
+      "</b><br>Boletas certas na carreira: <b>" + S.ok + "</b> · Melhor combo: <b>×" + comboMax() + "</b>";
+    var conf = "";
+    for (var cf = 0; cf < 14; cf++) {
+      conf += "<span class='confete' style='left:" + (4 + Math.random() * 92) + "%; animation-delay:" +
+        (Math.random() * 2.2).toFixed(2) + "s; background:" +
+        ["#EAC54F", "#4F8EF7", "#22C55E", "#EF4444", "#E85D9E"][cf % 5] + ";'></span>";
+    }
+    el("vit-confete").innerHTML = conf;
+    setTimeout(function(){ el("s-vitoria").style.display = "flex"; somPromo(); vib([60, 80, 60, 80, 200]); }, 500);
+  }
 
   var delta = S.bonus - S.bonusIni;
   var pct = S.bonusIni > 0 ? Math.round(delta / S.bonusIni * 100) : 0;
@@ -3017,6 +3154,7 @@ function boot(){
   safeLoad();
   attachJoy();
   montaPosterPiso();
+  renderConq();
   var ci = el("chat-inp");
   if (ci) ci.addEventListener("keydown", function(e){ if (e.key === "Enter") enviaChat(); });
   var masc = el("poster-mascote");

@@ -175,6 +175,8 @@
     padding:8px 10px; font-size:12.5px; text-align:center; margin-bottom:8px;
     animation:cancelpulse 0.9s ease-in-out infinite;}
   @keyframes cancelpulse{0%,100%{border-color:var(--sell);} 50%{border-color:#fff;}}
+  @keyframes punchk{0%,100%{transform:scale(1);} 45%{transform:scale(1.04);}}
+  #cena.punch{animation:punchk .22s ease-out; transform-origin:center 40%;}
   .row2{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
   .row2 .btn{padding:11px 6px; font-size:13.5px;}
   .painel-titulo{margin-bottom:5px; font-size:10px;}
@@ -268,6 +270,15 @@
   .chat-row{display:flex; gap:8px;}
   .chat-row input{flex:1; margin:0;}
   .chat-row .btn{width:auto; padding:12px 18px;}
+  #s-abertura{position:fixed; inset:0; z-index:34; display:none; flex-direction:column;
+    justify-content:space-between; pointer-events:none;}
+  #s-abertura.on{display:flex; animation:abfade 1.9s ease forwards;}
+  @keyframes abfade{0%{opacity:0;} 12%{opacity:1;} 82%{opacity:1;} 100%{opacity:0;}}
+  .ab-bar{height:16dvh; background:#05080F;}
+  .ab-centro{text-align:center; background:rgba(5,8,15,0.82); padding:16px 0;}
+  .ab-ano{font-size:34px; font-weight:900; letter-spacing:5px; color:#fff;}
+  .ab-cargo{font-size:13px; letter-spacing:3px; color:var(--gold); font-weight:800; margin:4px 0 8px;}
+  .ab-sino{font-size:12px; letter-spacing:2px; color:var(--mut);}
   #s-evento{position:fixed; inset:0; z-index:32; display:none; align-items:center;
     justify-content:center; padding:20px; background:rgba(4,8,16,.85);}
   .ev-card{width:100%; max-width:400px; background:var(--card); border:1.5px solid var(--gold);
@@ -376,6 +387,7 @@
       <button class="link-regras" id="btn-regras" onclick="toggleRegras()">como se joga ▾</button>
       <ul class="rules" id="regras" style="display:none;">
         <li class="rules-close" onclick="toggleRegras()">✕ fechar</li>
+        <li><b>Você começa no hall do prédio</b>, de pé: use o analógico (ou WASD/setas), suba pelo elevador e sente na sua mesa pra abrir o pregão.</li>
         <li><b>Toque em um trader</b> para pegar a ordem e compare com a boleta do sistema.</li>
         <li>Bateu? <b>Boletar</b>. Divergiu? <b>Devolver apontando o campo errado</b> — acertar o campo paga mais.</li>
         <li>Pode <b>levantar da mesa</b>: xingue os traders, fale (ou brigue) com o chefe que patrulha o andar, tome um café — mas cada segundo longe custa caro.</li>
@@ -564,8 +576,56 @@
           <g id="mesa-copa-2"></g>
         </g>
       </g>
+      <g id="sala-hall" style="display:none">
+        <g transform="translate(210,150) scale(-1,1) skewY(26.565)">
+          <rect x="0" y="-115" width="208" height="115" fill="#3B4A6B"/>
+          <rect x="0" y="-9" width="208" height="9" fill="#2A3654"/>
+          <rect x="12" y="-106" width="184" height="97" rx="3" fill="#141E33"/>
+          <rect x="17" y="-101" width="174" height="88" fill="url(#ceuDia)"/>
+          <rect x="30" y="-84" width="18" height="38" fill="#31456F"/>
+          <rect x="54" y="-92" width="22" height="46" fill="#3A4F7D"/>
+          <rect x="82" y="-76" width="16" height="30" fill="#31456F"/>
+          <rect x="104" y="-96" width="24" height="50" fill="#42588A"/>
+          <rect x="134" y="-72" width="18" height="26" fill="#31456F"/>
+          <rect x="158" y="-88" width="20" height="42" fill="#3A4F7D"/>
+          <g opacity="0.45">
+            <rect x="60" y="-86" width="4" height="4" fill="#FFE08A" class="twk"/>
+            <rect x="110" y="-90" width="4" height="4" fill="#FFD166" class="twk" style="animation-delay:.7s"/>
+            <rect x="163" y="-80" width="4" height="4" fill="#FFE08A" class="twk" style="animation-delay:1.3s"/>
+          </g>
+          <rect x="17" y="-46" width="174" height="33" fill="#2A3654"/>
+          <rect x="17" y="-46" width="174" height="3" fill="#5B6E9C"/>
+          <rect x="66" y="-101" width="5" height="88" fill="#141E33"/>
+          <rect x="126" y="-101" width="5" height="88" fill="#141E33"/>
+          <rect x="17" y="-64" width="174" height="3" fill="#141E33"/>
+        </g>
+        <g transform="translate(210,150) skewY(26.565)">
+          <rect x="0" y="-115" width="208" height="115" fill="#44557A"/>
+          <rect x="0" y="-9" width="208" height="9" fill="#31405F"/>
+          <rect x="14" y="-100" width="96" height="24" rx="4" fill="#1B2440"/>
+          <text x="62" y="-83" text-anchor="middle" font-size="11" font-weight="800" letter-spacing="1.2" fill="#EAC54F" font-family="inherit">&#9733; CONTINENTAL</text>
+          <rect x="18" y="-64" width="88" height="22" rx="3" fill="#22304A" stroke="#1B2745" stroke-width="1.5"/>
+          <text x="62" y="-49" text-anchor="middle" font-size="9" font-weight="800" fill="#EAC54F" font-family="inherit">14&#186; &#183; MESA</text>
+          <rect x="120" y="-100" width="56" height="100" rx="2" fill="#5B6577" stroke="#3F4756" stroke-width="2"/>
+          <rect x="125" y="-94" width="22" height="94" fill="#8A97AC"/>
+          <rect x="149" y="-94" width="22" height="94" fill="#7C8899"/>
+          <rect x="146" y="-94" width="3" height="94" fill="#3F4756"/>
+          <rect x="130" y="-112" width="36" height="13" rx="2" fill="#0A0F1C"/>
+          <text x="148" y="-102" text-anchor="middle" font-size="8" font-weight="800" fill="#F5A623" font-family="inherit">&#9650; 14</text>
+          <rect x="180" y="-58" width="9" height="16" rx="2" fill="#1B2440"/>
+          <circle cx="184.5" cy="-50" r="2.6" fill="#22C55E" class="twk"/>
+        </g>
+        <polygon points="210,150 417,253.5 210,357 3,253.5" fill="#EAC54F" opacity="0.05"/>
+        <g id="mundo-hall">
+          <g id="hall-recep-npc"></g>
+          <g id="hall-balcao"></g>
+          <g id="hall-planta"></g>
+          <g id="hall-sofa"></g>
+        </g>
+      </g>
       <g id="ping"></g>
       <g id="camada-bolhas"></g>
+      <g id="fx"></g>
       <rect x="0" y="0" width="420" height="480" fill="url(#vinheta)" pointer-events="none"/>
     </svg>
 
@@ -691,6 +751,15 @@
       <button class="btn btn-main" onclick="enviaChat()">➤</button>
     </div>
   </div>
+</div>
+<div id="s-abertura">
+  <div class="ab-bar ab-top"></div>
+  <div class="ab-centro">
+    <div class="ab-ano" id="ab-ano">ANO 1</div>
+    <div class="ab-cargo" id="ab-cargo">ESTAGIÁRIO</div>
+    <div class="ab-sino">🔔 PREGÃO ABERTO</div>
+  </div>
+  <div class="ab-bar ab-bot"></div>
 </div>
 <div id="s-evento">
   <div class="ev-card">
@@ -1398,6 +1467,21 @@ function svgTrader(t, semBob){
   s += "<path d='M25,28 q5,4 10,0' fill='none' stroke='#8A5A3B' stroke-width='1.8' stroke-linecap='round'/>";
   s += "<circle cx='21' cy='25' r='2.5' fill='rgba(239,120,120,0.35)'/>";
   s += "<circle cx='39' cy='25' r='2.5' fill='rgba(239,120,120,0.35)'/>";
+  if (t.nome) {
+    var hh = 0;
+    for (var hc = 0; hc < t.nome.length; hc++) hh = (hh * 31 + t.nome.charCodeAt(hc)) % 997;
+    if (hh % 10 < 3) {
+      s += "<rect x='19.5' y='17' width='9.5' height='8' rx='3.5' fill='none' stroke='#1F2A3D' stroke-width='1.6'/>";
+      s += "<rect x='31' y='17' width='9.5' height='8' rx='3.5' fill='none' stroke='#1F2A3D' stroke-width='1.6'/>";
+      s += "<line x1='29' y1='20' x2='31' y2='20' stroke='#1F2A3D' stroke-width='1.6'/>";
+    }
+    if (hh % 7 < 2) {
+      s += "<path d='M19,25 a11,11 0 0,0 22,0 l0,3 a11,9 0 0,1 -22,0 Z' fill='" + t.hair + "'/>";
+      s += "<path d='M26,29.5 q4,3 8,0' fill='none' stroke='#D9A78A' stroke-width='1.5' stroke-linecap='round'/>";
+    } else if (hh % 5 === 0) {
+      s += "<path d='M24,26 q6,-2.5 12,0 l0,1.6 q-6,-2.2 -12,0 Z' fill='" + t.hair + "'/>";
+    }
+  }
   s += "</g>";
   return s;
 }
@@ -1558,23 +1642,157 @@ function montaCopaNpcs(){
   if (S.chefeNaCopa) el("chefe-wrap").style.display = "none";
 }
 
-function trocaSala(destino){
+/* ============ HALL: SALA 3 (recepção do prédio) ============ */
+/* O jogo começa aqui: de pé, no térreo, antes do pregão existir.
+   S.fase == "chegada" segura o relógio do ano até o jogador sentar na mesa. */
+var SPAWN_HALL    = { i: 4.2, j: 7.4 };   // entrada do prédio, frente do losango
+var SPAWN_CHEGADA = { i: 3.0, j: 7.2 };   // onde o elevador larga você no 14º
+var HALL = {
+  elev:   { i: 6.5, j: 1.0 },
+  recep:  { i: 2.1, j: 3.9 },
+  npc:    { i: 1.05, j: 2.85 },
+  planta: { i: 0.9, j: 6.2 },
+  sofa:   { i: 7.1, j: 7.0 }
+};
+var OBST_HALL = [
+  { i0: 1.1, i1: 3.1, j0: 3.3, j1: 4.5 },
+  { i0: 6.3, i1: 7.9, j0: 6.4, j1: 7.6 }
+];
+var ESTATICOS_HALL = [
+  { id: "hall-recep-npc", d: 3.90 },
+  { id: "hall-balcao",    d: 6.00 },
+  { id: "hall-planta",    d: 7.10 },
+  { id: "hall-sofa",      d: 14.10 }
+];
+var RECEP = { nome: "Val", skin: "#C98D5E", hair: "#2B2118", shirt: "#E85D9E" };
+var RECEP_FALAS = [
+  "crachá no pescoço, o compliance tá passando de andar em andar.",
+  "chegou cedo, hein? Metade da mesa ainda tá na fila do café.",
+  "se o elevador travar de novo, sobe pela escada. São 14 andares. Boa sorte.",
+  "já recebi seis ligações pra você hoje. Todas do mesmo trader.",
+  "o chefe subiu com cara de quem dormiu mal. Só avisando.",
+  "chegou uma caixa no seu nome. Achei que era demissão, mas era café.",
+  "o pessoal do 12º mandou perguntar se a mesa vai devolver boleta hoje de novo."
+];
+
+/* caixa isométrica com a base centrada em (0,0) do grupo */
+function svgCaixaIso(li, lj, H, cTop, cEsq, cDir){
+  var hw = ISO.hw, hh = ISO.hh;
+  function P(di, dj, dy){
+    return ((di - dj) * hw).toFixed(1) + "," + ((di + dj) * hh + (dy || 0)).toFixed(1) + " ";
+  }
+  return "<polygon points='" + P(-li, lj, -H) + P(li, lj, -H) + P(li, lj) + P(-li, lj) + "' fill='" + cEsq + "'/>" +
+         "<polygon points='" + P(li, -lj, -H) + P(li, lj, -H) + P(li, lj) + P(li, -lj) + "' fill='" + cDir + "'/>" +
+         "<polygon points='" + P(-li, -lj, -H) + P(li, -lj, -H) + P(li, lj, -H) + P(-li, lj, -H) +
+         "' fill='" + cTop + "' stroke='#1B2745' stroke-width='1'/>";
+}
+
+function svgBalcaoHall(){
+  var s = "<ellipse cx='0' cy='6' rx='44' ry='14' fill='rgba(0,0,0,0.24)'/>";
+  s += svgCaixaIso(1.0, 0.6, 32, "#E8EAF0", "#B9C1D0", "#9AA3B4");
+  s += "<rect x='-34' y='-44' width='22' height='5' rx='2' fill='#1B2440'/>";
+  s += "<rect x='-4' y='-53' width='17' height='12' rx='1.5' fill='#0A0F1C' stroke='#3A4A6E' stroke-width='1'/>";
+  s += "<rect x='-1' y='-50' width='11' height='6' fill='#22304A'/>";
+  s += "<text x='-13' y='-1' text-anchor='middle' font-size='7' font-weight='800' fill='#5B6577' font-family='inherit'>RECEPÇÃO</text>";
+  return s;
+}
+
+function svgSofaHall(){
+  var hw = ISO.hw, hh = ISO.hh;
+  var s = "<ellipse cx='0' cy='5' rx='30' ry='11' fill='rgba(0,0,0,0.26)'/>";
+  /* encosto primeiro: fica no fundo (j menor), senão pinta por cima do assento */
+  s += "<g transform='translate(" + (0.55 * hw).toFixed(1) + "," + (-0.55 * hh).toFixed(1) + ")'>" +
+       svgCaixaIso(0.85, 0.13, 34, "#4E5F94", "#3B4B77", "#31405F") + "</g>";
+  s += svgCaixaIso(0.85, 0.5, 15, "#46578A", "#35446B", "#2B3757");
+  return s;
+}
+
+function svgPlantaHall(){
+  return "<ellipse cx='0' cy='5' rx='17' ry='6.5' fill='rgba(0,0,0,0.28)'/>" +
+    "<path d='M -11 3 L -8 -21 L 8 -21 L 11 3 Z' fill='#B26E2B'/>" +
+    "<rect x='-9.5' y='-24' width='19' height='4' rx='1' fill='#8F5A22'/>" +
+    "<circle cx='-7' cy='-34' r='11' fill='#2E9E5B'/>" +
+    "<circle cx='8' cy='-41' r='12' fill='#37B56A'/>" +
+    "<circle cx='9' cy='-28' r='9' fill='#2E9E5B'/>" +
+    "<circle cx='-2' cy='-47' r='9' fill='#43C77A'/>";
+}
+
+function montaHall(){
+  function poe(id, t, svg){
+    var g = el(id);
+    if (!g) return;
+    g.setAttribute("transform", "translate(" + isoX(t.i, t.j).toFixed(1) + "," + isoY(t.i, t.j).toFixed(1) + ")");
+    g.innerHTML = svg;
+  }
+  poe("hall-balcao", HALL.recep, svgBalcaoHall());
+  poe("hall-recep-npc", HALL.npc,
+    "<ellipse cx='0' cy='2' rx='14' ry='5.5' fill='rgba(0,0,0,0.28)'/>" + charAt(RECEP));
+  poe("hall-planta", HALL.planta, svgPlantaHall());
+  poe("hall-sofa", HALL.sofa, svgSofaHall());
+}
+
+function somElevador(){
+  if (!SET.som) return;
+  beep(880, 0.09, "sine", 0.05);
+  beep(660, 0.14, "sine", 0.05, 0.1);
+  ruido(0.55, 420, 0.9, 0.03, 0.24);
+}
+
+function entraHall(){
+  S.fase = "chegada";
+  S.modo = "anda";
+  S.introAte = 0;
+  S.alvo = "__force__";
+  atualizaCeu();
+  trocaSala("hall");
+  renderHud();
+  iniciaLoop();
+}
+
+function subirEscritorio(){
+  if (!S || S.sala !== "hall") return;
+  somElevador();
+  trocaSala("mesa", SPAWN_CHEGADA);
+  toast("🛗 14º andar. Sua mesa te espera — sente pra abrir o pregão.", "good");
+}
+
+function dicaDoAno(){
+  if (S.year >= 3) return "hoje tem ordem por telefone — a bolha some em 4 segundos, decore antes.";
+  if (S.year >= 2) return "avisaram que vem ordem pra digitar na mão. Bom dia e boa sorte.";
+  return "primeiro dia? Confere a ordem contra a boleta. Divergiu, devolve apontando o campo.";
+}
+
+function falaRecepcao(){
+  if (!S) return;
+  vib(10); somPop();
+  var txt;
+  if (!S._recepDica) { S._recepDica = true; txt = dicaDoAno(); }
+  else txt = rnd(RECEP_FALAS);
+  toast("🪪 " + RECEP.nome + ": " + txt, "good");
+}
+
+var SPAWN_SALA = { mesa: SPAWN_MESA, copa: SPAWN_COPA, hall: SPAWN_HALL };
+
+function trocaSala(destino, spawn){
   somPorta(); vib(20);
   S.sala = destino;
   S.dest = null; limpaPing();
   S.vi = 0; S.vj = 0;
-  var copa = (destino === "copa");
+  var copa = (destino === "copa"), hall = (destino === "hall");
   if (copa) montaCopaNpcs();
   el("sala-copa").style.display = copa ? "" : "none";
-  el("parede-esq").style.display = copa ? "none" : "";
-  el("parede-dir").style.display = copa ? "none" : "";
-  el("mundo").style.display = copa ? "none" : "";
-  if (copa) { S.pi = SPAWN_COPA.i; S.pj = SPAWN_COPA.j; }
-  else { S.pi = SPAWN_MESA.i; S.pj = SPAWN_MESA.j; }
+  el("sala-hall").style.display = hall ? "" : "none";
+  el("parede-esq").style.display = (copa || hall) ? "none" : "";
+  el("parede-dir").style.display = (copa || hall) ? "none" : "";
+  el("mundo").style.display = (copa || hall) ? "none" : "";
+  var sp = spawn || SPAWN_SALA[destino] || SPAWN_MESA;
+  S.pi = sp.i; S.pj = sp.j;
   S._sig = ""; S.alvo = "__force__";
   renderModo();
   if (copa) somPassaros();
-  toast(copa ? "🚪 Copa — os traders até seguram a onda por aqui (paciência drena mais devagar)." : "🚪 De volta à mesa de operações.", "good");
+  if (copa) toast("🚪 Copa — os traders até seguram a onda por aqui (paciência drena mais devagar).", "good");
+  else if (hall) toast("🏢 Recepção da Continental Capital. Bom dia — o 14º andar é logo ali.", "good");
+  else if (S.fase !== "chegada") toast("🚪 De volta à mesa de operações.", "good");
 }
 
 function somPassaros(){
@@ -1646,6 +1864,11 @@ function somTelefoneLonge(){
   if (!SET.som) return;
   beep(560, 0.14, "sine", 0.018); beep(730, 0.14, "sine", 0.018, 0.05);
   beep(560, 0.14, "sine", 0.018, 0.42); beep(730, 0.14, "sine", 0.018, 0.47);
+}
+function somSino(){
+  if (!SET.som) return;
+  beep(1318, 0.55, "sine", 0.08); beep(2637, 0.4, "sine", 0.025);
+  beep(1318, 0.7, "sine", 0.08, 0.55); beep(2637, 0.5, "sine", 0.025, 0.55);
 }
 function somSirene(){
   if (!SET.som) return;
@@ -1805,6 +2028,41 @@ function atualizaCeu(){
   if (lz) lz.setAttribute("opacity", (f0.luz + (f1.luz - f0.luz) * p).toFixed(2));
 }
 
+var PARTS = [];
+function emiteFx(x, y, tipo, n){
+  for (var k = 0; k < n; k++) {
+    PARTS.push({
+      x: x + (Math.random() - 0.5) * 26, y: y + (Math.random() - 0.5) * 10,
+      vx: (Math.random() - 0.5) * 90,
+      vy: tipo === "moeda" ? (-70 - Math.random() * 90) : (-15 - Math.random() * 35),
+      vida: tipo === "moeda" ? 0.85 : 1.1, max: tipo === "moeda" ? 0.85 : 1.1,
+      rot: Math.random() * 360, tipo: tipo
+    });
+  }
+}
+function tickFx(dt){
+  if (!PARTS.length) { if (S._fxLimpo !== 1) { el("fx").innerHTML = ""; S._fxLimpo = 1; } return; }
+  S._fxLimpo = 0;
+  var s = "";
+  for (var i = PARTS.length - 1; i >= 0; i--) {
+    var p = PARTS[i];
+    p.vida -= dt;
+    if (p.vida <= 0) { PARTS.splice(i, 1); continue; }
+    p.vy += 200 * dt;
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.rot += 260 * dt;
+    var op = Math.min(1, p.vida / p.max * 1.6).toFixed(2);
+    if (p.tipo === "moeda") {
+      s += "<circle cx='" + p.x.toFixed(1) + "' cy='" + p.y.toFixed(1) + "' r='3.4' fill='#EAC54F' stroke='#A9891F' stroke-width='1.2' opacity='" + op + "'/>";
+    } else {
+      s += "<rect x='" + (p.x - 2.5).toFixed(1) + "' y='" + (p.y - 4).toFixed(1) + "' width='5' height='8' fill='#EF4444' opacity='" + op +
+           "' transform='rotate(" + p.rot.toFixed(0) + " " + p.x.toFixed(1) + " " + p.y.toFixed(1) + ")'/>";
+    }
+  }
+  el("fx").innerHTML = s;
+}
+
 function tickTv(dtMs){
   S.tvAcc += dtMs;
   if (S.tvAcc >= 12000) {
@@ -1818,6 +2076,7 @@ function tickTv(dtMs){
 function montaExtras(){
   montaPiso();
   montaCopa();
+  montaHall();
   el("chefe").innerHTML = "<g transform='scale(0.8) translate(-30,-76)'>" + svgTrader(CHEFE_SKIN, true) + "</g>";
   el("mesa-jogador").innerHTML = svgMesaIso("i");
   el("maq-cafe").setAttribute("transform",
@@ -1835,7 +2094,11 @@ function renderModo(){
   el("joy").className = (S.modo === "anda") ? "on" : "";
   
   el("painel-anda").style.display = fora ? "block" : "none";
-  el("btn-voltar-mesa").style.display = fora ? "block" : "none";
+  // no hall nao existe "sua mesa" pra voltar: o caminho e o elevador
+  var bv = el("btn-voltar-mesa");
+  bv.style.display = (fora && S.sala !== "hall") ? "block" : "none";
+  bv.textContent = (S.fase === "chegada") ? "\uD83D\uDCBA Sentar e abrir o pregão"
+                                          : "\uD83D\uDCBA Voltar à mesa de operações";
   el("row-mesa-acoes").style.display = fora ? "none" : "grid";
   if (fora) {
     el("dica-vazio").style.display = "none";
@@ -1856,7 +2119,9 @@ function levantar(){
 }
 
 function sentar(){
-  if (S.sala === "copa") trocaSala("mesa");
+  if (!S || S.encerrando) return;
+  if (S.sala !== "mesa") trocaSala("mesa");
+  if (S.fase === "chegada") { vib(15); somPop(); iniciaAno(); return; }
   S.modo = "mesa";
   S.pi = SEAT.i; S.pj = SEAT.j;
   vib(15); somPop();
@@ -1873,12 +2138,14 @@ function achaOrdem(id){
 function ordenaMundo(){
   var itens = [], lista, cont;
   if (S.sala === "copa") { lista = ESTATICOS_COPA; cont = el("mundo-copa"); }
+  else if (S.sala === "hall") { lista = ESTATICOS_HALL; cont = el("mundo-hall"); }
   else { lista = ESTATICOS; cont = el("mundo"); }
   for (var k = 0; k < lista.length; k++) {
     itens.push({ nome: lista[k].id, alvo: el(lista[k].id), d: lista[k].d });
   }
   itens.push({ nome: "player", alvo: el("player"), d: Math.round((S.pi + S.pj) / 0.3) * 0.3 + 0.02 });
-  if (S.sala !== "copa") itens.push({ nome: "chefe-wrap", alvo: el("chefe-wrap"),
+  // so na mesa: no hall e na copa o chefe-wrap nao pode migrar pro container da sala
+  if (S.sala === "mesa") itens.push({ nome: "chefe-wrap", alvo: el("chefe-wrap"),
     d: Math.round((S.bi + S.bj) / 0.3) * 0.3 + 0.01 });
   itens.sort(function(a, b){ return a.d - b.d; });
   var sig = S.sala + ":";
@@ -1905,7 +2172,7 @@ function toggleZoom(){
 function updateCam(){
   var c = el("cena");
   if (!S || !S.zoom) {
-    c.setAttribute("viewBox", S.modo === "mesa" ? "0 14 420 398" : "0 0 420 480");
+    c.setAttribute("viewBox", (S && S.modo === "mesa") ? "0 14 420 398" : "0 0 420 480");
     return;
   }
   var w = 290, h = 331.4;
@@ -2005,7 +2272,10 @@ function calcAlvo(){
     var r = antes[tipo + ":" + dado] ? raio * 1.3 : raio;
     if (d < r) achados.push({ tipo: tipo, dado: dado, d: d });
   }
-  if (S.sala === "copa") {
+  if (S.sala === "hall") {
+    tenta("elevador", HALL.elev.i, HALL.elev.j, null, 2.0);
+    tenta("recepcao", HALL.recep.i, HALL.recep.j, null, 2.0);
+  } else if (S.sala === "copa") {
     tenta("porta", PORTA_COPA.i, PORTA_COPA.j, "mesa", 1.8);
     tenta("agua", COPA.agua.i, COPA.agua.j, null, 1.9);
     tenta("gelad", COPA.gelad.i, COPA.gelad.j, null, 1.9);
@@ -2036,6 +2306,10 @@ function calcAlvo(){
 }
 
 function btnAlvo(a){
+  if (a.tipo === "elevador") return { s: "🛗 Os elevadores. Mesa de operações no 14º.",
+    h: "<button class='btn btn-main' onclick='subirEscritorio()'>🛗 Subir para o 14º andar</button>" };
+  if (a.tipo === "recepcao") return { s: "🪪 " + RECEP.nome + " confere o crachá de todo mundo que entra.",
+    h: "<button class='btn btn-ghost' onclick='falaRecepcao()'>💬 Bom dia, " + RECEP.nome + "</button>" };
   if (a.tipo === "porta") {
     return { s: "🚪 " + (a.dado === "copa" ? "A porta da copa. Cheiro de café coado." : "De volta pro campo de batalha."),
       h: "<button class='btn btn-main' onclick=\"trocaSala('" + a.dado + "')\">🚪 " + (a.dado === "copa" ? "Ir para a copa" : "Voltar para a mesa") + "</button>" };
@@ -2094,7 +2368,12 @@ function renderAcoes(alvos){
   } else if (S.modo === "cafe") {
     status = "☕ Tomando um café... o pregão que espere.";
   } else if (!alvos.length) {
-    status = "🚶 Longe da mesa — as ordens continuam chegando!";
+    if (S.fase === "chegada") {
+      status = (S.sala === "hall") ? "🛗 Recepção do prédio — ande até os elevadores."
+                                   : "🏢 14º andar. Vá até a sua mesa e sente pra abrir o pregão.";
+    } else {
+      status = "🚶 Longe da mesa — as ordens continuam chegando!";
+    }
   } else {
     for (var k = 0; k < alvos.length; k++) {
       var b = btnAlvo(alvos[k]);
@@ -2121,7 +2400,9 @@ var VEL_MAX = 3.6;
 var ACEL = 12;
 
 function colide(i, j){
-  var lista = (S && S.sala === "copa") ? OBST_COPA : OBSTACULOS;
+  var lista = OBSTACULOS;
+  if (S && S.sala === "copa") lista = OBST_COPA;
+  else if (S && S.sala === "hall") lista = OBST_HALL;
   for (var k = 0; k < lista.length; k++) {
     var o = lista[k];
     if (i > o.i0 - RAIO && i < o.i1 + RAIO && j > o.j0 - RAIO && j < o.j1 + RAIO) return true;
@@ -2264,10 +2545,39 @@ function paraLoop(){
 
 function tick(){ atualiza(100); }
 
+/* despacho do modo do jogador; roda no pregao e tambem na chegada */
+function tickModo(dt, agora){
+  if (S.modo === "acao") {
+    if (agora >= S.acaoFim) concluiAcao();
+  } else if (S.modo === "anda") {
+    moveJogador(dt);
+    renderAcoes(calcAlvo());
+  } else if (S.modo === "cafe") {
+    S.vaporT += dt;
+    renderVapor();
+    if (agora >= S.cafeFim) {
+      S.modo = "anda";
+      S.alvo = "__force__";
+      toast("☕ Café tomado. De volta ao caos.", "good");
+      renderModo();
+    }
+  }
+
+}
+
 function atualiza(dtMs){
   if (!S || S.encerrando) return;
   var dt = dtMs / 1000;
   var agora = Date.now();
+
+  // Chegada: o predio existe, o pregao ainda nao. Sem spawn, sem chefe,
+  // sem relogio de paciencia — so o jogador andando.
+  if (S.fase === "chegada") {
+    tickModo(dt, agora);
+    tickFx(dt);
+    if (ambGain) ambGain.gain.value = SET.som ? 0.013 : 0;
+    return;
+  }
 
   if (S.cb > 0 && agora >= S.cb) {
     S.cb = 0;
@@ -2295,7 +2605,8 @@ function atualiza(dtMs){
       beep(880, 0.1); beep(880, 0.1, "sine", 0.07, 0.15); beep(1100, 0.2, "sine", 0.08, 0.3);
     }
   }
-  if (!congelado && S.spawned < TRADES_ANO && S.orders.length < maxSimul() &&
+  var abrindo = agora < (S.introAte || 0);
+  if (!congelado && !abrindo && S.spawned < TRADES_ANO && S.orders.length < maxSimul() &&
       agora - S.lastSpawn > (S.spawned === 0 ? 400 : intv)) {
     spawnOrder(agora);
   }
@@ -2331,6 +2642,7 @@ function atualiza(dtMs){
 
   tickChefe(dt);
   tickTv(dtMs);
+  tickFx(dt);
   if (!S.taunt1 && S.resolved >= Math.floor(TRADES_ANO * 0.33)) { S.taunt1 = true; tauntRival(); }
   if (!S.taunt2 && S.resolved >= Math.floor(TRADES_ANO * 0.66)) { S.taunt2 = true; tauntRival(); }
   if (ambGain) ambGain.gain.value = SET.som ? 0.013 : 0;
@@ -2340,21 +2652,7 @@ function atualiza(dtMs){
     S.ringProx = 9000 + Math.random() * 14000;
     if (S.sala === "mesa") somTelefoneLonge();
   }
-  if (S.modo === "acao") {
-    if (agora >= S.acaoFim) concluiAcao();
-  } else if (S.modo === "anda") {
-    moveJogador(dt);
-    renderAcoes(calcAlvo());
-  } else if (S.modo === "cafe") {
-    S.vaporT += dt;
-    renderVapor();
-    if (agora >= S.cafeFim) {
-      S.modo = "anda";
-      S.alvo = "__force__";
-      toast("☕ Café tomado. De volta ao caos.", "good");
-      renderModo();
-    }
-  }
+  tickModo(dt, agora);
 
   if (S.resolved >= TRADES_ANO && S.orders.length === 0) {
     S.encerrando = true;
@@ -2594,6 +2892,28 @@ function attachJoy(){
   window.addEventListener("mousemove", function(e){ if (mouseOn) aplica(e.clientX, e.clientY); });
   window.addEventListener("mouseup", function(){ if (mouseOn) { mouseOn = false; solta(); } });
 
+  /* teclado: o jogo abre com duplo clique no desktop, onde nao ha analogico */
+  var teclas = {};
+  var MAPA = { ArrowUp: "u", w: "u", W: "u", ArrowDown: "d", s: "d", S: "d",
+               ArrowLeft: "l", a: "l", A: "l", ArrowRight: "r", d: "r", D: "r" };
+  function tecla(e, on){
+    var tag = (e.target && e.target.tagName) || "";
+    if (tag === "INPUT" || tag === "TEXTAREA") return;
+    var m = MAPA[e.key];
+    if (!m) return;
+    e.preventDefault();
+    teclas[m] = on;
+    if (!S) return;
+    var x = (teclas.r ? 1 : 0) - (teclas.l ? 1 : 0);
+    var y = (teclas.d ? 1 : 0) - (teclas.u ? 1 : 0);
+    var n = Math.sqrt(x * x + y * y) || 1;
+    S.joy.x = x / n; S.joy.y = y / n;
+    knob.style.left = (26 + (x / n) * 34) + "px";
+    knob.style.top = (26 + (y / n) * 34) + "px";
+  }
+  window.addEventListener("keydown", function(e){ tecla(e, true); });
+  window.addEventListener("keyup", function(e){ tecla(e, false); });
+
   var cena = el("cena");
   cena.addEventListener("click", function(e){ andarAte(e.clientX, e.clientY); });
   cena.addEventListener("touchstart", function(e){
@@ -2619,22 +2939,22 @@ function startGame(){
     selId: null, lastSpawn: 0, encerrando: false,
     combo: 0, maxCombo: 0, rushAvisado: false,
     up: { cafe: false, headset: false, cdi: false, terminal: false },
-    modo: "mesa", pi: SEAT.i, pj: SEAT.j,
+    modo: "anda", fase: "chegada", pi: SPAWN_HALL.i, pj: SPAWN_HALL.j,
     joy: { x: 0, y: 0 }, alvo: null, cafeFim: 0, chatOrdId: null, chatTipo: null,
     zoom: false, _sig: "", bi: PATRULHA[0].i, bj: PATRULHA[0].j, bWp: 1, bPausaMs: 0,
     bPasso: 0, bFace: 1, bAndando: false, demitido: false,
     vi: 0, vj: 0, dest: null, face: 1, passo: 0, andando: false, vaporT: 0,
-    raivaChefe: { raiva: 0 }, raivaTrader: {}, sala: "mesa", marmita: "geladeira",
+    raivaChefe: { raiva: 0 }, raivaTrader: {}, sala: "hall", marmita: "geladeira",
     copaNpcs: null, chefeNaCopa: false, raivaColega: {}, acaoTipo: null, acaoFim: 0,
     tvIdx: 0, tvAcc: 0, cb: 0, cbFeito: false, cbAno: false, cbBoost: 0,
-    ringAcc: 0, ringProx: 8000, vitoriaVista: false,
+    ringAcc: 0, ringProx: 8000, vitoriaVista: false, introAte: 0, _fxLimpo: 1,
     evFeito: false, evMO: false, evPac: 1, evPacAtivo: 1, evTreino: false, evTreinoAtivo: false, _ev: null
   };
   montaMesas();
   montaExtras();
   somAmbiente();
   musica(SET.musica);
-  iniciaAno();
+  entraHall();
   show("s-game");
 }
 
@@ -2651,12 +2971,23 @@ function iniciaAno(){
   S.sala = "mesa"; S.marmita = "geladeira"; S.copaNpcs = null; S.chefeNaCopa = false;
   S.taunt1 = false; S.taunt2 = false;
   atualizaCeu();
+  S.introAte = Date.now() + 1900;
+  el("ab-ano").textContent = "ANO " + S.year;
+  el("ab-cargo").textContent = CARGOS[S.cargoIdx].t.toUpperCase();
+  var ab = el("s-abertura");
+  ab.className = "";
+  void (ab.offsetWidth);
+  ab.className = "on";
+  setTimeout(function(){ ab.className = ""; }, 2000);
+  somSino();
   S.cb = 0; S.cbFeito = false; S.cbAno = (S.year >= 3 && Math.random() < 0.45); S.cbBoost = 0;
   S.evPacAtivo = S.evPac || 1; S.evPac = 1;
   S.evTreinoAtivo = !!S.evTreino; S.evTreino = false;
   el("cenawrap").classList.remove("cbon");
   S.acaoTipo = null; S.raivaColega = {};
+  S.fase = "pregao";
   el("sala-copa").style.display = "none";
+  el("sala-hall").style.display = "none";
   el("parede-esq").style.display = "";
   el("parede-dir").style.display = "";
   el("mundo").style.display = "";
@@ -2811,7 +3142,7 @@ function spawnOrder(agora){
 
   somPop(); vib(15);
   renderHud();
-  if (S.selId === null) selectOrder(o.id);
+  if (S.selId === null && S.modo === "mesa") selectOrder(o.id);
 }
 
 function escondeFone(o){
@@ -2861,6 +3192,13 @@ function premia(base, o, extra){
   if (S.combo > S.maxCombo) S.maxCombo = S.combo;
   if (S.combo >= 8) desbloqueia("combo8");
   if (S.combo >= 5) { somCombo(S.combo); } else { somAcerto(); }
+  if (o && typeof o.slot === "number" && SLOTS[o.slot]) {
+    emiteFx(SLOTS[o.slot].charX, SLOTS[o.slot].charY - 34, "moeda", Math.min(12, 5 + S.combo));
+  }
+  if (S.combo >= 5 || base >= 1000) {
+    el("cena").classList.add("punch");
+    setTimeout(function(){ el("cena").classList.remove("punch"); }, 220);
+  }
   vib(25);
   showFloat("+" + fmt(ganho), "good");
   toast("✓ " + extra + " +" + fmt(ganho) + (S.combo >= 2 ? " · combo ×" + comboMult().toFixed(2).replace(".", ",") : ""), "good");
@@ -2875,6 +3213,9 @@ function pune(base, o, extra){
   S.err++; S.yErr++;
   quebraCombo();
   somErro(); vib([80, 50, 80]);
+  if (o && typeof o.slot === "number" && SLOTS[o.slot]) {
+    emiteFx(SLOTS[o.slot].charX, SLOTS[o.slot].charY - 30, "papel", 7);
+  }
   el("app").classList.add("shake");
   setTimeout(function(){ el("app").classList.remove("shake"); }, 320);
   showFloat("-" + fmt(perda), "bad");
@@ -3322,7 +3663,10 @@ function continuarCarreira(){
   S.cargoIdx = c.cargoIdx; S.ok = c.ok || 0; S.maxCombo = c.maxCombo || 0;
   S.up = c.up || S.up; S.vitoriaVista = !!c.vitoriaVista;
   if (c.npcs) S.npcs = c.npcs;
-  nextYear();
+  // So a contabilidade do ano novo: o pregao abre quando o jogador sentar na mesa.
+  // Chamar nextYear() aqui rodava iniciaAno() duas vezes (dois sinos, ANO 1 piscando).
+  preparaAno();
+  renderHud();
 }
 
 function nextYear(){
@@ -3334,7 +3678,7 @@ function nextYear(){
   nextYearCore();
 }
 
-function nextYearCore(){
+function preparaAno(){
   S.year++;
   S.yOk = 0; S.yErr = 0; S.yExp = 0;
   S.evFeito = false;
@@ -3342,6 +3686,10 @@ function nextYearCore(){
   S.evMO = false;
   S.bonusIni = S.bonus;
   el("mo").textContent = "🎧 Chamar middle office (" + S.hints + ")";
+}
+
+function nextYearCore(){
+  preparaAno();
   iniciaAno();
   show("s-game");
 }
